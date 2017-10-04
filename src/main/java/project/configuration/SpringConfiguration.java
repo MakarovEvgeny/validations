@@ -1,7 +1,6 @@
 package project.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,33 +10,28 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @SpringBootApplication
-@ComponentScan("project.controller")
+@ComponentScan("project")
 @PropertySource("classpath:database.properties")
 public class SpringConfiguration {
 
     @Value("${host}")
-    private static String host;
+    private String host;
 
     @Value("${port}")
-    private static String port;
+    private String port;
 
     @Value("${login}")
-    private static String login;
+    private String login;
 
     @Value("${password}")
-    private static String password;
+    private String password;
 
     @Value("${database}")
-    private static String database;
+    private String database;
 
     @Bean
-    public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
-        return new PropertyPlaceholderConfigurer();
-    }
-
-    @Bean
-    public static DataSource dataSource() {
-        return new DriverManagerDataSource(String.format("jdbc:postgresql://%s/%s/%s", host, port, database), login, password);
+    public DataSource dataSource() {
+        return new DriverManagerDataSource(String.format("jdbc:postgresql://%s:%s/%s", host, port, database), login, password);
     }
 
 }
