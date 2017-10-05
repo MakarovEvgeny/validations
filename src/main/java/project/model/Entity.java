@@ -16,6 +16,7 @@ public class Entity {
     /** Описание - если не получается вырязить смысл сущности в наименовании. */
     private String description;
 
+    @SuppressWarnings("unused")
     public Entity() {
         //for spring
     }
@@ -36,21 +37,6 @@ public class Entity {
 
     public String getDescription() {
         return description;
-    }
-
-    //for bean mapper
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    //for bean mapper
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    //for bean mapper
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     @Override

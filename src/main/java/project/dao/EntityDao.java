@@ -1,7 +1,6 @@
 package project.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,7 +22,7 @@ public class EntityDao {
 
     private NamedParameterJdbcTemplate jdbc;
 
-    private RowMapper<Entity> mapper = new BeanPropertyRowMapper<>(Entity.class);
+    private RowMapper<Entity> mapper = (rs, rowNum) -> new Entity(rs.getString("entity_id"), rs.getString("name"), rs.getString("description"));
 
     @PostConstruct
     public void init() {
