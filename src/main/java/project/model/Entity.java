@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Сущность системы.
  */
-public class Entity {
+public class Entity implements OptimisticOfflineLock {
 
     /** Вводится пользователем, является семантическим обозначением сущности системы. */
     private String id;
@@ -16,15 +16,19 @@ public class Entity {
     /** Описание - если не получается вырязить смысл сущности в наименовании. */
     private String description;
 
+    /** Версия сущности. */
+    private int version = 1;
+
     @SuppressWarnings("unused")
     public Entity() {
         //for spring
     }
 
-    public Entity(String id, String name, String description) {
+    public Entity(String id, String name, String description, int version) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.version = version;
     }
 
     public String getId() {
@@ -37,6 +41,10 @@ public class Entity {
 
     public String getDescription() {
         return description;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     @Override
