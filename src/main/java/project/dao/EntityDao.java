@@ -8,6 +8,8 @@ import project.model.Entity;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,11 @@ public class EntityDao {
 
     public void create(Entity entity) {
         jdbc.update("insert into entity(entity_id, name, description) values (:id, :name, :description)", prepareParams(entity));
+        createHistory(entity);
+    }
+
+    private void createHistory(Entity entity) {
+        jdbc.update("insert into entity_h(date, entity_id, name, description, version) values (:date, :id, :name, :description, :version)", prepareHistoricalParams(entity));
     }
 
     public void update(Entity entity) {
@@ -42,6 +49,7 @@ public class EntityDao {
         if (rowsAffected == 0) {
             throw new ConcurrentModificationException();
         }
+        createHistory(entity);
     }
 
     private Map<String, Object> prepareParams(Entity entity) {
@@ -53,6 +61,15 @@ public class EntityDao {
 
         return params;
     }
+
+    private Map<String, Object> prepareHistoricalParams(Entity entity) {
+        Map<String, Object> params = prepareParams(entity);
+        params.put("date", Timestamp.from(ZonedDateTime.now().toInstant()));
+        params.put("version", entity.getVersion() + 1);
+
+        return params;
+    }
+
 
     public void remove(Entity entity) {
         int rowsAffected = jdbc.update("delete from entity WHERE entity_id = :id and version = :version", prepareParams(entity));
