@@ -5,13 +5,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @SpringBootApplication
 @ComponentScan("project")
 @PropertySource("classpath:database.properties")
+@EnableTransactionManagement
 public class SpringConfiguration {
 
     @Value("${host}")
@@ -32,6 +36,11 @@ public class SpringConfiguration {
     @Bean
     public DataSource dataSource() {
         return new DriverManagerDataSource(String.format("jdbc:postgresql://%s:%s/%s", host, port, database), login, password);
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(DataSource ds) {
+        return new DataSourceTransactionManager(ds);
     }
 
 }
