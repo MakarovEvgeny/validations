@@ -19,16 +19,20 @@ public class Entity implements OptimisticOfflineLock {
     /** Версия сущности. */
     private int version = 1;
 
+    /** Комментарий. */
+    private String commentary;
+
     @SuppressWarnings("unused")
     public Entity() {
         //for spring
     }
 
-    public Entity(String id, String name, String description, int version) {
+    public Entity(String id, String name, String description, int version, String commentary) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.version = version;
+        this.commentary = commentary;
     }
 
     public String getId() {
@@ -47,6 +51,10 @@ public class Entity implements OptimisticOfflineLock {
         return version;
     }
 
+    public String getCommentary() {
+        return commentary;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,12 +63,13 @@ public class Entity implements OptimisticOfflineLock {
         return version == entity.version &&
                 Objects.equals(id, entity.id) &&
                 Objects.equals(name, entity.name) &&
-                Objects.equals(description, entity.description);
+                Objects.equals(description, entity.description) &&
+                Objects.equals(commentary, entity.commentary);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, version);
+        return Objects.hash(id, name, description, version, commentary);
     }
 
 }

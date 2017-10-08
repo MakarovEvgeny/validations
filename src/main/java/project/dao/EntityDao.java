@@ -24,7 +24,7 @@ public class EntityDao {
 
     private NamedParameterJdbcTemplate jdbc;
 
-    private RowMapper<Entity> mapper = (rs, rowNum) -> new Entity(rs.getString("entity_id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"));
+    private RowMapper<Entity> mapper = (rs, rowNum) -> new Entity(rs.getString("entity_id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 
     @PostConstruct
     public void init() {
@@ -36,16 +36,16 @@ public class EntityDao {
     }
 
     public void create(Entity entity) {
-        jdbc.update("insert into entity(entity_id, name, description) values (:id, :name, :description)", prepareParams(entity));
+        jdbc.update("insert into entity(entity_id, name, description, commentary) values (:id, :name, :description, :commentary)", prepareParams(entity));
         createHistory(entity);
     }
 
     private void createHistory(Entity entity) {
-        jdbc.update("insert into entity_h(date, entity_id, name, description, version) values (:date, :id, :name, :description, :version)", prepareHistoricalParams(entity));
+        jdbc.update("insert into entity_h(date, entity_id, name, description, version, commentary) values (:date, :id, :name, :description, :version, :commentary)", prepareHistoricalParams(entity));
     }
 
     public void update(Entity entity) {
-        int rowsAffected = jdbc.update("update entity set name = :name, description = :description, version = version + 1 where entity_id = :id and version = :version", prepareParams(entity));
+        int rowsAffected = jdbc.update("update entity set name = :name, description = :description, version = version + 1, commentary = :commentary where entity_id = :id and version = :version", prepareParams(entity));
         if (rowsAffected == 0) {
             throw new ConcurrentModificationException();
         }
@@ -58,6 +58,7 @@ public class EntityDao {
         params.put("name", entity.getName());
         params.put("description", entity.getDescription());
         params.put("version", entity.getVersion());
+        params.put("commentary", entity.getCommentary());
 
         return params;
     }
