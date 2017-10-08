@@ -52,14 +52,15 @@ public class Entity implements OptimisticOfflineLock {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Entity entity = (Entity) o;
-        return Objects.equals(id, entity.id) &&
+        return version == entity.version &&
+                Objects.equals(id, entity.id) &&
                 Objects.equals(name, entity.name) &&
                 Objects.equals(description, entity.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description);
+        return Objects.hash(id, name, description, version);
     }
 
 }
