@@ -44,6 +44,10 @@ public class EntityDao {
         jdbc.update("insert into entity_h(date, entity_id, name, description, version, commentary) values (:date, :id, :name, :description, :version, :commentary)", prepareHistoricalParams(entity));
     }
 
+    private void createHistoryForRemoval(Entity entity) {
+        jdbc.update("insert into entity_h(date, entity_id, version, commentary) values (:date, :id, :version, :commentary)", prepareHistoricalParams(entity));
+    }
+
     public void update(Entity entity) {
         int rowsAffected = jdbc.update("update entity set name = :name, description = :description, version = version + 1, commentary = :commentary where entity_id = :id and version = :version", prepareParams(entity));
         if (rowsAffected == 0) {
@@ -77,6 +81,7 @@ public class EntityDao {
         if (rowsAffected == 0) {
             throw new ConcurrentModificationException();
         }
+        createHistoryForRemoval(entity);
     }
 
     public List<Entity> find() {
