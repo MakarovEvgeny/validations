@@ -17,7 +17,7 @@ public class Entity implements OptimisticOfflineLock {
     private String description;
 
     /** Версия сущности. */
-    private int version = 1;
+    private int version;
 
     /** Комментарий. */
     private String commentary;
