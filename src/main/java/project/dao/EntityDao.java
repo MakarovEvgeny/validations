@@ -1,35 +1,18 @@
 package project.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import project.model.Entity;
 
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
-import java.sql.Timestamp;
-import java.time.ZonedDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 
 @Repository
-public class EntityDao {
-
-    @Autowired
-    private DataSource ds;
-
-    private NamedParameterJdbcTemplate jdbc;
+public class EntityDao extends BaseVersionAwareModelDao<Entity> {
 
     private RowMapper<Entity> mapper = (rs, rowNum) -> new Entity(rs.getString("entity_id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 
-    @PostConstruct
-    public void init() {
-        jdbc = new NamedParameterJdbcTemplate(ds);
-    }
 
     public Entity load(String entityId) {
         return jdbc.queryForObject("select * from entity where entity_id = :id", singletonMap("id", entityId), mapper);
@@ -54,25 +37,6 @@ public class EntityDao {
             throw new ConcurrentModificationException();
         }
         createHistory(entity);
-    }
-
-    private Map<String, Object> prepareParams(Entity entity) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("id", entity.getId());
-        params.put("name", entity.getName());
-        params.put("description", entity.getDescription());
-        params.put("version", entity.getVersion());
-        params.put("commentary", entity.getCommentary());
-
-        return params;
-    }
-
-    private Map<String, Object> prepareHistoricalParams(Entity entity) {
-        Map<String, Object> params = prepareParams(entity);
-        params.put("date", Timestamp.from(ZonedDateTime.now().toInstant()));
-        params.put("version", entity.getVersion() + 1);
-
-        return params;
     }
 
 
