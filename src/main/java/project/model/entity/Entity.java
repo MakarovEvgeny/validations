@@ -1,4 +1,6 @@
-package project.model;
+package project.model.entity;
+
+import project.model.BaseVersionAwareModel;
 
 /**
  * Сущность системы.

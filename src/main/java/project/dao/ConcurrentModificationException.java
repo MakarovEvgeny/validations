@@ -5,6 +5,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /** Исключение в случае конкурентого изменения объекта в БД. */
 @ResponseStatus(HttpStatus.CONFLICT)
-class ConcurrentModificationException extends RuntimeException {
+public class ConcurrentModificationException extends RuntimeException {
 
 }

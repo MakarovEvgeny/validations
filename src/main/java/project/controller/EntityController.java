@@ -2,7 +2,7 @@ package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import project.model.Entity;
+import project.model.entity.Entity;
 import project.service.ModelService;
 
 import java.util.List;
