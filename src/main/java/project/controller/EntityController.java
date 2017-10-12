@@ -3,7 +3,7 @@ package project.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import project.model.Entity;
-import project.service.EntityService;
+import project.service.ModelService;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public class EntityController {
 
     @Autowired
-    private EntityService service;
+    private ModelService<Entity> service;
 
     @RequestMapping(value = "/entity", method = RequestMethod.GET)
     public List<Entity> find() {

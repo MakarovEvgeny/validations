@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class EntityServiceImpl implements EntityService {
+public class EntityServiceImpl implements ModelService<Entity> {
 
     @Autowired
     private EntityDao dao;
