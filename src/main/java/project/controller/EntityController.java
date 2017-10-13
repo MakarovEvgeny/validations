@@ -7,33 +7,34 @@ import project.service.ModelService;
 
 import java.util.List;
 
+@RequestMapping("entity")
 @RestController
 public class EntityController {
 
     @Autowired
     private ModelService<Entity> service;
 
-    @RequestMapping(value = "/entity", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public List<Entity> find() {
         return service.find();
     }
 
-    @RequestMapping(value = "/entity/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public Entity load(@PathVariable String id){
         return service.load(id);
     }
 
-    @RequestMapping(value = "/entity", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public void create(@RequestBody Entity entity) {
         service.create(entity);
     }
 
-    @RequestMapping(value = "/entity/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public void update(@RequestBody Entity entity) {
         service.update(entity);
     }
 
-    @RequestMapping(value = "/entity/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void remove(@RequestBody Entity entity) {
         service.remove(entity);
     }
