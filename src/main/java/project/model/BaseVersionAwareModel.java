@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Базовый класс моделей, по которым ведется история.
  */
-public class BaseVersionAwareModel extends AbstractModel<String> implements VersionAware, OptimisticOfflineLock {
+public class BaseVersionAwareModel extends AbstractModel implements VersionAware, OptimisticOfflineLock {
 
     /** Версия сущности. */
     protected int version;

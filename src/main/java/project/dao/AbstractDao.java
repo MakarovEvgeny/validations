@@ -1,11 +1,11 @@
 package project.dao;
 
-import project.model.BaseVersionAwareModel;
+import project.model.AbstractModel;
 
 import java.util.List;
 
 /** Основные методы dao. */
-public interface AbstractDao<MODEL extends BaseVersionAwareModel> {
+public interface AbstractDao<MODEL extends AbstractModel> {
 
     MODEL load(String modelId);
 

@@ -7,6 +7,7 @@ import project.dao.ConcurrentModificationException;
 import project.model.entity.Entity;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 
@@ -54,5 +55,13 @@ public class EntityDao extends BaseVersionAwareModelDao<Entity> {
         return jdbc.query("select * from entity", mapper);
     }
 
+
+    @Override
+    protected Map<String, Object> prepareParams(Entity entity) {
+        Map<String, Object> params = super.prepareParams(entity);
+        params.put("name", entity.getName());
+        params.put("description", entity.getDescription());
+        return params;
+    }
 
 }

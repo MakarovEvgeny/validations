@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import project.model.Operation;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 
@@ -49,6 +50,14 @@ public class OperationDao extends BaseVersionAwareModelDao<Operation> {
 
     public List<Operation> find() {
         return jdbc.query("select * from operation", mapper);
+    }
+
+    @Override
+    protected Map<String, Object> prepareParams(Operation operation) {
+        Map<String, Object> params = super.prepareParams(operation);
+        params.put("name", operation.getName());
+        params.put("description", operation.getDescription());
+        return params;
     }
 
 }

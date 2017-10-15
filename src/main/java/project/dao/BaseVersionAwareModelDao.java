@@ -27,8 +27,6 @@ public abstract class BaseVersionAwareModelDao<MODEL extends BaseVersionAwareMod
     protected Map<String, Object> prepareParams(MODEL model) {
         Map<String, Object> params = new HashMap<>();
         params.put("id", model.getId());
-        params.put("name", model.getName());
-        params.put("description", model.getDescription());
         params.put("version", model.getVersion());
         params.put("commentary", model.getCommentary());
 
