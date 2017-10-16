@@ -21,11 +21,9 @@ public class Operation extends BaseVersionAwareModel {
     }
 
     public Operation(String id, String name, String description, int version, String commentary) {
-        this.id = id;
+        super(id, version, commentary);
         this.name = name;
         this.description = description;
-        this.version = version;
-        this.commentary = commentary;
     }
 
     public String getName() {
