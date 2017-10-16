@@ -1,5 +1,6 @@
-package project.model;
+package project.model.operation;
 
+import project.model.BaseVersionAwareModel;
 import project.model.entity.Entity;
 
 import java.util.Objects;

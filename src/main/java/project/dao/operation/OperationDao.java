@@ -1,8 +1,10 @@
-package project.dao;
+package project.dao.operation;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import project.model.Operation;
+import project.dao.BaseVersionAwareModelDao;
+import project.dao.ConcurrentModificationException;
+import project.model.operation.Operation;
 
 import java.util.List;
 import java.util.Map;
