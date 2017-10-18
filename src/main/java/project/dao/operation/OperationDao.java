@@ -10,31 +10,28 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.singletonMap;
+import static project.dao.RequestRegistry.lookup;
 
 @Repository
 public class OperationDao extends BaseVersionAwareModelDao<Operation> {
 
-    private RowMapper<Operation> mapper = (rs, rowNum) -> new Operation(rs.getString("entity_id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
+    private RowMapper<Operation> mapper = (rs, rowNum) -> new Operation(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 
     public Operation load(String operationId) {
-        return jdbc.queryForObject("select * from operation where operation_id = :id", singletonMap("id", operationId), mapper);
+        return jdbc.queryForObject(lookup("operation/LoadOperation"), singletonMap("id", operationId), mapper);
     }
 
     public void create(Operation operation) {
-        jdbc.update("insert into operation(operation_id, name, description, commentary) values (:id, :name, :description, :commentary)", prepareParams(operation));
+        jdbc.update(lookup("operation/CreateOperation"), prepareParams(operation));
         createHistory(operation);
     }
 
     private void createHistory(Operation operation) {
-        jdbc.update("insert into operation_h(date, operation_id, name, description, version, commentary) values (:date, :id, :name, :description, :version, :commentary)", prepareHistoricalParams(operation));
-    }
-
-    private void createHistoryForRemoval(Operation operation) {
-        jdbc.update("insert into operation_h(date, operation_id, version, commentary) values (:date, :id, :version, :commentary)", prepareHistoricalParams(operation));
+        jdbc.update(lookup("operation/CreateOperationHistory"), prepareHistoricalParams(operation));
     }
 
     public void update(Operation operation) {
-        int rowsAffected = jdbc.update("update operation set name = :name, description = :description, version = version + 1, commentary = :commentary where operation_id = :id and version = :version", prepareParams(operation));
+        int rowsAffected = jdbc.update(lookup("operation/UpdateOperation"), prepareParams(operation));
         if (rowsAffected == 0) {
             throw new ConcurrentModificationException();
         }
@@ -43,15 +40,15 @@ public class OperationDao extends BaseVersionAwareModelDao<Operation> {
 
 
     public void remove(Operation operation) {
-        int rowsAffected = jdbc.update("delete from operation WHERE operation_id = :id and version = :version", prepareParams(operation));
+        int rowsAffected = jdbc.update(lookup("operation/DeleteOperation"), prepareParams(operation));
         if (rowsAffected == 0) {
             throw new ConcurrentModificationException();
         }
-        createHistoryForRemoval(operation);
+        jdbc.update(lookup("operation/CreateOperationHistory"), prepareHistoricalParamsForRemove(operation));
     }
 
     public List<Operation> find() {
-        return jdbc.query("select * from operation", mapper);
+        return jdbc.query(lookup("operation/FindOperation"), mapper);
     }
 
     @Override
@@ -59,6 +56,13 @@ public class OperationDao extends BaseVersionAwareModelDao<Operation> {
         Map<String, Object> params = super.prepareParams(operation);
         params.put("name", operation.getName());
         params.put("description", operation.getDescription());
+        return params;
+    }
+
+    private Map<String, Object> prepareHistoricalParamsForRemove(Operation model) {
+        Map<String, Object> params = super.prepareHistoricalParams(model);
+        params.put("name", null);
+        params.put("description", null);
         return params;
     }
 
