@@ -35,6 +35,22 @@ public class Validation extends BaseVersionAwareModel {
         this.description = description;
     }
 
+    public Message getMessage() {
+        return message;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Set<Entity> getEntities() {
+        return entities;
+    }
+
+    public Set<Operation> getOperations() {
+        return operations;
+    }
+
     public void setEntities(Set<Entity> entities) {
         this.entities = entities;
     }
