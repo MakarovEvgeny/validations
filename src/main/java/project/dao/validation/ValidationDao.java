@@ -1,6 +1,8 @@
 package project.dao.validation;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.model.entity.Entity;
@@ -40,7 +42,23 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
 
     @Override
     public void create(Validation validation) {
+        jdbc.update(lookup("validation/CreateValidation"), prepareParams(validation));
 
+        SqlParameterSource[] entityParams = validation.getEntities().stream().map(entity -> {
+            MapSqlParameterSource source = new MapSqlParameterSource();
+            source.addValue("id", validation.getId());
+            source.addValue("entityId", entity.getId());
+            return source;
+        }).toArray(SqlParameterSource[]::new);
+        jdbc.batchUpdate(lookup("validation/CreateValidationEntities"), entityParams);
+
+        SqlParameterSource[] operationParams = validation.getOperations().stream().map(operation -> {
+            MapSqlParameterSource source = new MapSqlParameterSource();
+            source.addValue("id", validation.getId());
+            source.addValue("operationId", operation.getId());
+            return source;
+        }).toArray(SqlParameterSource[]::new);
+        jdbc.batchUpdate(lookup("validation/CreateValidationOperations"), operationParams);
     }
 
     @Override

@@ -5,6 +5,7 @@ import project.model.entity.Entity;
 import project.model.message.Message;
 import project.model.operation.Operation;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -13,17 +14,17 @@ import java.util.Set;
  */
 public class Validation extends BaseVersionAwareModel {
 
-    /** id {@link project.model.message.Message} */
+    /** {@link project.model.message.Message} */
     private Message message;
 
     /** Описание проверки, бизнес требования. */
     private String description;
 
-    /** Коллекция уникальных id {@link project.model.entity.Entity} */
-    private Set<Entity> entities;
+    /** Коллекция уникальных {@link project.model.entity.Entity} */
+    private Set<Entity> entities = new HashSet<>();
 
-    /** Коллекция уникальных id {@link project.model.operation.Operation} */
-    private Set<Operation> operations;
+    /** Коллекция уникальных {@link project.model.operation.Operation} */
+    private Set<Operation> operations = new HashSet<>();
 
     public Validation() {
         //for spring
