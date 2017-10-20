@@ -1,0 +1,1 @@
+DELETE FROM validation WHERE validation_id = :id AND version = :version

@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
+import project.dao.ConcurrentModificationException;
 import project.model.entity.Entity;
 import project.model.message.Message;
 import project.model.operation.Operation;
@@ -29,7 +30,6 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
     private RowMapper<Entity> entityMapper = (rs, rowNum) -> new Entity(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 
     private RowMapper<Operation> operationMapper = (rs, rowNum) -> new Operation(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
-
 
 
     @Override
@@ -76,7 +76,13 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
 
     @Override
     public void remove(Validation validation) {
+        jdbc.update(lookup("validation/DeleteValidationEntities"), singletonMap("id", validation.getId()));
+        jdbc.update(lookup("validation/DeleteValidationOperations"), singletonMap("id", validation.getId()));
 
+        int rowsAffected = jdbc.update(lookup("validation/DeleteValidation"), prepareParams(validation));
+        if (rowsAffected == 0) {
+            throw new ConcurrentModificationException();
+        }
     }
 
     @Override
