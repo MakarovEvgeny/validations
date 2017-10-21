@@ -44,14 +44,25 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
     public void create(Validation validation) {
         jdbc.update(lookup("validation/CreateValidation"), prepareParams(validation));
 
-        SqlParameterSource[] entityParams = validation.getEntities().stream().map(entity -> {
-            MapSqlParameterSource source = new MapSqlParameterSource();
-            source.addValue("id", validation.getId());
-            source.addValue("entityId", entity.getId());
-            return source;
-        }).toArray(SqlParameterSource[]::new);
-        jdbc.batchUpdate(lookup("validation/CreateValidationEntities"), entityParams);
+        createEntities(validation);
+        createOperations(validation);
+    }
 
+    @Override
+    public void update(Validation validation) {
+        deleteEntities(validation);
+        deleteOperations(validation);
+
+        createEntities(validation);
+        createOperations(validation);
+
+        int rowsAffected = jdbc.update(lookup("validation/UpdateValidation"), prepareParams(validation));
+        if (rowsAffected == 0) {
+            throw new ConcurrentModificationException();
+        }
+    }
+
+    private void createOperations(Validation validation) {
         SqlParameterSource[] operationParams = validation.getOperations().stream().map(operation -> {
             MapSqlParameterSource source = new MapSqlParameterSource();
             source.addValue("id", validation.getId());
@@ -59,6 +70,24 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
             return source;
         }).toArray(SqlParameterSource[]::new);
         jdbc.batchUpdate(lookup("validation/CreateValidationOperations"), operationParams);
+    }
+
+    private void createEntities(Validation validation) {
+        SqlParameterSource[] entityParams = validation.getEntities().stream().map(entity -> {
+            MapSqlParameterSource source = new MapSqlParameterSource();
+            source.addValue("id", validation.getId());
+            source.addValue("entityId", entity.getId());
+            return source;
+        }).toArray(SqlParameterSource[]::new);
+        jdbc.batchUpdate(lookup("validation/CreateValidationEntities"), entityParams);
+    }
+
+    private void deleteOperations(Validation validation) {
+        jdbc.update(lookup("validation/DeleteValidationOperations"), singletonMap("id", validation.getId()));
+    }
+
+    private void deleteEntities(Validation validation) {
+        jdbc.update(lookup("validation/DeleteValidationEntities"), singletonMap("id", validation.getId()));
     }
 
     @Override
@@ -70,14 +99,9 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
     }
 
     @Override
-    public void update(Validation validation) {
-
-    }
-
-    @Override
     public void remove(Validation validation) {
-        jdbc.update(lookup("validation/DeleteValidationEntities"), singletonMap("id", validation.getId()));
-        jdbc.update(lookup("validation/DeleteValidationOperations"), singletonMap("id", validation.getId()));
+        deleteEntities(validation);
+        deleteOperations(validation);
 
         int rowsAffected = jdbc.update(lookup("validation/DeleteValidation"), prepareParams(validation));
         if (rowsAffected == 0) {
