@@ -13,6 +13,15 @@ public class BaseVersionAwareModel extends AbstractModel implements VersionAware
     /** Комментарий. */
     protected String commentary;
 
+    public BaseVersionAwareModel() {
+    }
+
+    public BaseVersionAwareModel(String id, int version, String commentary) {
+        super(id);
+        this.version = version;
+        this.commentary = commentary;
+    }
+
     @Override
     public int getVersion() {
         return version;

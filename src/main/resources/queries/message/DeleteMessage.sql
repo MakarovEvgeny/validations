@@ -1,0 +1,1 @@
+DELETE FROM message WHERE message_id = :id AND version = :version

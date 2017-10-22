@@ -1,0 +1,1 @@
+INSERT INTO validation_operation_h (validation_version_id, operation_id) VALUES (:validationVersionId, :operationId)

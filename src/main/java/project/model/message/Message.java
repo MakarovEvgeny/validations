@@ -16,10 +16,8 @@ public class Message extends BaseVersionAwareModel {
     }
 
     public Message(String id, String text, int version, String commentary) {
-        this.id = id;
+        super(id, version, commentary);
         this.text = text;
-        this.version = version;
-        this.commentary = commentary;
     }
 
 

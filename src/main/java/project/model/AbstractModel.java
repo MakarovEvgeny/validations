@@ -10,6 +10,13 @@ public abstract class AbstractModel implements Persistable {
     /** Вводится пользователем, является семантическим обозначением сущности системы. */
     protected String id;
 
+    public AbstractModel() {
+    }
+
+    public AbstractModel(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

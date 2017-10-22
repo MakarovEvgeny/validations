@@ -1,0 +1,1 @@
+DELETE FROM operation WHERE operation_id = :id AND version = :version

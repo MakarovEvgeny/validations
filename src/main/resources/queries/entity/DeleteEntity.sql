@@ -1,0 +1,1 @@
+DELETE FROM entity WHERE entity_id = :id AND version = :version
