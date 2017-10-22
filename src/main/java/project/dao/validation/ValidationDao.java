@@ -3,6 +3,7 @@ package project.dao.validation;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
@@ -11,11 +12,9 @@ import project.model.message.Message;
 import project.model.operation.Operation;
 import project.model.validation.Validation;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonMap;
 import static project.dao.RequestRegistry.lookup;
 
@@ -46,6 +45,8 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
 
         createEntities(validation);
         createOperations(validation);
+
+        createHistory(validation, false);
     }
 
     @Override
@@ -60,6 +61,8 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
         if (rowsAffected == 0) {
             throw new ConcurrentModificationException();
         }
+
+        createHistory(validation, false);
     }
 
     private void createOperations(Validation validation) {
@@ -90,6 +93,43 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
         jdbc.update(lookup("validation/DeleteValidationEntities"), singletonMap("id", validation.getId()));
     }
 
+
+    private void createHistory(Validation validation, boolean isForDelete) {
+
+        MapSqlParameterSource params = new MapSqlParameterSource(isForDelete ? prepareHistoricalParamsForDelete(validation) : prepareHistoricalParams(validation));
+
+        GeneratedKeyHolder idHolder = new GeneratedKeyHolder();
+        jdbc.update(lookup("validation/CreateValidationHistory"), params, idHolder, new String[]{"validation_version_id"});
+
+        int validationVersionId = idHolder.getKey().intValue();
+
+        createEntitiesHistory(validationVersionId, validation.getEntities());
+        createOperationsHistory(validationVersionId, validation.getOperations());
+    }
+
+    private void createEntitiesHistory(int validationVersionId, Set<Entity> entities) {
+        SqlParameterSource[] entityParams = entities.stream().map(entity -> {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("validationVersionId", validationVersionId);
+            params.addValue("entityId", entity.getId());
+            return params;
+        }).toArray(SqlParameterSource[]::new);
+
+        jdbc.batchUpdate(lookup("validation/CreateValidationEntitiesHistory"), entityParams);
+    }
+
+    private void createOperationsHistory(int validationVersionId, Set<Operation> operations) {
+        SqlParameterSource[] entityParams = operations.stream().map(operation -> {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("validationVersionId", validationVersionId);
+            params.addValue("operationId", operation.getId());
+            return params;
+        }).toArray(SqlParameterSource[]::new);
+
+        jdbc.batchUpdate(lookup("validation/CreateValidationOperationsHistory"), entityParams);
+    }
+
+
     @Override
     protected Map<String, Object> prepareParams(Validation validation) {
         Map<String, Object> params = super.prepareParams(validation);
@@ -97,6 +137,14 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
         params.put("description", validation.getDescription());
         return params;
     }
+
+    private Map<String, Object> prepareHistoricalParamsForDelete(Validation validation) {
+        Map<String, Object> params = super.prepareHistoricalParams(validation);
+        params.put("messageId", null);
+        params.put("description", null);
+        return params;
+    }
+
 
     @Override
     public void remove(Validation validation) {
@@ -107,11 +155,13 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
         if (rowsAffected == 0) {
             throw new ConcurrentModificationException();
         }
+
+        createHistory(validation, true);
     }
 
     @Override
     public List<Validation> find() {
-        return null;
+        return emptyList();//todo тут стоит возвращать не иерархичскую доменную модель, а плоскую dto.
     }
 
 
