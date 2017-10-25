@@ -1,9 +1,14 @@
 Ext.define('app.views.MainView', {
     extend: 'Ext.tab.Panel',
+    requires: [
+        'app.views.EntityGrid'
+    ],
+
     activeTab: 3,
     items: [
         {
-            title: 'Сущности'
+            title: 'Сущности',
+            xtype: 'entity-grid'
         },
         {
             title: 'Операции'
