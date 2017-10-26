@@ -2,6 +2,7 @@ package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import project.model.query.SearchParams;
 import project.model.entity.Entity;
 import project.service.ModelService;
 
@@ -14,8 +15,8 @@ public class EntityController {
     @Autowired
     private ModelService<Entity> service;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Entity> find() {
+    @RequestMapping(value = "query", method = RequestMethod.POST)
+    public List<Entity> find(@RequestBody SearchParams searchParams) {
         return service.find();
     }
 

@@ -9,6 +9,8 @@ Ext.define('app.views.EntityGrid', {
 
     enableColumnHide: false,
 
+    plugins: 'gridfilters',
+
     controller: 'entity-grid-controller',
 
     store: Ext.create('app.stores.EntityStore'),
@@ -18,11 +20,17 @@ Ext.define('app.views.EntityGrid', {
             {
                 text: 'Код',
                 dataIndex: 'id',
+                filter: {
+                    type: 'list'
+                },
                 flex: 1
             },
             {
                 text: 'Наименование',
                 dataIndex: 'name',
+                filter: {
+                    type: 'string'
+                },
                 flex: 1
             },
             {
