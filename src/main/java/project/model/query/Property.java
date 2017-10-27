@@ -10,6 +10,12 @@ public class Property {
     /** Значение. */
     private String value;
 
+    public Property(String property, String operator, String value) {
+        this.property = property;
+        this.operator = operator;
+        this.value = value;
+    }
+
     public String getProperty() {
         return property;
     }

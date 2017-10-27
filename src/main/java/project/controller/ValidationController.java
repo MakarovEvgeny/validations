@@ -2,6 +2,7 @@ package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import project.model.query.SearchParams;
 import project.model.validation.Validation;
 import project.service.ModelService;
 
@@ -14,9 +15,9 @@ public class ValidationController {
     @Autowired
     private ModelService<Validation> service;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Validation> find() {
-        return service.find();
+    @RequestMapping(value = "query", method = RequestMethod.POST)
+    public List<Validation> find(@RequestBody SearchParams searchParams) {
+        return service.find(searchParams);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

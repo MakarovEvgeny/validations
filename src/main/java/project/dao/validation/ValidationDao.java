@@ -10,6 +10,7 @@ import project.dao.ConcurrentModificationException;
 import project.model.entity.Entity;
 import project.model.message.Message;
 import project.model.operation.Operation;
+import project.model.query.SearchParams;
 import project.model.validation.Validation;
 
 import java.util.*;
@@ -160,7 +161,7 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
     }
 
     @Override
-    public List<Validation> find() {
+    public List<Validation> find(SearchParams searchParams) {
         return emptyList();//todo тут стоит возвращать не иерархичскую доменную модель, а плоскую dto.
     }
 

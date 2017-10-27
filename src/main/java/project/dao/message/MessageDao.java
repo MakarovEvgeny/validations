@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
 import project.model.message.Message;
+import project.model.query.SearchParams;
 
 import java.util.List;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class MessageDao extends BaseVersionAwareModelDao<Message> {
     }
 
     @Override
-    public List<Message> find() {
+    public List<Message> find(SearchParams searchParams) {
         return jdbc.query(lookup("message/FindMessage"), mapper);
     }
 

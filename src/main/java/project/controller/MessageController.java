@@ -3,6 +3,7 @@ package project.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import project.model.message.Message;
+import project.model.query.SearchParams;
 import project.service.ModelService;
 
 import java.util.List;
@@ -14,9 +15,9 @@ public class MessageController {
     @Autowired
     private ModelService<Message> service;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Message> find() {
-        return service.find();
+    @RequestMapping(value = "query", method = RequestMethod.POST)
+    public List<Message> find(@RequestBody SearchParams searchParams) {
+        return service.find(searchParams);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)

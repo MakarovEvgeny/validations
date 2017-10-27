@@ -1,5 +1,6 @@
 package project.model.query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /** Параметры для поиска, приходят с клиента. */
@@ -12,7 +13,7 @@ public class SearchParams {
     private Integer start;
 
     /** Непосредственно фильтры. */
-    private List<Property> filter;
+    private List<Property> filter = new ArrayList<>();
 
     public List<Property> getFilter() {
         return filter;

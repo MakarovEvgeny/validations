@@ -17,7 +17,7 @@ public class EntityController {
 
     @RequestMapping(value = "query", method = RequestMethod.POST)
     public List<Entity> find(@RequestBody SearchParams searchParams) {
-        return service.find();
+        return service.find(searchParams);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)

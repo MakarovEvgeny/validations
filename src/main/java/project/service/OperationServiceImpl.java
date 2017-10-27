@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dao.operation.OperationDao;
 import project.model.operation.Operation;
+import project.model.query.SearchParams;
 
 import java.util.List;
 
@@ -36,8 +37,8 @@ public class OperationServiceImpl implements ModelService<Operation> {
     }
 
     @Override
-    public List<Operation> find() {
-        return dao.find();
+    public List<Operation> find(SearchParams searchParams) {
+        return dao.find(searchParams);
     }
 
 }

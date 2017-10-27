@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dao.entity.EntityDao;
 import project.model.entity.Entity;
+import project.model.query.SearchParams;
 
 import java.util.List;
 
@@ -36,8 +37,8 @@ public class EntityServiceImpl implements ModelService<Entity> {
     }
 
     @Override
-    public List<Entity> find() {
-        return dao.find();
+    public List<Entity> find(SearchParams searchParams) {
+        return dao.find(searchParams);
     }
 
 }

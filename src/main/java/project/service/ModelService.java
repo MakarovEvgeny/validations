@@ -1,6 +1,7 @@
 package project.service;
 
 import project.model.AbstractModel;
+import project.model.query.SearchParams;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ public interface ModelService<MODEL extends AbstractModel> {
 
     void remove(MODEL model);
 
-    List<MODEL> find();
+    List<MODEL> find(SearchParams searchParams);
 
 }

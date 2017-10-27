@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
 import project.model.entity.Entity;
+import project.model.query.SearchParams;
 
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class EntityDao extends BaseVersionAwareModelDao<Entity> {
         jdbc.update(lookup("entity/CreateEntityHistory"), prepareHistoricalParamsForRemove(entity));
     }
 
-    public List<Entity> find() {
+    public List<Entity> find(SearchParams searchParams) {
         return jdbc.query(lookup("entity/FindEntity"), mapper);
     }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dao.message.MessageDao;
 import project.model.message.Message;
+import project.model.query.SearchParams;
 
 import java.util.List;
 
@@ -36,8 +37,8 @@ public class MessageServiceImpl implements ModelService<Message> {
     }
 
     @Override
-    public List<Message> find() {
-        return dao.find();
+    public List<Message> find(SearchParams searchParams) {
+        return dao.find(searchParams);
     }
 
 }
