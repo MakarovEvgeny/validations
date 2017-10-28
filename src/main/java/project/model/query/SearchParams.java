@@ -6,11 +6,11 @@ import java.util.List;
 /** Параметры для поиска, приходят с клиента. */
 public class SearchParams {
 
-    private Integer limit;
+    private int limit;
 
-    private Integer page;
+    private int page;
 
-    private Integer start;
+    private int start;
 
     /** Непосредственно фильтры. */
     private List<Property> filter = new ArrayList<>();
@@ -19,15 +19,15 @@ public class SearchParams {
         return filter;
     }
 
-    public Integer getLimit() {
+    public int getLimit() {
         return limit;
     }
 
-    public Integer getPage() {
+    public int getPage() {
         return page;
     }
 
-    public Integer getStart() {
+    public int getStart() {
         return start;
     }
 }

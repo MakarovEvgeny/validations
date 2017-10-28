@@ -6,9 +6,12 @@ public class Property {
     /** Наименование */
     private String property;
     /** Оператор */
-    private String operator;
+    private String operator = "=";
     /** Значение. */
     private String value;
+
+    public Property() {
+    }
 
     public Property(String property, String operator, String value) {
         this.property = property;
