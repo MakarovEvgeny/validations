@@ -2,6 +2,7 @@ Ext.define('app.views.EntityGrid', {
     extend: 'Ext.grid.Panel',
     requires: [
         'app.stores.EntityStore',
+        'app.views.filters.filter.MultiString',
         'app.controllers.EntityGridController'
     ],
 
@@ -29,7 +30,7 @@ Ext.define('app.views.EntityGrid', {
                 text: 'Наименование',
                 dataIndex: 'name',
                 filter: {
-                    type: 'string'
+                    type: 'multi-string'
                 },
                 flex: 1
             },
