@@ -80,9 +80,42 @@ Ext.define('app.views.filters.filter.MultiString', {
         showSeparator: false
     },
 
+
+    /** ПОКА БЕЗ ПОДДЕРЖКИ НАЧАЛЬНЫХ ЗНАЧЕНИЙ!!!! */
+    constructor: function (config) {
+        var me = this;
+
+        // Ввызов конструктора у Ext.grid.filters.filter.Base
+        this.superclass.superclass.constructor.apply(this, arguments);
+
+
+
+        this.filters = me.getStoreFilters();
+
+        if (!Ext.isEmpty(this.filters) && this.filters.length > 0) {
+            // This filter was restored from stateful filters on the store so enforce it as active.
+            me.active = true;
+        }
+
+        if (me.active) {
+            me.setColumnActive(true); // Подчеркивание названия колонки.
+        }
+    },
+
     /**
+     * @protected
+     * Получим фильтры у стора грида.
+     * @return {Ext.util.FilterCollection}
+     */
+    getStoreFilters: function () {
+        return this.getGridStore().getFilters()
+    },
+
+    /**
+     * @override
      * @private
      * Template method that is to initialize the filter and install required menu items.
+     * @see Ext.grid.filters.filter.Base
      */
     createMenu: function () {
         var me = this,
@@ -97,9 +130,9 @@ Ext.define('app.views.filters.filter.MultiString', {
         delete config.iconCls;
 
         config.emptyText = config.emptyText || me.emptyText;
-        me.inputItem = me.menu.add(config);
+        var inputItem = me.menu.add(config);
 
-        me.inputItem.on({
+        inputItem.on({
             scope: me,
             keyup: me.onValueChange,
             el: {
@@ -111,18 +144,12 @@ Ext.define('app.views.filters.filter.MultiString', {
     },
 
     /**
-     * @private
+     * @protected
      * Template method that is to set the value of the filter.
      * @param {Object} value The value to set the filter.
      */
     setValue: function (value) {
         var me = this;
-
-        if (me.inputItem) {
-            me.inputItem.setValue(value);
-        }
-
-        me.filter.setValue(value);
 
         if (value && me.active) {
             me.value = value;
@@ -133,20 +160,56 @@ Ext.define('app.views.filters.filter.MultiString', {
     },
 
     activateMenu: function () {
-        this.inputItem.setValue(this.filter.getValue());
+        // this.inputItem.setValue(this.filter.getValue());
     },
 
-    createFilter: function(config, key) {
-        var me = this;
 
-        if (me.filterFn) {
-            return new Ext.util.Filter({
-                filterFn: function(rec) {
-                    return Ext.callback(me.filterFn, me.scope, [rec, me.inputItem.getValue()]);
-                }
-            });
+    /**
+     * @override
+     * @see Ext.grid.filters.filter.SingleFilter
+     */
+    activate: function (showingMenu) {
+        if (showingMenu) {
+            this.activateMenu();
         } else {
-            return me.callParent([config, key]);
+            this.applyTextFieldDataToGridStoreFilters();
         }
+    },
+
+    /**
+     * @override
+     * @see Ext.grid.filters.filter.SingleFilter
+     */
+    deactivate: function () {
+        // Сбросим текущие фильтры.
+        this.getStoreFilters().clear();
+    },
+
+    /**
+     * @protected
+     * Обновим фильтры у стора. Вызывать в контексте отключенных событий!!!
+     */
+    applyTextFieldDataToGridStoreFilters: function () {
+        // Сбросим текущие фильтры.
+        this.getStoreFilters().clear();
+
+        this.getTextFields().each(function (textfield) {
+                var newFilter = this.createFilter({
+                    operator: this.operator,
+                    value: textfield.getValue()
+                });
+                this.getStoreFilters().add(newFilter);
+            }
+            , this);
+    },
+
+    /**
+     * @protected
+     * Получим все textfield-ы в которые вводятся поисковые значения.
+     * @return {Ext.util.ItemCollection}
+     */
+    getTextFields: function() {
+        return this.owner.activeFilterMenuItem.menu.items;
     }
+
 });
