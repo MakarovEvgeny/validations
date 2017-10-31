@@ -114,6 +114,7 @@ Ext.define('app.views.filters.filter.MultiString', {
         if (skipMark !== true) {
             this.markFilterAndColumn(filterDataPresence);
         }
+        this.active = filterDataPresence;
     },
 
     /**
@@ -247,6 +248,7 @@ Ext.define('app.views.filters.filter.MultiString', {
         } else {
             this.getStoreFilters().removeAll();//Очистим фильры, метод бросит события.
             this.markFilterAndColumn(false);
+            this.active = false; // Обязаны высталвять этот признак, т.к. он предустанавливается в меню при его повторном открытии.
         }
 
     },
