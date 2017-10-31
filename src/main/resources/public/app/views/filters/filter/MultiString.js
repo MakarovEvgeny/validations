@@ -87,19 +87,52 @@ Ext.define('app.views.filters.filter.MultiString', {
 
         // Ввызов конструктора у Ext.grid.filters.filter.Base
         this.superclass.superclass.constructor.apply(this, arguments);
+        me.task = new Ext.util.DelayedTask(me.processFiltersState, me);
 
+    },
 
+    /**
+     * @protected
+     * Функция для обработки состояния фильтров.
+     * @param {boolean} skipMark - не использовать алгоритм определения активности фильтра для столюца.
+     */
+    processFiltersState: function (skipMark) {
+        // Есть ли критерии поиска?
+        var filterDataPresence = false;
 
-        this.filters = me.getStoreFilters();
+        this.getTextFields().each(function (textfield) {
+            if (!Ext.isEmpty(textfield.getValue())) {
+                filterDataPresence = true;
+                return false; // Прервем итерацию
+            }
+        });
 
-        if (!Ext.isEmpty(this.filters) && this.filters.length > 0) {
-            // This filter was restored from stateful filters on the store so enforce it as active.
-            me.active = true;
+        this.applyTextFieldDataToGridStoreFilters();
+
+        // Когда мы явно включаем галочку в меню, фильтры могут не присутствовать и галочка слетит.
+        // Флаг для того чтобы галочка не слетала.
+        if (skipMark !== true) {
+            this.markFilterAndColumn(filterDataPresence);
+        }
+    },
+
+    /**
+     * @private
+     * Установать/снать галочку (активности фильтра) в меню фильтра колонки. Изменить подчеркивание наименования
+     * колонки в соответствии с активностью фильтрации по колонке
+     */
+    markFilterAndColumn: function(active) {
+        var me = this,
+            menuItem = me.owner.activeFilterMenuItem;
+
+        // Make sure we update the 'Filters' menu item.
+        if (menuItem && menuItem.activeFilter === me) {
+            menuItem.suspendEvents(); // проигнорируем все события.
+            menuItem.setChecked(active);
+            menuItem.resumeEvents();
         }
 
-        if (me.active) {
-            me.setColumnActive(true); // Подчеркивание названия колонки.
-        }
+        me.setColumnActive(active);
     },
 
     /**
@@ -134,7 +167,7 @@ Ext.define('app.views.filters.filter.MultiString', {
 
         inputItem.on({
             scope: me,
-            keyup: me.onValueChange,
+            change: me.onValueChange,
             el: {
                 click: function(e) {
                     e.stopPropagation();
@@ -143,53 +176,15 @@ Ext.define('app.views.filters.filter.MultiString', {
         });
     },
 
-    /**
-     * @protected
-     * Template method that is to set the value of the filter.
-     * @param {Object} value The value to set the filter.
-     */
-    setValue: function (value) {
-        var me = this;
-
-        if (value && me.active) {
-            me.value = value;
-            me.updateStoreFilter();
-        } else {
-            me.setActive(!!value);
-        }
-    },
-
-    activateMenu: function () {
-        // this.inputItem.setValue(this.filter.getValue());
-    },
-
-
-    /**
-     * @override
-     * @see Ext.grid.filters.filter.SingleFilter
-     */
-    activate: function (showingMenu) {
-        if (showingMenu) {
-            this.activateMenu();
-        } else {
-            this.applyTextFieldDataToGridStoreFilters();
-        }
-    },
-
-    /**
-     * @override
-     * @see Ext.grid.filters.filter.SingleFilter
-     */
-    deactivate: function () {
-        // Сбросим текущие фильтры.
-        this.getStoreFilters().clear();
-    },
 
     /**
      * @protected
-     * Обновим фильтры у стора. Вызывать в контексте отключенных событий!!!
+     * Обновим фильтры у стора.
      */
     applyTextFieldDataToGridStoreFilters: function () {
+        var filterCollection = this.getGridStore().getFilters();
+        filterCollection.beginUpdate();
+
         // Сбросим текущие фильтры.
         this.getStoreFilters().clear();
 
@@ -201,7 +196,34 @@ Ext.define('app.views.filters.filter.MultiString', {
                 this.getStoreFilters().add(newFilter);
             }
             , this);
+
+        filterCollection.endUpdate();
     },
+
+
+    /**
+     * @private
+     * Handler method called when there is a significant event on an input item.
+     */
+    onValueChange: function (field, e) {
+        var me = this,
+            updateBuffer = me.updateBuffer;
+
+        //<debug>
+        if (!field.isFormField) {
+            Ext.raise('`field` should be a form field instance.');
+        }
+        //</debug>
+
+        if (field.isValid()) {
+            if (updateBuffer) {
+                me.task.delay(updateBuffer);
+            } else {
+                me.processFiltersState(false);
+            }
+        }
+    },
+
 
     /**
      * @protected
@@ -210,6 +232,28 @@ Ext.define('app.views.filters.filter.MultiString', {
      */
     getTextFields: function() {
         return this.owner.activeFilterMenuItem.menu.items;
+    },
+
+    /**
+     * @override
+     * Вызывается когда в меню столбца включается/выключается галочка активности фильтра.
+     * @param active
+     * @see Ext.grid.filters.filter.Base
+     */
+    setActive: function (active) {
+        if (active) {
+            this.processFiltersState(true);
+            this.markFilterAndColumn(true);
+        } else {
+            this.getStoreFilters().removeAll();//Очистим фильры, метод бросит события.
+            this.markFilterAndColumn(false);
+        }
+
+    },
+
+    /** @override */
+    activateMenu: function () {
+    //     this.inputItem.setValue(this.filter.getValue());
     }
 
 });
