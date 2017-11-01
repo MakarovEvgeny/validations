@@ -187,7 +187,7 @@ Ext.define('app.views.filters.filter.MultiString', {
         filterCollection.beginUpdate();
 
         // Сбросим текущие фильтры.
-        this.getStoreFilters().clear();
+        this.clearFilters();
 
         this.getTextFields().each(function (textfield) {
                 var newFilter = this.createFilter({
@@ -246,11 +246,26 @@ Ext.define('app.views.filters.filter.MultiString', {
             this.processFiltersState(true);
             this.markFilterAndColumn(true);
         } else {
-            this.getStoreFilters().removeAll();//Очистим фильры, метод бросит события.
+            this.clearFilters();
             this.markFilterAndColumn(false);
             this.active = false; // Обязаны высталвять этот признак, т.к. он предустанавливается в меню при его повторном открытии.
         }
 
+    },
+
+    /**
+     * @private
+     * Очистим фильтры которые относятся к текущему столбцу.
+     */
+    clearFilters: function () {
+        var filtersToRemove = [];
+        this.getStoreFilters().each(function (filter) {
+            if (filter.getProperty() === this.dataIndex) {
+                filtersToRemove.push(filter)
+            }
+        }, this);
+        //Очистим фильры, метод бросит события.
+        this.getStoreFilters().remove(filtersToRemove);
     },
 
     /** @override */
