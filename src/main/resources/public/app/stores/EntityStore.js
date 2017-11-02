@@ -27,7 +27,7 @@ Ext.define('app.stores.EntityStore', {
                             {
                                 property: item.property,
                                 value: itemValue,
-                                operation: item.operation
+                                operator: item.operator
                             }
                         )
                     }, this);
