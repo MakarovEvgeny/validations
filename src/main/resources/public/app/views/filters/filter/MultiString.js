@@ -157,18 +157,39 @@ Ext.define('app.views.filters.filter.MultiString', {
 
         me.callParent();
 
-        config = Ext.apply({}, me.getItemDefaults());
+        config = this.getTextFieldConfig();
+
+        var inputItem = me.menu.add(config);
+
+        this.setListenersForTextField(inputItem, me);
+    },
+
+
+    /**
+     * @protected
+     * Получим параметры для создания поля ввода критерия поиска.
+     */
+    getTextFieldConfig: function () {
+        var config = Ext.apply({}, this.getItemDefaults());
         if (config.iconCls && !('labelClsExtra' in config)) {
             config.labelClsExtra = Ext.baseCSSPrefix + 'grid-filters-icon ' + config.iconCls;
         }
         delete config.iconCls;
 
-        config.emptyText = config.emptyText || me.emptyText;
-        var inputItem = me.menu.add(config);
+        config.emptyText = config.emptyText || this.emptyText;
 
-        inputItem.on({
-            scope: me,
-            change: me.onValueChange,
+        return config;
+    },
+
+    /**
+     * Повесим обработчики событий на компонент.
+     * @param textfield поле для ввода критерия поиска
+     * @param scope контекст
+     */
+    setListenersForTextField: function (textfield, scope) {
+        textfield.on({
+            scope: scope,
+            change: scope.onValueChange,
             el: {
                 click: function(e) {
                     e.stopPropagation();
@@ -189,15 +210,19 @@ Ext.define('app.views.filters.filter.MultiString', {
         // Сбросим текущие фильтры.
         this.clearFilters();
 
+        var values = [];
         this.getTextFields().each(function (textfield) {
-                var newFilter = this.createFilter({
-                    operator: this.operator,
-                    value: textfield.getValue()
-                });
-                this.getStoreFilters().add(newFilter);
+                var value = textfield.getValue();
+                if (!Ext.isEmpty(value)) {
+                    values.push(value);
+                }
             }
             , this);
 
+        this.getStoreFilters().add(this.createFilter({
+            operator: this.operator,
+            value: values
+        }));
         filterCollection.endUpdate();
     },
 
@@ -217,6 +242,14 @@ Ext.define('app.views.filters.filter.MultiString', {
         //</debug>
 
         if (field.isValid()) {
+
+            if (Ext.isEmpty(field.getValue()) && this.getEmptyTextFieldsCount() > 1) {
+                me.menu.remove(field);
+            } else if (!Ext.isEmpty(field.getValue()) && this.getEmptyTextFieldsCount() === 0) {
+                var textfield = me.menu.add(this.getTextFieldConfig());
+                this.setListenersForTextField(textfield, me);
+            }
+
             if (updateBuffer) {
                 me.task.delay(updateBuffer);
             } else {
@@ -225,6 +258,22 @@ Ext.define('app.views.filters.filter.MultiString', {
         }
     },
 
+
+    /**
+     * @private
+     * Количество незаполненных компонентов, требуется для логики добавления/удаление новых.
+     */
+    getEmptyTextFieldsCount: function () {
+        var count = 0;
+        this.getTextFields().each(function (textfield) {
+            if (Ext.isEmpty(textfield.getValue())) {
+                count++;
+            }
+
+        });
+
+        return count;
+    },
 
     /**
      * @protected
