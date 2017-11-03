@@ -68,7 +68,7 @@ Ext.define('app.views.filters.filter.MultiString', {
         hideEmptyLabel: false,
         iconCls: Ext.baseCSSPrefix + 'grid-filters-find',
         labelSeparator: '',
-        labelWidth: 29,
+        labelWidth: 3,
         margin: 0,
         selectOnFocus: true
     },
@@ -88,6 +88,7 @@ Ext.define('app.views.filters.filter.MultiString', {
         // Ввызов конструктора у Ext.grid.filters.filter.Base
         this.superclass.superclass.constructor.apply(this, arguments);
         me.task = new Ext.util.DelayedTask(me.processFiltersState, me);
+        this.toDelete = [];
 
     },
 
@@ -171,10 +172,10 @@ Ext.define('app.views.filters.filter.MultiString', {
      */
     getTextFieldConfig: function () {
         var config = Ext.apply({}, this.getItemDefaults());
-        if (config.iconCls && !('labelClsExtra' in config)) {
-            config.labelClsExtra = Ext.baseCSSPrefix + 'grid-filters-icon ' + config.iconCls;
-        }
-        delete config.iconCls;
+        // if (config.iconCls && !('labelClsExtra' in config)) {
+        //     config.labelClsExtra = Ext.baseCSSPrefix + 'grid-filters-icon ' + config.iconCls;
+        // }
+        // delete config.iconCls;
 
         config.emptyText = config.emptyText || this.emptyText;
 
@@ -235,6 +236,11 @@ Ext.define('app.views.filters.filter.MultiString', {
         var me = this,
             updateBuffer = me.updateBuffer;
 
+        Ext.each(this.toDelete, function (f) {
+            f.destroy();
+        });
+        this.toDelete = [];
+
         //<debug>
         if (!field.isFormField) {
             Ext.raise('`field` should be a form field instance.');
@@ -244,7 +250,16 @@ Ext.define('app.views.filters.filter.MultiString', {
         if (field.isValid()) {
 
             if (Ext.isEmpty(field.getValue()) && this.getEmptyTextFieldsCount() > 1) {
-                me.menu.remove(field);
+
+                // me.menu.remove(field);
+                // Уничтожение элемента меню почему-то приводит к: Uncaught TypeError: Cannot read property 'removeCls' of null
+                // За вменяемое время разобраться в причинах не удалось, проблему решает отложенное уничтожение textfield-а.
+
+                var removed = me.menu.remove(field, false);
+                this.toDelete.push(removed); //Компоненты которые уничтожаться при следующем изменении значений фильтров.
+
+
+
             } else if (!Ext.isEmpty(field.getValue()) && this.getEmptyTextFieldsCount() === 0) {
                 var textfield = me.menu.add(this.getTextFieldConfig());
                 this.setListenersForTextField(textfield, me);
