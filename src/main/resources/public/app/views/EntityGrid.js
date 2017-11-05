@@ -45,6 +45,37 @@ Ext.define('app.views.EntityGrid', {
                 flex: 1
             }
         ]
+    },
+
+    listeners: {
+        selectionChange: 'onEntityGridSelectionChange'
+    },
+
+    bbar: [
+        {
+            xtype: 'button',
+            name: 'create',
+            scale: 'large',
+            text: 'Создать',
+            listeners: {
+                click: 'createEntity'
+            }
+        },
+        {
+            xtype: 'button',
+            name: 'edit',
+            scale: 'large',
+            disabled: true,
+            text: 'Редактировать',
+            listeners: {
+                click: 'editEntity'
+            }
+        }
+    ],
+
+
+    getEditButton: function () {
+        return this.down('button[name=edit]');
     }
 
 });
