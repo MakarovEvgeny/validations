@@ -10,62 +10,43 @@ Ext.define('app.views.EntityWindow', {
     width: 350,
     height: 400,
 
-    layout: {
-        type: 'vbox',
-        align: 'left'
-    },
-
-    defaults: {
-        margin: '5 10 5 10',
-        labelWidth: 150
-    },
-
-
-    constructor: function (entityId) {
-        this.callParent();
-
-        if (Ext.isEmpty(entityId)) {
-            this.setViewModel({
-                data: {
-                    entity: Ext.create('app.models.Entity')
-                }
-            });
-        }
-    },
-
     items: [
 
         {
-            xtype: 'textfield',
-            fieldLabel: 'Код',
-            bind: {
-                value: '{entity.data.id}'
+            xtype: 'form',
+            border: false,
+            layout: {
+                type: 'vbox',
+                align: 'left'
             },
-            name: 'id'
-        },
-        {
-            xtype: 'textfield',
-            fieldLabel: 'Наименование',
-            bind: {
-                value: '{entity.data.name}'
+
+            defaults: {
+                margin: '5 10 5 10',
+                labelWidth: 150
             },
-            name: 'name'
-        },
-        {
-            xtype: 'textfield',
-            fieldLabel: 'Описание',
-            bind: {
-                value: '{entity.data.description}'
-            },
-            name: 'description'
-        },
-        {
-            xtype: 'textfield',
-            fieldLabel: 'Комментарий',
-            bind: {
-                value: '{entity.data.commentary}'
-            },
-            name: 'commentary'
+
+            items: [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Код',
+                    name: 'id'
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Наименование',
+                    name: 'name'
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Описание',
+                    name: 'description'
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Комментарий',
+                    name: 'commentary'
+                }
+            ]
         }
 
     ],

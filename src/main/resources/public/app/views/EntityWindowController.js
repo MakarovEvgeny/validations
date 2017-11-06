@@ -7,7 +7,9 @@ Ext.define('app.views.EntityWindowController', {
     ],
 
     createEntity: function () {
-        var entity = this.getViewModel().getData().entity;
+        var entity = Ext.create('app.models.Entity');
+        this.getView().down('form').updateRecord(entity);
+
         entity.phantom = true; //у нас проставлен id, надо установить этот признак чтобы не выполнилась операция update.
         entity.save();
     }
