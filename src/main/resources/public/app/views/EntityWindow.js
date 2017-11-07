@@ -6,9 +6,23 @@ Ext.define('app.views.EntityWindow', {
 
     controller: 'entity-window-controller',
 
-    title: 'Создать',
     width: 350,
     height: 400,
+
+    constructor: function (operation) {
+        this.callParent(arguments);
+
+        if (operation === 'create') {
+            this.title = 'Создать';
+            this.down('button[name=edit]').hide();
+            this.down('button[name=delete]').hide();
+        } else {
+            this.title = 'Редактировать';
+            this.down('textfield[name=id]').setReadOnly(true);
+            this.down('button[name=create]').hide(true);
+        }
+
+    },
 
     items: [
 
@@ -45,6 +59,11 @@ Ext.define('app.views.EntityWindow', {
                     xtype: 'textfield',
                     fieldLabel: 'Комментарий',
                     name: 'commentary'
+                },
+                {
+                    xtype: 'numberfield',
+                    name: 'version',
+                    hidden: true
                 }
             ]
         }
@@ -59,6 +78,24 @@ Ext.define('app.views.EntityWindow', {
             text: 'Создать',
             listeners: {
                 click: 'createEntity'
+            }
+        },
+        {
+            xtype: 'button',
+            name: 'edit',
+            scale: 'large',
+            text: 'Редактировать',
+            listeners: {
+                click: 'editEntity'
+            }
+        },
+        {
+            xtype: 'button',
+            name: 'delete',
+            scale: 'large',
+            text: 'Удалить',
+            listeners: {
+                click: 'deleteEntity'
             }
         }
     ]
