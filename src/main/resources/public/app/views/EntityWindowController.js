@@ -17,14 +17,14 @@ Ext.define('app.views.EntityWindowController', {
         var entity = this.getEntity();
 
         entity.phantom = true; //у нас проставлен id, надо установить этот признак чтобы не выполнилась операция update.
-        entity.save();
+        this.save(entity);
     },
 
     editEntity: function () {
         var entity = this.getEntity();
 
         entity.phantom = false; // установим признак чтобы выполнилась операция update.
-        entity.save();
+        this.save(entity);
     },
 
     deleteEntity: function () {
@@ -32,7 +32,21 @@ Ext.define('app.views.EntityWindowController', {
 
         entity.dropped = true;
         entity.phantom = false; // Установим признаки для удаления записи.
-        entity.save();
+        this.save(entity);
+    },
+
+    /** @private */
+    save: function(entity) {
+        var w = this.getView();
+        w.setLoading(true);
+        entity.save({
+            callback: function (record, operation, success) {
+                w.setLoading(false);
+                if (success) {
+                    w.close();
+                }
+            }
+        });
     }
 
 });

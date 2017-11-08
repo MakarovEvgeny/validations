@@ -20,19 +20,19 @@ Ext.define('app.controllers.EntityGridController', {
     editEntity: function () {
         var row = this.getView().getSelectionModel().getSelection()[0];
 
-        this.getView().setLoading(true);
+        var window = Ext.create('app.views.EntityWindow', {
+            operation: 'edit'
+        });
+        window.show();
+        window.setLoading(true);
+
         app.models.Entity.load(row.get('id'), {
             scope: this,
             success: function (record) {
-                var window = Ext.create('app.views.EntityWindow', {
-                    operation: 'edit'
-                });
                 window.down('form').loadRecord(record);
-
-                window.show();
             },
             callback: function () {
-                this.getView().setLoading(false);
+                window.setLoading(false);
             }
         });
 
