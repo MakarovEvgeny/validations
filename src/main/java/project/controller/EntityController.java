@@ -1,11 +1,15 @@
 package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import project.model.query.SearchParams;
 import project.model.entity.Entity;
+import project.model.query.SearchParams;
 import project.service.ModelService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("entity")
@@ -14,6 +18,15 @@ public class EntityController {
 
     @Autowired
     private ModelService<Entity> service;
+
+    @Autowired
+    @Qualifier("entityValidator")
+    private Validator v;
+
+    @InitBinder("entity")
+    public void initBinder(WebDataBinder binder) {
+        binder.addValidators(v);
+    }
 
     @RequestMapping(value = "query", method = RequestMethod.POST)
     public List<Entity> find(@RequestBody SearchParams searchParams) {
@@ -26,7 +39,7 @@ public class EntityController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void create(@RequestBody Entity entity) {
+    public void create(@RequestBody @Valid Entity entity) {
         service.create(entity);
     }
 
