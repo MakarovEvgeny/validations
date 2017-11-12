@@ -1,0 +1,1 @@
+select exists(select null from entity WHERE name = :name and (CAST(:id as varchar) is null or entity_id != :id))

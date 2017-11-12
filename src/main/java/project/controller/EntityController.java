@@ -12,6 +12,8 @@ import project.service.ModelService;
 import javax.validation.Valid;
 import java.util.List;
 
+import static project.model.ClientOperation.QUERY;
+
 @RequestMapping("entity")
 @RestController
 public class EntityController {
@@ -28,7 +30,7 @@ public class EntityController {
         binder.addValidators(v);
     }
 
-    @RequestMapping(value = "query", method = RequestMethod.POST)
+    @RequestMapping(value = QUERY, method = RequestMethod.POST)
     public List<Entity> find(@RequestBody SearchParams searchParams) {
         return service.find(searchParams);
     }
@@ -44,12 +46,12 @@ public class EntityController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@RequestBody Entity entity) {
+    public void update(@RequestBody @Valid Entity entity) {
         service.update(entity);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void remove(@RequestBody Entity entity) {
+    public void remove(@RequestBody @Valid Entity entity) {
         service.remove(entity);
     }
 
