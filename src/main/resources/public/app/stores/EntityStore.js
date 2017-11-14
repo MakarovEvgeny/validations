@@ -1,6 +1,9 @@
 Ext.define('app.stores.EntityStore', {
     extend: 'Ext.data.Store',
-    requires: ['app.models.Entity'],
+    requires: [
+        'app.models.Entity',
+        'app.stores.AppRestProxy'
+    ],
 
     model: 'app.models.Entity',
 
@@ -9,42 +12,10 @@ Ext.define('app.stores.EntityStore', {
     remoteFilter: true,
 
     proxy: {
-        type: 'rest',
+        type: 'app-rest',
         url: '/entity',
-        actionMethods: {
-            read: 'POST'
-        },
-        paramsAsJson: true,
-        // override
-        // https://www.sencha.com/forum/showthread.php?297692-sortParam-is-sent-as-String-when-using-paramsAsJson-true
-        applyEncoding: function (value) {
-            var result = [];
-            Ext.each(value, function (item) {
-
-                if (Ext.isArray(item.value)) {
-                    Ext.each(item.value, function (itemValue) {
-                        result.push(
-                            {
-                                property: item.property,
-                                value: itemValue,
-                                operator: item.operator
-                            }
-                        )
-                    }, this);
-
-                } else {
-                    result.push(item);
-                }
-
-            }, this);
-
-            return result;
-        },
         api: {
             read: 'entity/query'
-        },
-        reader: {
-            type: 'json'
         }
     }
 
