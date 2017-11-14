@@ -8,6 +8,7 @@ import project.dao.SearchParamsProcessor.ProcessResult;
 import project.model.entity.Entity;
 import project.model.query.SearchParams;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +73,25 @@ public class EntityDao extends BaseVersionAwareModelDao<Entity> {
         params.put("name", null);
         params.put("description", null);
         return params;
+    }
+
+    /** Проверка существования записи в БД с указанным id. */
+    public boolean alreadyExists(String id) {
+        return jdbc.queryForObject(lookup("entity/AlreadyExists"), singletonMap("id", id), Boolean.class);
+    }
+
+    /** Проверка существования записи в БД с указанным наименованием. */
+    public boolean nameAlreadyExists(String id, String name) {
+        Map<String, String> params = new HashMap<>();
+        params.put("id", id);
+        params.put("name", name);
+
+        return jdbc.queryForObject(lookup("entity/NameAlreadyExists"), params, Boolean.class);
+    }
+
+    /** Проверка что на удаляемую запись ссылаются из других таблиц. */
+    public boolean isUsed(String id) {
+        return jdbc.queryForObject(lookup("entity/IsUsed"), singletonMap("id", id), Boolean.class);
     }
 
 }

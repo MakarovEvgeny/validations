@@ -1,0 +1,1 @@
+select exists(select null from entity WHERE entity_id = :id)
