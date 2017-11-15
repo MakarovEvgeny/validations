@@ -1,16 +1,11 @@
 Ext.define('app.views.EntityGrid', {
-    extend: 'Ext.grid.Panel',
+    extend: 'app.views.ModelGrid',
     requires: [
         'app.stores.EntityStore',
-        'app.views.filters.filter.MultiString',
         'app.controllers.EntityGridController'
     ],
 
     xtype: 'entity-grid',
-
-    enableColumnHide: false,
-
-    plugins: 'gridfilters',
 
     controller: 'entity-grid-controller',
 
@@ -45,37 +40,6 @@ Ext.define('app.views.EntityGrid', {
                 flex: 1
             }
         ]
-    },
-
-    listeners: {
-        selectionChange: 'onEntityGridSelectionChange'
-    },
-
-    bbar: [
-        {
-            xtype: 'button',
-            name: 'create',
-            scale: 'large',
-            text: 'Создать',
-            listeners: {
-                click: 'createEntity'
-            }
-        },
-        {
-            xtype: 'button',
-            name: 'edit',
-            scale: 'large',
-            disabled: true,
-            text: 'Редактировать',
-            listeners: {
-                click: 'editEntity'
-            }
-        }
-    ],
-
-
-    getEditButton: function () {
-        return this.down('button[name=edit]');
     }
 
 });

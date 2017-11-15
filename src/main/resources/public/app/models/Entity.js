@@ -1,5 +1,5 @@
 Ext.define('app.models.Entity', {
-    extend: 'Ext.data.Model',
+    extend: 'app.models.BaseVersionAwareModel',
 
     proxy: {
         type: 'rest',
@@ -10,11 +10,8 @@ Ext.define('app.models.Entity', {
     },
 
     fields: [
-        {name: 'id'},
         {name: 'name'},
-        {name: 'description'},
-        {name: 'commentary'},
-        {name: 'version'}
+        {name: 'description'}
     ]
 
 });

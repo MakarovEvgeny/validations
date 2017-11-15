@@ -9,10 +9,10 @@ Ext.define('app.views.EntityWindow', {
     width: 350,
     height: 400,
 
-    constructor: function (operation) {
+    constructor: function () {
         this.callParent(arguments);
 
-        if (operation === 'create') {
+        if (this.operation === 'create') {
             this.title = 'Создать';
             this.down('button[name=edit]').hide();
             this.down('button[name=delete]').hide();
