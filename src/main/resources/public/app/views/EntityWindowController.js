@@ -13,21 +13,21 @@ Ext.define('app.views.EntityWindowController', {
         return entity;
     },
 
-    createEntity: function () {
+    create: function () {
         var entity = this.getEntity();
 
         entity.phantom = true; //у нас проставлен id, надо установить этот признак чтобы не выполнилась операция update.
         this.save(entity);
     },
 
-    editEntity: function () {
+    edit: function () {
         var entity = this.getEntity();
 
         entity.phantom = false; // установим признак чтобы выполнилась операция update.
         this.save(entity);
     },
 
-    deleteEntity: function () {
+    delete: function () {
         var entity = this.getEntity();
 
         entity.dropped = true;
