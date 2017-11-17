@@ -17,7 +17,8 @@ Ext.define('app.views.EntityGrid', {
                 text: 'Код',
                 dataIndex: 'id',
                 filter: {
-                    type: 'list'
+                    type: 'list',
+                    operator: '='
                 },
                 flex: 1
             },

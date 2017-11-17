@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
+import project.dao.SearchParamsProcessor;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 import static project.dao.RequestRegistry.lookup;
+import static project.dao.SearchParamsProcessor.process;
 
 @Repository
 public class OperationDao extends BaseVersionAwareModelDao<Operation> {
@@ -49,7 +51,8 @@ public class OperationDao extends BaseVersionAwareModelDao<Operation> {
     }
 
     public List<Operation> find(SearchParams searchParams) {
-        return jdbc.query(lookup("operation/FindOperation"), mapper);
+        SearchParamsProcessor.ProcessResult result = process(lookup("operation/FindOperation"), searchParams);
+        return jdbc.query(result.getResultQuery(), result.getParams(), mapper);
     }
 
     @Override
