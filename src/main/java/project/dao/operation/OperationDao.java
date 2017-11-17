@@ -8,6 +8,7 @@ import project.dao.SearchParamsProcessor;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class OperationDao extends BaseVersionAwareModelDao<Operation> {
+public class OperationDao extends BaseVersionAwareModelDao<Operation> implements OperationValidatorDao {
 
     private RowMapper<Operation> mapper = (rs, rowNum) -> new Operation(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 
@@ -68,6 +69,25 @@ public class OperationDao extends BaseVersionAwareModelDao<Operation> {
         params.put("name", null);
         params.put("description", null);
         return params;
+    }
+
+    /** Проверка существования записи в БД с указанным id. */
+    public boolean alreadyExists(String id) {
+        return jdbc.queryForObject(lookup("operation/AlreadyExists"), singletonMap("id", id), Boolean.class);
+    }
+
+    /** Проверка существования записи в БД с указанным наименованием. */
+    public boolean nameAlreadyExists(String id, String name) {
+        Map<String, String> params = new HashMap<>();
+        params.put("id", id);
+        params.put("name", name);
+
+        return jdbc.queryForObject(lookup("operation/NameAlreadyExists"), params, Boolean.class);
+    }
+
+    /** Проверка что на удаляемую запись ссылаются из других таблиц. */
+    public boolean isUsed(String id) {
+        return jdbc.queryForObject(lookup("operation/IsUsed"), singletonMap("id", id), Boolean.class);
     }
 
 }

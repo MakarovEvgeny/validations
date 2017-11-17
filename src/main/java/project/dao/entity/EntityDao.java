@@ -17,7 +17,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class EntityDao extends BaseVersionAwareModelDao<Entity> {
+public class EntityDao extends BaseVersionAwareModelDao<Entity> implements EntityValidatorDao {
 
     private RowMapper<Entity> mapper = (rs, rowNum) -> new Entity(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 
