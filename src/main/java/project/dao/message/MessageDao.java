@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
+import project.dao.SearchParamsProcessor;
 import project.model.message.Message;
 import project.model.query.SearchParams;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 import static project.dao.RequestRegistry.lookup;
+import static project.dao.SearchParamsProcessor.process;
 
 @Repository
 public class MessageDao extends BaseVersionAwareModelDao<Message> {
@@ -49,7 +51,8 @@ public class MessageDao extends BaseVersionAwareModelDao<Message> {
 
     @Override
     public List<Message> find(SearchParams searchParams) {
-        return jdbc.query(lookup("message/FindMessage"), mapper);
+        SearchParamsProcessor.ProcessResult result = process(lookup("message/FindMessage"), searchParams);
+        return jdbc.query(result.getResultQuery(), result.getParams(), mapper);
     }
 
     private void createHistory(Message message) {
