@@ -1,7 +1,9 @@
-SELECT
-  operation_id AS id,
-  name,
-  description,
-  version,
-  commentary
-FROM operation
+SELECT * FROM (
+  SELECT
+    operation_id AS id,
+    name,
+    description,
+    version,
+    commentary
+  FROM operation
+) wrapper
