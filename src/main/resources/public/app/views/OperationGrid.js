@@ -1,15 +1,15 @@
-Ext.define('app.views.EntityGrid', {
+Ext.define('app.views.OperationGrid', {
     extend: 'app.views.ModelGrid',
     requires: [
-        'app.stores.EntityStore',
-        'app.controllers.EntityGridController'
+        'app.stores.OperationStore',
+        'app.controllers.OperationGridController'
     ],
 
-    xtype: 'entity-grid',
+    xtype: 'operation-grid',
 
-    controller: 'entity-grid-controller',
+    controller: 'operation-grid-controller',
 
-    store: Ext.create('app.stores.EntityStore'),
+    store: Ext.create('app.stores.OperationStore'),
 
     columns: {
         items: [

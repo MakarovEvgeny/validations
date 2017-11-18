@@ -1,4 +1,4 @@
-package project.model.entity;
+package project.model.operation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -9,40 +9,40 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.ServletWebRequest;
-import project.dao.entity.EntityValidatorDao;
+import project.dao.operation.OperationValidatorDao;
 import project.model.ClientOperation;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.INTERFACES)
-public class EntityValidator implements Validator {
+public class OperationValidator implements Validator {
 
-    private static final String NAME = "Сущность";
+    private static final String NAME = "Операция";
 
     @Autowired
     private ServletWebRequest request;
 
     @Autowired
-    private EntityValidatorDao dao;
+    private OperationValidatorDao dao;
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return Entity.class.equals(clazz);
+        return Operation.class == clazz;
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        Entity entity = (Entity) target;
-        ClientOperation operation = ClientOperation.getClientOperation(request);
+        Operation operation = (Operation) target;
+        ClientOperation op = ClientOperation.getClientOperation(request);
 
         ValidationUtils.rejectIfEmpty(errors, "id", "001", new String[]{NAME});
         ValidationUtils.rejectIfEmpty(errors, "name", "002", new String[]{NAME});
 
-        String id = entity.getId();
-        String name = entity.getName();
+        String id = operation.getId();
+        String name = operation.getName();
 
-        if (operation == ClientOperation.CREATE) {
+        if (op == ClientOperation.CREATE) {
             if (!isEmpty(id) && dao.alreadyExists(id)) {
                 errors.rejectValue("id", "003", new String[]{NAME}, null);
             }
@@ -51,13 +51,13 @@ public class EntityValidator implements Validator {
             }
         }
 
-        if (operation == ClientOperation.UPDATE) {
+        if (op == ClientOperation.UPDATE) {
             if (!isEmpty(id) && !isEmpty(name) && dao.nameAlreadyExists(id, name)) {
                 errors.rejectValue("id", "004", new String[]{NAME}, null);
             }
         }
 
-        if (operation == ClientOperation.DELETE) {
+        if (op == ClientOperation.DELETE) {
             ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
 
             if (!isEmpty(id) && dao.isUsed(id)) {
