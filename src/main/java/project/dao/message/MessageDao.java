@@ -4,17 +4,20 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
+import project.dao.SearchParamsProcessor;
 import project.model.message.Message;
 import project.model.query.SearchParams;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 import static project.dao.RequestRegistry.lookup;
+import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class MessageDao extends BaseVersionAwareModelDao<Message> {
+public class MessageDao extends BaseVersionAwareModelDao<Message> implements MessageValidatorDao {
 
     private RowMapper<Message> mapper = (rs, rowNum) -> new Message(rs.getString("id"), rs.getString("text"), rs.getInt("version"), rs.getString("commentary"));
 
@@ -49,7 +52,8 @@ public class MessageDao extends BaseVersionAwareModelDao<Message> {
 
     @Override
     public List<Message> find(SearchParams searchParams) {
-        return jdbc.query(lookup("message/FindMessage"), mapper);
+        SearchParamsProcessor.ProcessResult result = process(lookup("message/FindMessage"), searchParams);
+        return jdbc.query(result.getResultQuery(), result.getParams(), mapper);
     }
 
     private void createHistory(Message message) {
@@ -68,4 +72,24 @@ public class MessageDao extends BaseVersionAwareModelDao<Message> {
         params.put("text", null);
         return params;
     }
+
+    @Override
+    public boolean alreadyExists(String id) {
+        return jdbc.queryForObject(lookup("message/AlreadyExists"), singletonMap("id", id), Boolean.class);
+    }
+
+    @Override
+    public boolean sameTextAlreadyExists(String id, String text) {
+        Map<String, String> params = new HashMap<>();
+        params.put("id", id);
+        params.put("text", text);
+
+        return jdbc.queryForObject(lookup("message/TextAlreadyExists"), params, Boolean.class);
+    }
+
+    @Override
+    public boolean isUsed(String id) {
+        return jdbc.queryForObject(lookup("message/IsUsed"), singletonMap("id", id), Boolean.class);
+    }
+
 }

@@ -1,11 +1,15 @@
 package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import project.model.message.Message;
 import project.model.query.SearchParams;
 import project.service.ModelService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("message")
@@ -14,6 +18,15 @@ public class MessageController {
 
     @Autowired
     private ModelService<Message> service;
+
+    @Autowired
+    @Qualifier("messageValidator")
+    private Validator validator;
+
+    @InitBinder("message")
+    public void initBinder(WebDataBinder binder) {
+        binder.addValidators(validator);
+    }
 
     @RequestMapping(value = "query", method = RequestMethod.POST)
     public List<Message> find(@RequestBody SearchParams searchParams) {
@@ -26,17 +39,17 @@ public class MessageController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void create(@RequestBody Message message) {
+    public void create(@RequestBody @Valid Message message) {
         service.create(message);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@RequestBody Message message) {
+    public void update(@RequestBody @Valid Message message) {
         service.update(message);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void remove(@RequestBody Message message) {
+    public void remove(@RequestBody @Valid Message message) {
         service.remove(message);
     }
 

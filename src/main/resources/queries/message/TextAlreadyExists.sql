@@ -1,0 +1,1 @@
+select exists(select null from message WHERE text = :text and (CAST(:id as varchar) is null or message_id != :id))

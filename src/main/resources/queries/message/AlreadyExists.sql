@@ -1,0 +1,1 @@
+select exists(select null from message WHERE message_id = :id)

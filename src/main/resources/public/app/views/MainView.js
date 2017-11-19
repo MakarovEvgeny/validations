@@ -2,7 +2,8 @@ Ext.define('app.views.MainView', {
     extend: 'Ext.tab.Panel',
     requires: [
         'app.views.EntityGrid',
-        'app.views.OperationGrid'
+        'app.views.OperationGrid',
+        'app.views.MessageGrid'
     ],
 
     activeTab: 3,
@@ -16,7 +17,8 @@ Ext.define('app.views.MainView', {
             xtype: 'operation-grid'
         },
         {
-            title: 'Сообщения'
+            title: 'Сообщения',
+            xtype: 'message-grid'
         },
         {
             title: 'Валидации'
