@@ -1,6 +1,7 @@
 Ext.define('app.views.ModelGrid', {
     extend: 'Ext.grid.Panel',
     requires: [
+        'app.custom.NoTotalPagesPagingToolbar',
         'app.views.filters.filter.MultiString',
         'app.controllers.ModelGridController'
     ],
@@ -9,31 +10,74 @@ Ext.define('app.views.ModelGrid', {
 
     plugins: 'gridfilters',
 
+    constructor: function () {
+        this.callParent(arguments);
+
+        var store = this.createStore({
+            pageSize: 50 //записей на одной странице.
+        });
+        this.reconfigure(store);
+        this.down('custom-pagingtoolbar').bindStore(store);
+    },
+
+    /** @protected */
+    createStore: function (storeConfig) {
+        throw 'should be overridden';
+    },
+
+
     listeners: {
         selectionChange: 'onSelectionChange'
     },
 
-    bbar: [
-        {
-            xtype: 'button',
-            name: 'create',
-            scale: 'large',
-            text: 'Создать',
-            listeners: {
-                click: 'create'
-            }
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'bottom',
+        layout: {
+            type: 'vbox',
+            align: 'stretch'
         },
-        {
-            xtype: 'button',
-            name: 'edit',
-            scale: 'large',
-            disabled: true,
-            text: 'Редактировать',
-            listeners: {
-                click: 'edit'
+        margin: 0,
+        padding: 0,
+        items: [
+            {
+                xtype: 'panel',
+                margin: 0,
+                padding: 0,
+                items: [
+                    {
+                        xtype: 'button',
+                        name: 'create',
+                        scale: 'large',
+                        text: 'Создать',
+                        listeners: {
+                            click: 'create'
+                        }
+                    },
+                    {
+                        xtype: 'button',
+                        name: 'edit',
+                        scale: 'large',
+                        disabled: true,
+                        text: 'Редактировать',
+                        listeners: {
+                            click: 'edit'
+                        }
+                    }
+                ]
+            },
+            {
+                xtype: 'panel',
+                border: false,
+                items: [
+                    {
+                        xtype: 'custom-pagingtoolbar',
+                        border: 0
+                    }
+                ]
             }
-        }
-    ],
+        ]
+    }],
 
 
     getEditButton: function () {

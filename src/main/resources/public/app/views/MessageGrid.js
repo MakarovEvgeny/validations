@@ -9,7 +9,10 @@ Ext.define('app.views.MessageGrid', {
 
     controller: 'message-grid-controller',
 
-    store: Ext.create('app.stores.MessageStore'),
+    /** @override */
+    createStore: function (storeConfig) {
+        return Ext.create('app.stores.MessageStore', storeConfig);
+    },
 
     columns: {
         items: [

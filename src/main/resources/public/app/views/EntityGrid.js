@@ -9,7 +9,10 @@ Ext.define('app.views.EntityGrid', {
 
     controller: 'entity-grid-controller',
 
-    store: Ext.create('app.stores.EntityStore'),
+    /** @override */
+    createStore: function (storeConfig) {
+        return Ext.create('app.stores.EntityStore', storeConfig);
+    },
 
     columns: {
         items: [

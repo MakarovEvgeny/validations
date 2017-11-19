@@ -9,7 +9,10 @@ Ext.define('app.views.OperationGrid', {
 
     controller: 'operation-grid-controller',
 
-    store: Ext.create('app.stores.OperationStore'),
+    /** @override */
+    createStore: function (storeConfig) {
+        return Ext.create('app.stores.OperationStore', storeConfig);
+    },
 
     columns: {
         items: [
