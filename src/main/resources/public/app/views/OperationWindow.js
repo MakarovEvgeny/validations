@@ -1,7 +1,7 @@
 Ext.define('app.views.OperationWindow', {
     extend: 'app.views.ModelWindow',
     requires: [
-        'app.views.OperationWindowController'
+        'app.controllers.OperationWindowController'
     ],
 
     controller: 'operation-window-controller',

@@ -1,7 +1,7 @@
 Ext.define('app.views.MessageWindow', {
     extend: 'app.views.ModelWindow',
     requires: [
-        'app.views.MessageWindowController'
+        'app.controllers.MessageWindowController'
     ],
 
     controller: 'message-window-controller',

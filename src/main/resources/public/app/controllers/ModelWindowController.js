@@ -1,4 +1,4 @@
-Ext.define('app.views.ModelWindowController', {
+Ext.define('app.controllers.ModelWindowController', {
     extend: 'Ext.app.ViewController',
 
     /** @protected */

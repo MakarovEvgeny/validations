@@ -1,5 +1,5 @@
-Ext.define('app.views.EntityWindowController', {
-    extend: 'app.views.ModelWindowController',
+Ext.define('app.controllers.EntityWindowController', {
+    extend: 'app.controllers.ModelWindowController',
     alias: 'controller.entity-window-controller',
 
     requires: [

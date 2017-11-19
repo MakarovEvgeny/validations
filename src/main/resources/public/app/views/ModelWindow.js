@@ -1,7 +1,7 @@
 Ext.define('app.views.ModelWindow', {
     extend: 'Ext.window.Window',
     requires: [
-        'app.views.EntityWindowController'
+        'app.controllers.EntityWindowController'
     ],
 
     width: 350,

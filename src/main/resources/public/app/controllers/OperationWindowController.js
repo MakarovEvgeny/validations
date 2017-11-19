@@ -1,5 +1,5 @@
-Ext.define('app.views.OperationWindowController', {
-    extend: 'app.views.ModelWindowController',
+Ext.define('app.controllers.OperationWindowController', {
+    extend: 'app.controllers.ModelWindowController',
     alias: 'controller.operation-window-controller',
 
     requires: [

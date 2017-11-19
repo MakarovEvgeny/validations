@@ -1,5 +1,5 @@
-Ext.define('app.views.MessageWindowController', {
-    extend: 'app.views.ModelWindowController',
+Ext.define('app.controllers.MessageWindowController', {
+    extend: 'app.controllers.ModelWindowController',
     alias: 'controller.message-window-controller',
 
     requires: [
