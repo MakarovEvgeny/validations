@@ -4,6 +4,8 @@ SELECT
   v.version       AS version,
   v.commentary    AS commentary,
 
+  v.severity_id   AS severityId,
+
   m.message_id    AS m_id,
   m.text          AS m_text,
   m.version       AS m_version,

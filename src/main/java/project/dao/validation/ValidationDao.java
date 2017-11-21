@@ -11,6 +11,7 @@ import project.model.entity.Entity;
 import project.model.message.Message;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
+import project.model.validation.Severity;
 import project.model.validation.Validation;
 
 import java.util.*;
@@ -24,7 +25,8 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
 
     private RowMapper<Validation> mapper = (rs, rowNum) -> {
         Message message = new Message(rs.getString("m_id"), rs.getString("m_text"), rs.getInt("m_version"), rs.getString("m_commentary"));
-        return new Validation(rs.getString("id"), message, rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
+        Severity severity = Severity.resolveById(rs.getInt("severityId"));
+        return new Validation(rs.getString("id"), severity, message, rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
     };
 
     private RowMapper<Entity> entityMapper = (rs, rowNum) -> new Entity(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
@@ -134,6 +136,7 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
     @Override
     protected Map<String, Object> prepareParams(Validation validation) {
         Map<String, Object> params = super.prepareParams(validation);
+        params.put("severityId", validation.getSeverity().getId());
         params.put("messageId", validation.getMessage().getId());
         params.put("description", validation.getDescription());
         return params;

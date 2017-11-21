@@ -1,4 +1,5 @@
 UPDATE validation SET
+  severity_id = :severityId,
   message_id = :messageId,
   description = :description,
   version = version + 1,

@@ -14,6 +14,9 @@ import java.util.Set;
  */
 public class Validation extends BaseVersionAwareModel {
 
+    /** Тип проверки. */
+    private Severity severity;
+
     /** {@link project.model.message.Message} */
     private Message message;
 
@@ -30,10 +33,15 @@ public class Validation extends BaseVersionAwareModel {
         //for spring
     }
 
-    public Validation(String id, Message message, String description, int version, String commentary) {
+    public Validation(String id, Severity severity, Message message, String description, int version, String commentary) {
         super(id, version, commentary);
+        this.severity = severity;
         this.message = message;
         this.description = description;
+    }
+
+    public Severity getSeverity() {
+        return severity;
     }
 
     public Message getMessage() {
@@ -66,7 +74,8 @@ public class Validation extends BaseVersionAwareModel {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Validation that = (Validation) o;
-        return Objects.equals(message, that.message) &&
+        return severity == that.severity &&
+                Objects.equals(message, that.message) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(entities, that.entities) &&
                 Objects.equals(operations, that.operations);
@@ -74,6 +83,7 @@ public class Validation extends BaseVersionAwareModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), message, description, entities, operations);
+        return Objects.hash(super.hashCode(), severity, message, description, entities, operations);
     }
+
 }
