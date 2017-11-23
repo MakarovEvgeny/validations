@@ -8,14 +8,20 @@ Ext.define('app.controllers.ModelGridController', {
     },
 
     create: function () {
-        var window = this.createWindow({operation: 'create'});
+        var window = this.createWindow({
+            operation: 'create',
+            gridStore: this.getView().store
+        });
         window.show();
     },
 
     edit: function () {
         var row = this.getView().getSelectionModel().getSelection()[0];
 
-        var window = this.createWindow({operation: 'edit'});
+        var window = this.createWindow({
+            operation: 'edit',
+            gridStore: this.getView().store
+        });
         window.show();
         window.setLoading(true);
 

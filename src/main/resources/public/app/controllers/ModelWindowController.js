@@ -44,9 +44,11 @@ Ext.define('app.controllers.ModelWindowController', {
     /** @private */
     save: function(model) {
         var w = this.getView();
+        var gridStore = w.gridStore;
         w.setLoading(true);
         model.save({
             callback: function (record, operation, success) {
+                gridStore.reload();
                 w.setLoading(false);
                 if (success) {
                     w.close();
