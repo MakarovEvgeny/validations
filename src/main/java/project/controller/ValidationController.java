@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import project.model.query.SearchParams;
 import project.model.validation.Validation;
-import project.service.ModelService;
+import project.model.validation.ValidationDto;
+import project.service.ValidationService;
 
 import java.util.List;
 
@@ -13,10 +14,10 @@ import java.util.List;
 public class ValidationController {
 
     @Autowired
-    private ModelService<Validation> service;
+    private ValidationService service;
 
     @RequestMapping(value = "query", method = RequestMethod.POST)
-    public List<Validation> find(@RequestBody SearchParams searchParams) {
+    public List<ValidationDto> find(@RequestBody SearchParams searchParams) {
         return service.find(searchParams);
     }
 

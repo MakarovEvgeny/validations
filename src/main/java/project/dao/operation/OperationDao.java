@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
 import project.dao.SearchParamsProcessor;
+import project.dao.FindAbility;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 
@@ -17,7 +18,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class OperationDao extends BaseVersionAwareModelDao<Operation> implements OperationValidatorDao {
+public class OperationDao extends BaseVersionAwareModelDao<Operation> implements FindAbility<Operation>, OperationValidatorDao {
 
     private RowMapper<Operation> mapper = (rs, rowNum) -> new Operation(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 

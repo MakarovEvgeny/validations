@@ -7,7 +7,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import project.model.message.Message;
 import project.model.query.SearchParams;
-import project.service.ModelService;
+import project.service.MessageService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 public class MessageController {
 
     @Autowired
-    private ModelService<Message> service;
+    private MessageService service;
 
     @Autowired
     @Qualifier("messageValidator")

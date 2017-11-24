@@ -7,12 +7,14 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
+import project.dao.FindAbility;
 import project.model.entity.Entity;
 import project.model.message.Message;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 import project.model.validation.Severity;
 import project.model.validation.Validation;
+import project.model.validation.ValidationDto;
 
 import java.util.*;
 
@@ -21,7 +23,7 @@ import static java.util.Collections.singletonMap;
 import static project.dao.RequestRegistry.lookup;
 
 @Repository
-public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
+public class ValidationDao extends BaseVersionAwareModelDao<Validation> implements FindAbility<ValidationDto> {
 
     private RowMapper<Validation> mapper = (rs, rowNum) -> {
         Message message = new Message(rs.getString("m_id"), rs.getString("m_text"), rs.getInt("m_version"), rs.getString("m_commentary"));
@@ -164,7 +166,7 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
     }
 
     @Override
-    public List<Validation> find(SearchParams searchParams) {
+    public List<ValidationDto> find(SearchParams searchParams) {
         return emptyList();//todo тут стоит возвращать не иерархичскую доменную модель, а плоскую dto.
     }
 

@@ -1,9 +1,6 @@
 package project.dao;
 
 import project.model.AbstractModel;
-import project.model.query.SearchParams;
-
-import java.util.List;
 
 /** Основные методы dao. */
 public interface AbstractDao<MODEL extends AbstractModel> {
@@ -15,7 +12,5 @@ public interface AbstractDao<MODEL extends AbstractModel> {
     void update(MODEL model);
 
     void remove(MODEL model);
-
-    List<MODEL> find(SearchParams searchParams);
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class OperationServiceImpl implements ModelService<Operation> {
+public class OperationServiceImpl implements OperationService {
 
     @Autowired
     private OperationDao dao;
