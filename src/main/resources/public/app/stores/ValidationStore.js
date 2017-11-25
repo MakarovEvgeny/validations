@@ -1,11 +1,11 @@
 Ext.define('app.stores.ValidationStore', {
     extend: 'Ext.data.Store',
     requires: [
-        'app.models.Validation',
+        'app.models.ValidationDto',
         'app.stores.AppRestProxy'
     ],
 
-    model: 'app.models.Validation',
+    model: 'app.models.ValidationDto',
 
     autoLoad: true,
 
