@@ -34,6 +34,35 @@ Ext.define('app.views.ValidationGrid', {
                 flex: 1
             },
             {
+                text: 'Сообщение об ошибке',
+                dataIndex: 'messageText',
+                filter: {
+                    type: 'multi-string'
+                },
+                flex: 1
+            },
+            {
+                text: 'Тип',
+                dataIndex: 'severityName',
+                flex: 1
+            },
+            {
+                text: 'Сущности',
+                dataIndex: 'entityNames',
+                filter: {
+                    type: 'multi-string'
+                },
+                flex: 1
+            },
+            {
+                text: 'Операции',
+                dataIndex: 'operationNames',
+                filter: {
+                    type: 'multi-string'
+                },
+                flex: 1
+            },
+            {
                 text: 'Описание',
                 dataIndex: 'description',
                 flex: 1
