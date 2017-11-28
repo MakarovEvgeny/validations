@@ -27,7 +27,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class ValidationDao extends BaseVersionAwareModelDao<Validation> implements FindAbility<ValidationDto> {
+public class ValidationDao extends BaseVersionAwareModelDao<Validation> implements FindAbility<ValidationDto>, ValidationValidatorDao {
 
     private RowMapper<Validation> mapper = (rs, rowNum) -> {
         Message message = new Message(rs.getString("m_id"), rs.getString("m_text"), rs.getInt("m_version"), rs.getString("m_commentary"));
@@ -199,6 +199,16 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> implemen
     private Set<Operation> loadOperations(String validationId) {
         List<Operation> data = jdbc.query(lookup("validation/LoadValidationOperations"), singletonMap("id", validationId), operationMapper);
         return new HashSet<>(data);
+    }
+
+    @Override
+    public boolean alreadyExists(String id) {
+        return jdbc.queryForObject(lookup("validation/AlreadyExists"), singletonMap("id", id), Boolean.class);
+    }
+
+    @Override
+    public boolean messageExists(String messageId) {
+        return jdbc.queryForObject(lookup("validation/MessageExists"), singletonMap("id", messageId), Boolean.class);
     }
 
 }
