@@ -3,18 +3,19 @@ package project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.dao.BaseVersionAwareModelDao;
+import project.dao.validation.ValidationDao;
 import project.model.query.SearchParams;
 import project.model.validation.Validation;
+import project.model.validation.ValidationDto;
 
 import java.util.List;
 
 @Service
 @Transactional
-public class ValidationServiceImpl implements ModelService<Validation> {
+public class ValidationServiceImpl implements ValidationService {
 
     @Autowired
-    private BaseVersionAwareModelDao<Validation> dao;
+    private ValidationDao dao;
 
     @Override
     public Validation load(String validationId) {
@@ -37,7 +38,7 @@ public class ValidationServiceImpl implements ModelService<Validation> {
     }
 
     @Override
-    public List<Validation> find(SearchParams searchParams) {
+    public List<ValidationDto> find(SearchParams searchParams) {
         return dao.find(searchParams);
     }
 

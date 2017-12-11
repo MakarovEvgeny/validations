@@ -7,26 +7,48 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
+import project.dao.FindAbility;
+import project.dao.SearchParamsProcessor;
 import project.model.entity.Entity;
 import project.model.message.Message;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 import project.model.validation.Severity;
 import project.model.validation.Validation;
+import project.model.validation.ValidationDto;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonMap;
 import static project.dao.RequestRegistry.lookup;
+import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
+public class ValidationDao extends BaseVersionAwareModelDao<Validation> implements FindAbility<ValidationDto>, ValidationValidatorDao {
 
     private RowMapper<Validation> mapper = (rs, rowNum) -> {
         Message message = new Message(rs.getString("m_id"), rs.getString("m_text"), rs.getInt("m_version"), rs.getString("m_commentary"));
         Severity severity = Severity.resolveById(rs.getInt("severityId"));
         return new Validation(rs.getString("id"), severity, message, rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
+    };
+
+    private RowMapper<ValidationDto> dtoMapper = (rs, rowNum) -> {
+        ValidationDto dto = new ValidationDto();
+        dto.id = rs.getString("id");
+        dto.messageId = rs.getString("messageId");
+        dto.messageText = rs.getString("messageText");
+        dto.description= rs.getString("description");
+        dto.version = rs.getInt("version");
+        dto.commentary = rs.getString("commentary");
+        dto.severityId = rs.getString("severityId");
+        dto.severityName = rs.getString("severityName");
+        dto.entityNames = rs.getString("entityNames");
+        dto.operationNames = rs.getString("operationNames");
+
+        return dto;
     };
 
     private RowMapper<Entity> entityMapper = (rs, rowNum) -> new Entity(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
@@ -163,9 +185,9 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
         createHistory(validation, true);
     }
 
-    @Override
-    public List<Validation> find(SearchParams searchParams) {
-        return emptyList();//todo тут стоит возвращать не иерархичскую доменную модель, а плоскую dto.
+    public List<ValidationDto> find(SearchParams searchParams) {
+        SearchParamsProcessor.ProcessResult result = process(lookup("validation/FindValidation"), searchParams);
+        return jdbc.query(result.getResultQuery(), result.getParams(), dtoMapper);
     }
 
 
@@ -177,6 +199,16 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> {
     private Set<Operation> loadOperations(String validationId) {
         List<Operation> data = jdbc.query(lookup("validation/LoadValidationOperations"), singletonMap("id", validationId), operationMapper);
         return new HashSet<>(data);
+    }
+
+    @Override
+    public boolean alreadyExists(String id) {
+        return jdbc.queryForObject(lookup("validation/AlreadyExists"), singletonMap("id", id), Boolean.class);
+    }
+
+    @Override
+    public boolean messageExists(String messageId) {
+        return jdbc.queryForObject(lookup("validation/MessageExists"), singletonMap("id", messageId), Boolean.class);
     }
 
 }

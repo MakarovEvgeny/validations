@@ -36,7 +36,7 @@ Ext.define('app.controllers.ModelGridController', {
         };
 
 
-        this.loadModel(row.get('id'), requestConfig);
+        this.loadModel(row.get('id'), requestConfig, window);
     },
 
     createWindow: function (config) {

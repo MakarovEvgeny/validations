@@ -3,7 +3,8 @@ Ext.define('app.views.MainView', {
     requires: [
         'app.views.EntityGrid',
         'app.views.OperationGrid',
-        'app.views.MessageGrid'
+        'app.views.MessageGrid',
+        'app.views.ValidationGrid'
     ],
 
     activeTab: 3,
@@ -21,7 +22,8 @@ Ext.define('app.views.MainView', {
             xtype: 'message-grid'
         },
         {
-            title: 'Валидации'
+            title: 'Валидации',
+            xtype: 'validation-grid'
         }
     ]
 });

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class EntityServiceImpl implements ModelService<Entity> {
+public class EntityServiceImpl implements EntityService {
 
     @Autowired
     private EntityDao dao;

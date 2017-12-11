@@ -6,9 +6,8 @@ import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import project.model.operation.Operation;
-import project.model.operation.OperationValidator;
 import project.model.query.SearchParams;
-import project.service.ModelService;
+import project.service.OperationService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
 public class OperationController {
 
     @Autowired
-    private ModelService<Operation> service;
+    private OperationService service;
 
     @Autowired
     @Qualifier("operationValidator")

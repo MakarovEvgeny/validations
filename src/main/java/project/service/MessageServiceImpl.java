@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class MessageServiceImpl implements ModelService<Message> {
+public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private MessageDao dao;

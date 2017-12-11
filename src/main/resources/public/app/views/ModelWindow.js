@@ -4,6 +4,7 @@ Ext.define('app.views.ModelWindow', {
         'app.controllers.EntityWindowController'
     ],
 
+    layout: 'fit',
     width: 350,
     height: 400,
 

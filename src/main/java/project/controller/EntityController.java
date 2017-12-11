@@ -7,7 +7,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import project.model.entity.Entity;
 import project.model.query.SearchParams;
-import project.service.ModelService;
+import project.service.EntityService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,7 +19,7 @@ import static project.model.ClientOperation.QUERY;
 public class EntityController {
 
     @Autowired
-    private ModelService<Entity> service;
+    private EntityService service;
 
     @Autowired
     @Qualifier("entityValidator")
