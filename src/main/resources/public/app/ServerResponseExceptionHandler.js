@@ -13,7 +13,9 @@ Ext.define('app.ServerResponseExceptionHandler', {
                     break;
                 }
                 case 401: {
-                    Ext.create('app.views.LoginWindow');
+                    if (Ext.ComponentQuery.query('login-window').length === 0) {
+                        Ext.create('app.views.LoginWindow');
+                    }
                 }
             }
         });

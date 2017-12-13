@@ -8,6 +8,8 @@ Ext.define('app.views.LoginWindow', {
     layout: 'vbox',
     title: 'Войти',
 
+    xtype: 'login-window',
+
     controller: 'login-window-controller',
 
     items: [
