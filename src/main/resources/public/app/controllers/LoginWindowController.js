@@ -2,6 +2,8 @@ Ext.define('app.controllers.LoginWindowController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.login-window-controller',
 
+    requires: ['app.views.LoginPanelConfigurer'],
+
     onButtonClick: function () {
         var window = this.getView();
         var username = window.down('textfield[name="username"]').getValue();
@@ -15,6 +17,7 @@ Ext.define('app.controllers.LoginWindowController', {
             },
             rawData: 'username=' + username + '&password=' + password,
             success: function() {
+                app.views.LoginPanelConfigurer.configureButtons();
                 window.close(); // Аутентификация прошла успешно.
             },
             failure: function () {

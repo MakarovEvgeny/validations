@@ -1,29 +1,46 @@
 Ext.define('app.views.MainView', {
-    extend: 'Ext.tab.Panel',
+    extend: 'Ext.panel.Panel',
+
     requires: [
         'app.views.EntityGrid',
         'app.views.OperationGrid',
         'app.views.MessageGrid',
-        'app.views.ValidationGrid'
+        'app.views.ValidationGrid',
+        'app.views.LoginPanel'
     ],
 
-    activeTab: 3,
+    layout: 'border',
+
     items: [
         {
-            title: 'Сущности',
-            xtype: 'entity-grid'
+            xtype: 'login-panel',
+            width: '100%',
+            region: 'north'
         },
         {
-            title: 'Операции',
-            xtype: 'operation-grid'
-        },
-        {
-            title: 'Сообщения',
-            xtype: 'message-grid'
-        },
-        {
-            title: 'Валидации',
-            xtype: 'validation-grid'
+            xtype: 'tabpanel',
+            region: 'center',
+            activeTab: 3,
+
+            items: [
+                {
+                    title: 'Сущности',
+                    xtype: 'entity-grid'
+                },
+                {
+                    title: 'Операции',
+                    xtype: 'operation-grid'
+                },
+                {
+                    title: 'Сообщения',
+                    xtype: 'message-grid'
+                },
+                {
+                    title: 'Валидации',
+                    xtype: 'validation-grid'
+                }
+            ]
         }
     ]
+
 });
