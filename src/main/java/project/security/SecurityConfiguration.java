@@ -2,11 +2,13 @@ package project.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +38,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
+        http.httpBasic().disable();
+        http.anonymous().disable();
+
+        DefaultLoginPageGeneratingFilter filter = new DefaultLoginPageGeneratingFilter();
+        http.setSharedObject(DefaultLoginPageGeneratingFilter.class, filter);
+
         http.csrf().disable()
             .formLogin()
                 .failureHandler((request, response, exception) -> {
@@ -55,6 +63,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.logout()
                 .deleteCookies("JSESSIONID", LOGGED)
                 .logoutSuccessHandler((request, response, authentication) -> {});
+
+        http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
+            if (authException instanceof AuthenticationCredentialsNotFoundException) {
+                Cookie cookie = new Cookie(LOGGED, null);
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+
+                response.sendError(401);
+            } else {
+                response.sendError(403);
+            }
+        });
     }
 
 }
