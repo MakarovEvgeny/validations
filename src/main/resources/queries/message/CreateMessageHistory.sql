@@ -3,11 +3,15 @@ INSERT INTO message_h (
   text,
   version,
   date,
-  commentary
+  commentary,
+  login,
+  ip
 ) VALUES (
   :id,
   :text,
   :version,
   :date,
-  :commentary
+  :commentary,
+  :login,
+  inet(:ip)
 )

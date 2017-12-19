@@ -2,6 +2,9 @@ package project.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import project.model.BaseVersionAwareModel;
 
 import javax.annotation.PostConstruct;
@@ -37,6 +40,11 @@ public abstract class BaseVersionAwareModelDao<MODEL extends BaseVersionAwareMod
         Map<String, Object> params = prepareParams(model);
         params.put("date", Timestamp.from(ZonedDateTime.now().toInstant()));
         params.put("version", model.getVersion() + 1);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
+        params.put("login", authentication.getName());
+        params.put("ip", details.getRemoteAddress());
 
         return params;
     }

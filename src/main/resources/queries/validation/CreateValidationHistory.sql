@@ -5,7 +5,9 @@ INSERT INTO validation_h (
   message_id,
   description,
   version,
-  commentary
+  commentary,
+  login,
+  ip
 ) VALUES (
   :id,
   :severityId,
@@ -13,5 +15,7 @@ INSERT INTO validation_h (
   :messageId,
   :description,
   :version,
-  :commentary
+  :commentary,
+  :login,
+  inet(:ip)
 )
