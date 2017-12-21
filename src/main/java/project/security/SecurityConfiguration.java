@@ -1,5 +1,6 @@
 package project.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
 
 import javax.servlet.http.Cookie;
@@ -19,6 +21,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     /** Cookie (не HttpOnly) служит для понимания (на стороне js) залогинился пользователь или нет. */
     private static final String LOGGED = "LOGGED";
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     /**
      * Запросы которые не изменяют состояние ресурсов (в терминологии REST) должны выполняться минуя механизмы аутентификации и авторизации.
@@ -33,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("user").roles("USER");
+        auth.userDetailsService(userDetailsService);
     }
 
     @Override
