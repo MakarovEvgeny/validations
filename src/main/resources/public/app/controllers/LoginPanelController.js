@@ -2,11 +2,16 @@ Ext.define('app.controllers.LoginPanelController', {
     extend: 'Ext.app.ViewController',
 
     requires: [
+        'app.views.RegisterWindow',
         'app.views.LoginWindow',
         'app.views.LoginPanelConfigurer'
     ],
 
     alias: 'controller.login-panel-controller',
+
+    onRegisterButtonClick: function () {
+        Ext.create('app.views.RegisterWindow');
+    },
 
     onLoginButtonClick: function () {
         Ext.create('app.views.LoginWindow');

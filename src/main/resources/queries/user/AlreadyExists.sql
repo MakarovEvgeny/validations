@@ -1,0 +1,1 @@
+select exists(select null from users WHERE login = :username)

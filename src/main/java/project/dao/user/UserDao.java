@@ -19,13 +19,12 @@ import static java.util.Collections.singletonList;
 import static project.dao.RequestRegistry.lookup;
 
 @Repository
-public class UserDao implements UserDetailsService {
+public class UserDao implements UserDetailsService, UserValidatorDao {
 
     @Autowired
     private DataSource ds;
 
     private NamedParameterJdbcTemplate jdbc;
-
 
     private RowMapper<UserDetails> mapper = (rs, rowNum) -> new User(rs.getString("login"), rs.getString("password"), singletonList(new SimpleGrantedAuthority(rs.getString("role"))));
 
@@ -42,6 +41,19 @@ public class UserDao implements UserDetailsService {
         }
 
         return data.get(0);
+    }
+
+    public void register(String username, String password) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("username", username);
+        params.addValue("password", password);
+
+        jdbc.update(lookup("user/CreateUser"), params);
+    }
+
+    @Override
+    public boolean usernameAlreadyExists(String username) {
+        return jdbc.queryForObject(lookup("user/AlreadyExists"), new MapSqlParameterSource("username", username), Boolean.class);
     }
 
 }

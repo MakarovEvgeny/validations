@@ -21,6 +21,14 @@ Ext.define('app.views.LoginPanel', {
     items: [
         {
             xtype: 'button',
+            name: 'register',
+            text: 'Зарегистрироваться',
+            listeners: {
+                click: 'onRegisterButtonClick'
+            }
+        },
+        {
+            xtype: 'button',
             name: 'login',
             text: 'Войти',
             listeners: {
