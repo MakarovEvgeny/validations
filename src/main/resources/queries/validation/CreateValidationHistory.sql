@@ -6,7 +6,7 @@ INSERT INTO validation_h (
   description,
   version,
   commentary,
-  login,
+  username,
   ip
 ) VALUES (
   :id,
@@ -16,6 +16,6 @@ INSERT INTO validation_h (
   :description,
   :version,
   :commentary,
-  :login,
+  :username,
   inet(:ip)
 )

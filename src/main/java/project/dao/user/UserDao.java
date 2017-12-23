@@ -26,7 +26,7 @@ public class UserDao implements UserDetailsService, UserValidatorDao {
 
     private NamedParameterJdbcTemplate jdbc;
 
-    private RowMapper<UserDetails> mapper = (rs, rowNum) -> new User(rs.getString("login"), rs.getString("password"), singletonList(new SimpleGrantedAuthority(rs.getString("role"))));
+    private RowMapper<UserDetails> mapper = (rs, rowNum) -> new User(rs.getString("username"), rs.getString("password"), singletonList(new SimpleGrantedAuthority(rs.getString("role"))));
 
     @PostConstruct
     public void init() {
@@ -35,7 +35,7 @@ public class UserDao implements UserDetailsService, UserValidatorDao {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<UserDetails> data = jdbc.query(lookup("user/LoadUser"), new MapSqlParameterSource("login", username), mapper);
+        List<UserDetails> data = jdbc.query(lookup("user/LoadUser"), new MapSqlParameterSource("username", username), mapper);
         if (data.isEmpty() || data.size() != 1) {
             throw new UsernameNotFoundException(username);
         }

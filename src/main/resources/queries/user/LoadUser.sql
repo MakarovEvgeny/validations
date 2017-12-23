@@ -1,7 +1,7 @@
 SELECT
-  login    AS login,
+  username AS username,
   r.name   AS role,
   password AS password
 FROM users u
   JOIN role r ON u.role_id = r.role_id
-WHERE login = :login
+WHERE username = :username

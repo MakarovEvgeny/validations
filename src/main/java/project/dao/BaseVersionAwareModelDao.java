@@ -43,7 +43,7 @@ public abstract class BaseVersionAwareModelDao<MODEL extends BaseVersionAwareMod
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
-        params.put("login", authentication.getName());
+        params.put("username", authentication.getName());
         params.put("ip", details.getRemoteAddress());
 
         return params;

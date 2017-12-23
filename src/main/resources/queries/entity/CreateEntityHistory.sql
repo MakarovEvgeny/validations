@@ -5,7 +5,7 @@ INSERT INTO entity_h (
   description,
   version,
   commentary,
-  login,
+  username,
   ip
 ) VALUES (
   :date,
@@ -14,6 +14,6 @@ INSERT INTO entity_h (
   :description,
   :version,
   :commentary,
-  :login,
+  :username,
   inet(:ip)
 )

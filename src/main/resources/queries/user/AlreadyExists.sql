@@ -1,1 +1,1 @@
-select exists(select null from users WHERE login = :username)
+select exists(select null from users WHERE username = :username)
