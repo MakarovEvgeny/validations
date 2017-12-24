@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dao.validation.ValidationDao;
+import project.model.Change;
 import project.model.query.SearchParams;
 import project.model.validation.Validation;
 import project.model.validation.ValidationDto;
@@ -40,6 +41,11 @@ public class ValidationServiceImpl implements ValidationService {
     @Override
     public List<ValidationDto> find(SearchParams searchParams) {
         return dao.find(searchParams);
+    }
+
+    @Override
+    public List<Change> getChanges(String validationId) {
+        return dao.getChanges(validationId);
     }
 
 }

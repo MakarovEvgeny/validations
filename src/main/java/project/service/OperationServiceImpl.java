@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dao.operation.OperationDao;
+import project.model.Change;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 
@@ -39,6 +40,11 @@ public class OperationServiceImpl implements OperationService {
     @Override
     public List<Operation> find(SearchParams searchParams) {
         return dao.find(searchParams);
+    }
+
+    @Override
+    public List<Change> getChanges(String operationId) {
+        return dao.getChanges(operationId);
     }
 
 }

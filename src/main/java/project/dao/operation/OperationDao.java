@@ -4,8 +4,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
-import project.dao.SearchParamsProcessor;
 import project.dao.FindAbility;
+import project.dao.SearchParamsProcessor;
+import project.model.Change;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 
@@ -89,6 +90,10 @@ public class OperationDao extends BaseVersionAwareModelDao<Operation> implements
     /** Проверка что на удаляемую запись ссылаются из других таблиц. */
     public boolean isUsed(String id) {
         return jdbc.queryForObject(lookup("operation/IsUsed"), singletonMap("id", id), Boolean.class);
+    }
+
+    public List<Change> getChanges(String id) {
+        return jdbc.query(lookup("operation/LoadChanges"), singletonMap("id", id), changeMapper);
     }
 
 }

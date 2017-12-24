@@ -12,7 +12,8 @@ Ext.define('app.views.MessageWindow', {
             {
                 xtype: 'textfield',
                 fieldLabel: 'Код',
-                name: 'id'
+                name: 'id',
+                margin: '15 10 5 10'
             },
             {
                 xtype: 'textfield',

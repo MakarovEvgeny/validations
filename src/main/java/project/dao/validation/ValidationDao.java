@@ -9,6 +9,7 @@ import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
 import project.dao.FindAbility;
 import project.dao.SearchParamsProcessor;
+import project.model.Change;
 import project.model.entity.Entity;
 import project.model.message.Message;
 import project.model.operation.Operation;
@@ -209,6 +210,10 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> implemen
     @Override
     public boolean messageExists(String messageId) {
         return jdbc.queryForObject(lookup("validation/MessageExists"), singletonMap("id", messageId), Boolean.class);
+    }
+
+    public List<Change> getChanges(String id) {
+        return jdbc.query(lookup("validation/LoadChanges"), singletonMap("id", id), changeMapper);
     }
 
 }

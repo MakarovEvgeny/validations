@@ -4,8 +4,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
-import project.dao.SearchParamsProcessor;
 import project.dao.FindAbility;
+import project.dao.SearchParamsProcessor;
+import project.model.Change;
 import project.model.message.Message;
 import project.model.query.SearchParams;
 
@@ -91,6 +92,10 @@ public class MessageDao extends BaseVersionAwareModelDao<Message> implements Fin
     @Override
     public boolean isUsed(String id) {
         return jdbc.queryForObject(lookup("message/IsUsed"), singletonMap("id", id), Boolean.class);
+    }
+
+    public List<Change> getChanges(String id) {
+        return jdbc.query(lookup("message/LoadChanges"), singletonMap("id", id), changeMapper);
     }
 
 }

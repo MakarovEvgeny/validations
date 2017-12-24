@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import project.model.Change;
 import project.model.message.Message;
 import project.model.query.SearchParams;
 import project.service.MessageService;
@@ -51,6 +52,11 @@ public class MessageController {
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void remove(@RequestBody @Valid Message message) {
         service.remove(message);
+    }
+
+    @RequestMapping(value = "{id}/changes", method = RequestMethod.GET)
+    public List<Change> getChanges(@PathVariable String id) {
+        return service.getChanges(id);
     }
 
 }

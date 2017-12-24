@@ -4,8 +4,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import project.dao.BaseVersionAwareModelDao;
 import project.dao.ConcurrentModificationException;
-import project.dao.SearchParamsProcessor.ProcessResult;
 import project.dao.FindAbility;
+import project.dao.SearchParamsProcessor.ProcessResult;
+import project.model.Change;
 import project.model.entity.Entity;
 import project.model.query.SearchParams;
 
@@ -93,6 +94,10 @@ public class EntityDao extends BaseVersionAwareModelDao<Entity> implements FindA
     /** Проверка что на удаляемую запись ссылаются из других таблиц. */
     public boolean isUsed(String id) {
         return jdbc.queryForObject(lookup("entity/IsUsed"), singletonMap("id", id), Boolean.class);
+    }
+
+    public List<Change> getChanges(String id) {
+        return jdbc.query(lookup("entity/LoadChanges"), singletonMap("id", id), changeMapper);
     }
 
 }

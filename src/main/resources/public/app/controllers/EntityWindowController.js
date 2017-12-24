@@ -9,6 +9,11 @@ Ext.define('app.controllers.EntityWindowController', {
     /** @override */
     createEmptyModel: function () {
         return Ext.create('app.models.Entity');
+    },
+
+    /** @override */
+    getChangesUrlPart: function () {
+        return 'entity';
     }
 
 });

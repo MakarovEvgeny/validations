@@ -55,6 +55,45 @@ Ext.define('app.controllers.ModelWindowController', {
                 }
             }
         });
+    },
+
+    /** @protected */
+    onExpand: function () {
+        // Если режим создания или данные уже загружены, то к серверу не обращаемся.
+        if (this.changesLoaded !== true && this.getView().operation !== 'create') {
+            this.loadChanges();
+        }
+    },
+
+    /** @private */
+    loadChanges: function () {
+        var model = this.getModel();
+        var store = Ext.create('app.stores.ChangeStore', {
+            proxy: {
+                type: 'ajax',
+                url: '/' + this.getChangesUrlPart() + '/' + model.get('id') + '/changes',
+                reader: {
+                    type: 'json'
+                }
+            }
+        });
+
+        var changesGrid = this.getView().down('grid[name=changesGrid]');
+        store.load({
+            scope: this,
+            callback: function () {
+                changesGrid.reconfigure(store);
+                this.changesLoaded = true;
+            }
+        });
+    },
+
+    /**
+     * @protected
+     * Получим часть ссылки для получения изменений данных по модели.
+     */
+    getChangesUrlPart: function () {
+        throw 'should be overridden';
     }
 
 });

@@ -30,6 +30,11 @@ Ext.define('app.controllers.ValidationWindowController', {
     /** @override */
     createEmptyModel: function () {
         return Ext.create('app.models.Validation');
+    },
+
+    /** @override */
+    getChangesUrlPart: function () {
+        return 'validation';
     }
 
 });

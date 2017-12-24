@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import project.model.Change;
 import project.model.entity.Entity;
 import project.model.query.SearchParams;
 import project.service.EntityService;
@@ -53,6 +54,11 @@ public class EntityController {
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void remove(@RequestBody @Valid Entity entity) {
         service.remove(entity);
+    }
+
+    @RequestMapping(value = "{id}/changes", method = RequestMethod.GET)
+    public List<Change> getChanges(@PathVariable String id) {
+        return service.getChanges(id);
     }
 
 }
