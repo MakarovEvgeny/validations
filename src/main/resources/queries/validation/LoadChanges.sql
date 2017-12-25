@@ -1,4 +1,5 @@
 SELECT
+  validation_version_id AS id,
   date,
   username,
   commentary

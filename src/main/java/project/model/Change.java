@@ -8,6 +8,9 @@ public class Change {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
+    /** id изменения (id версии). */
+    private String id;
+
     /** Дата + время со смещением относительно GMT. */
     private String date;
 
@@ -18,10 +21,15 @@ public class Change {
     public Change() {
     }
 
-    public Change(ZonedDateTime date, String username, String commentary) {
+    public Change(String id, ZonedDateTime date, String username, String commentary) {
+        this.id = id;
         this.date = date.format(formatter);
         this.username = username;
         this.commentary = commentary;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getDate() {

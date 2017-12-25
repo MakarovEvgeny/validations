@@ -26,7 +26,7 @@ public abstract class BaseVersionAwareModelDao<MODEL extends BaseVersionAwareMod
 
     protected NamedParameterJdbcTemplate jdbc;
 
-    protected RowMapper<Change> changeMapper = (rs, rowNum) -> new Change(ZonedDateTime.ofInstant(rs.getTimestamp("date").toInstant(), ZoneId.systemDefault()), rs.getString("username"), rs.getString("commentary"));
+    protected RowMapper<Change> changeMapper = (rs, rowNum) -> new Change(rs.getString("id"), ZonedDateTime.ofInstant(rs.getTimestamp("date").toInstant(), ZoneId.systemDefault()), rs.getString("username"), rs.getString("commentary"));
 
     @PostConstruct
     public void init() {

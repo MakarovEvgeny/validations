@@ -71,7 +71,7 @@ Ext.define('app.controllers.ModelWindowController', {
         var store = Ext.create('app.stores.ChangeStore', {
             proxy: {
                 type: 'ajax',
-                url: '/' + this.getChangesUrlPart() + '/' + model.get('id') + '/changes',
+                url: '/' + this.getChangesUrlPart() + '/' + model.get('id') + '/change',
                 reader: {
                     type: 'json'
                 }

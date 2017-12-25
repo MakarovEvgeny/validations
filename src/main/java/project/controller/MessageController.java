@@ -54,7 +54,7 @@ public class MessageController {
         service.remove(message);
     }
 
-    @RequestMapping(value = "{id}/changes", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/change", method = RequestMethod.GET)
     public List<Change> getChanges(@PathVariable String id) {
         return service.getChanges(id);
     }
