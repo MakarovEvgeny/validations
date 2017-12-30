@@ -1,6 +1,6 @@
 package project.model.validation;
 
-import project.model.BaseVersionAwareModel;
+import project.model.BaseVersionableModel;
 import project.model.entity.Entity;
 import project.model.message.Message;
 import project.model.operation.Operation;
@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * Проверка aka Валидация.
  */
-public class Validation extends BaseVersionAwareModel {
+public class Validation extends BaseVersionableModel {
 
     /** Тип проверки. */
     private Severity severity;

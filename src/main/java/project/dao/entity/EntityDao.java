@@ -2,7 +2,7 @@ package project.dao.entity;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import project.dao.BaseVersionAwareModelDao;
+import project.dao.BaseVersionableModelDao;
 import project.dao.ConcurrentModificationException;
 import project.dao.FindAbility;
 import project.dao.SearchParamsProcessor.ProcessResult;
@@ -19,7 +19,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class EntityDao extends BaseVersionAwareModelDao<Entity> implements FindAbility<Entity>, EntityValidatorDao {
+public class EntityDao extends BaseVersionableModelDao<Entity> implements FindAbility<Entity>, EntityValidatorDao {
 
     private RowMapper<Entity> mapper = (rs, rowNum) -> new Entity(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 

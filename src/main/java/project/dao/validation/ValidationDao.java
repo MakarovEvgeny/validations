@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import project.dao.BaseVersionAwareModelDao;
+import project.dao.BaseVersionableModelDao;
 import project.dao.ConcurrentModificationException;
 import project.dao.FindAbility;
 import project.dao.SearchParamsProcessor;
@@ -28,7 +28,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class ValidationDao extends BaseVersionAwareModelDao<Validation> implements FindAbility<ValidationDto>, ValidationValidatorDao {
+public class ValidationDao extends BaseVersionableModelDao<Validation> implements FindAbility<ValidationDto>, ValidationValidatorDao {
 
     private RowMapper<Validation> mapper = (rs, rowNum) -> {
         Message message = new Message(rs.getString("m_id"), rs.getString("m_text"), rs.getInt("m_version"), rs.getString("m_commentary"));

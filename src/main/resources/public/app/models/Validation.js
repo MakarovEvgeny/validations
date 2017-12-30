@@ -1,5 +1,5 @@
 Ext.define('app.models.Validation', {
-    extend: 'app.models.BaseVersionAwareModel',
+    extend: 'app.models.BaseVersionableModel',
 
     requires: [
         'app.models.Entity',

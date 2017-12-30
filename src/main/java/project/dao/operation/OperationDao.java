@@ -2,7 +2,7 @@ package project.dao.operation;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import project.dao.BaseVersionAwareModelDao;
+import project.dao.BaseVersionableModelDao;
 import project.dao.ConcurrentModificationException;
 import project.dao.FindAbility;
 import project.dao.SearchParamsProcessor;
@@ -19,7 +19,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class OperationDao extends BaseVersionAwareModelDao<Operation> implements FindAbility<Operation>, OperationValidatorDao {
+public class OperationDao extends BaseVersionableModelDao<Operation> implements FindAbility<Operation>, OperationValidatorDao {
 
     private RowMapper<Operation> mapper = (rs, rowNum) -> new Operation(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 

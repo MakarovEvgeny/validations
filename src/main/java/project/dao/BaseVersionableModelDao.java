@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import project.model.BaseVersionAwareModel;
+import project.model.BaseVersionableModel;
 import project.model.Change;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /** Базовый класс DAO для моделей по которым ведется история. */
-public abstract class BaseVersionAwareModelDao<MODEL extends BaseVersionAwareModel> implements AbstractDao<MODEL> {
+public abstract class BaseVersionableModelDao<MODEL extends BaseVersionableModel> implements AbstractDao<MODEL> {
 
     @Autowired
     protected DataSource ds;

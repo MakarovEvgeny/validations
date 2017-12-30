@@ -1,9 +1,9 @@
 package project.model;
 
 /**
- * Интерфейс, который должны реалзовывать все модели по которым ведется история.
+ * Интерфейс, который должны реализовывать все модели по которым ведется история.
  */
-public interface VersionAware {
+public interface Versionable {
 
     /** Получить версию медели. */
     int getVersion();

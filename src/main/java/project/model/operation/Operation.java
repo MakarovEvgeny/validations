@@ -1,6 +1,6 @@
 package project.model.operation;
 
-import project.model.BaseVersionAwareModel;
+import project.model.BaseVersionableModel;
 import project.model.entity.Entity;
 
 import java.util.Objects;
@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Операция над {@link Entity Сущностью}.
  */
-public class Operation extends BaseVersionAwareModel {
+public class Operation extends BaseVersionableModel {
 
     /** Наименование, человекопонятное. */
     private String name;

@@ -1,4 +1,4 @@
-Ext.define('app.models.BaseVersionAwareModel', {
+Ext.define('app.models.BaseVersionableModel', {
     extend: 'Ext.data.Model',
 
     fields: [

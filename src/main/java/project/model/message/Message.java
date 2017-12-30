@@ -5,7 +5,7 @@ import project.model.*;
 import java.util.Objects;
 
 /** Сообщение пользователю об ошибке. */
-public class Message extends BaseVersionAwareModel {
+public class Message extends BaseVersionableModel {
 
     /** Текст сообщения. */
     private String text;

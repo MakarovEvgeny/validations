@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Базовый класс моделей, по которым ведется история.
  */
-public class BaseVersionAwareModel extends AbstractModel implements VersionAware, OptimisticOfflineLock {
+public class BaseVersionableModel extends AbstractModel implements Versionable, OptimisticOfflineLock {
 
     /** Версия сущности. */
     protected int version;
@@ -13,10 +13,10 @@ public class BaseVersionAwareModel extends AbstractModel implements VersionAware
     /** Комментарий. */
     protected String commentary;
 
-    public BaseVersionAwareModel() {
+    public BaseVersionableModel() {
     }
 
-    public BaseVersionAwareModel(String id, int version, String commentary) {
+    public BaseVersionableModel(String id, int version, String commentary) {
         super(id);
         this.version = version;
         this.commentary = commentary;
@@ -37,7 +37,7 @@ public class BaseVersionAwareModel extends AbstractModel implements VersionAware
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        BaseVersionAwareModel that = (BaseVersionAwareModel) o;
+        BaseVersionableModel that = (BaseVersionableModel) o;
         return version == that.version &&
                 Objects.equals(commentary, that.commentary);
     }
