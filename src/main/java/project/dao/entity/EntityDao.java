@@ -100,4 +100,9 @@ public class EntityDao extends BaseVersionableModelDao<Entity> implements FindAb
         return jdbc.query(lookup("entity/LoadChanges"), singletonMap("id", id), changeMapper);
     }
 
+    @Override
+    public Entity loadVersion(int versionId) {
+        return jdbc.queryForObject(lookup("entity/LoadEntityVersion"), singletonMap("id", versionId), mapper);
+    }
+
 }

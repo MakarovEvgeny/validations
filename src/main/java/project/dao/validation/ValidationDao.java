@@ -216,4 +216,22 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
         return jdbc.query(lookup("validation/LoadChanges"), singletonMap("id", id), changeMapper);
     }
 
+    @Override
+    public Validation loadVersion(int versionId) {
+        Validation validation = jdbc.queryForObject(lookup("validation/LoadValidationVersion"), singletonMap("id", versionId), mapper);
+        validation.setEntities(loadEntitiesVersions(versionId));
+        validation.setOperations(loadOperationsVersions(versionId));
+        return validation;
+    }
+
+    private Set<Entity> loadEntitiesVersions(int validationVersionId) {
+        List<Entity> data = jdbc.query(lookup("validation/LoadValidationEntitiesVersions"), singletonMap("id", validationVersionId), entityMapper);
+        return new HashSet<>(data);
+    }
+
+    private Set<Operation> loadOperationsVersions(int validationVersionId) {
+        List<Operation> data = jdbc.query(lookup("validation/LoadValidationOperationsVersions"), singletonMap("id", validationVersionId), operationMapper);
+        return new HashSet<>(data);
+    }
+
 }

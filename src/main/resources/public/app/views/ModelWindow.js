@@ -76,6 +76,10 @@ Ext.define('app.views.ModelWindow', {
                     xtype: 'grid',
                     name: 'changesGrid',
 
+                    listeners: {
+                        rowdblclick: 'onRowDoubleClick'
+                    },
+
                     columns: {
                         items: [
                             {

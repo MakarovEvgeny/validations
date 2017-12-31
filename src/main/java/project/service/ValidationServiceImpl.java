@@ -48,4 +48,9 @@ public class ValidationServiceImpl implements ValidationService {
         return dao.getChanges(validationId);
     }
 
+    @Override
+    public Validation loadVersion(int versionId) {
+        return dao.loadVersion(versionId);
+    }
+
 }

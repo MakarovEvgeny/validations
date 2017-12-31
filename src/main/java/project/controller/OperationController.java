@@ -59,4 +59,9 @@ public class OperationController {
         return service.getChanges(id);
     }
 
+    @RequestMapping(value = "{id}/change/{versionId}", method = RequestMethod.GET)
+    public Operation loadVersion(@PathVariable int versionId) {
+        return service.loadVersion(versionId);
+    }
+
 }

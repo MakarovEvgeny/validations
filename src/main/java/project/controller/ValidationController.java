@@ -61,4 +61,9 @@ public class ValidationController {
         return service.getChanges(id);
     }
 
+    @RequestMapping(value = "{id}/change/{versionId}", method = RequestMethod.GET)
+    public Validation loadVersion(@PathVariable int versionId) {
+        return service.loadVersion(versionId);
+    }
+
 }

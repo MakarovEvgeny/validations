@@ -47,4 +47,9 @@ public class EntityServiceImpl implements EntityService {
         return dao.getChanges(entityId);
     }
 
+    @Override
+    public Entity loadVersion(int versionId) {
+        return dao.loadVersion(versionId);
+    }
+
 }

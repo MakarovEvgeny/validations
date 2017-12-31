@@ -47,4 +47,9 @@ public class MessageServiceImpl implements MessageService {
         return dao.getChanges(messageId);
     }
 
+    @Override
+    public Message loadVersion(int versionId) {
+        return dao.loadVersion(versionId);
+    }
+
 }

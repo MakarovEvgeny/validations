@@ -61,4 +61,9 @@ public class EntityController {
         return service.getChanges(id);
     }
 
+    @RequestMapping(value = "{id}/change/{versionId}", method = RequestMethod.GET)
+    public Entity loadVersion(@PathVariable int versionId) {
+        return service.loadVersion(versionId);
+    }
+
 }

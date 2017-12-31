@@ -94,6 +94,41 @@ Ext.define('app.controllers.ModelWindowController', {
      */
     getChangesUrlPart: function () {
         throw 'should be overridden';
+    },
+
+    /** Загрузим данные версии на форму. */
+    onRowDoubleClick: function (table, record) {
+        var window = this.getView();
+        var model = this.getModel();
+        var versionId = record.get('id');
+
+        window.setLoading(true);
+
+        Ext.Ajax.request({
+            url: this.getChangesUrlPart() + '/' + model.get('id') + '/change/' + versionId,
+            scope: this,
+            success: function(response) {
+                var dataObj = Ext.JSON.decode(response.responseText);
+                var model = this.createEmptyModel();
+                model.set(dataObj);
+                this.setModelToForm(window.down('form'), model);
+            },
+            callback: function () {
+                window.setLoading(false);
+            }
+        });
+
+    },
+
+    /**
+     * @protected
+     * Заполним форму данными версии.
+     */
+    setModelToForm: function (form, model) {
+        // Версию модели обновлять не будем, чтобы была возможность сохранить старую версию в качестве актуальной.
+        var version = form.down('numberfield[name=version]').getValue();
+        model.set('version', version);
+        form.loadRecord(model);
     }
 
 });

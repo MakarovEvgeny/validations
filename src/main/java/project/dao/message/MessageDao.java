@@ -98,4 +98,9 @@ public class MessageDao extends BaseVersionableModelDao<Message> implements Find
         return jdbc.query(lookup("message/LoadChanges"), singletonMap("id", id), changeMapper);
     }
 
+    @Override
+    public Message loadVersion(int versionId) {
+        return jdbc.queryForObject(lookup("message/LoadMessageVersion"), singletonMap("id", versionId), mapper);
+    }
+
 }

@@ -35,6 +35,25 @@ Ext.define('app.controllers.ValidationWindowController', {
     /** @override */
     getChangesUrlPart: function () {
         return 'validation';
+    },
+
+    /** @override */
+    setModelToForm: function (form, model) {
+        this.callParent(arguments);
+
+        var entities = form.down('custom-tagfield[name=entityIds]');
+        var entityIds = [];
+        Ext.Array.each(model.get('entities'), function (entity) {
+            entityIds.push(entity.id);
+        });
+        entities.setValue(entityIds);
+
+        var operations = form.down('custom-tagfield[name=operationIds]');
+        var operationIds = [];
+        Ext.Array.each(model.get('operations'), function (operation) {
+            operationIds.push(operation.id);
+        });
+        operations.setValue(operationIds);
     }
 
 });

@@ -59,4 +59,8 @@ public class MessageController {
         return service.getChanges(id);
     }
 
+    @RequestMapping(value = "{id}/change/{versionId}", method = RequestMethod.GET)
+    public Message loadVersion(@PathVariable int versionId) {
+        return service.loadVersion(versionId);
+    }
 }

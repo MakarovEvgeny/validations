@@ -58,4 +58,8 @@ public abstract class BaseVersionableModelDao<MODEL extends BaseVersionableModel
     /** Получаем список изменений по конкретной модели данных. */
     public abstract List<Change> getChanges(String id);
 
+    /** Загрузка версии модели. */
+    public abstract MODEL loadVersion(int versionId);
+
+
 }
