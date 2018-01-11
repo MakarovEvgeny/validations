@@ -10,6 +10,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -52,6 +54,11 @@ public class SpringConfiguration {
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setBasename("messages");
         return messageSource;
+    }
+
+    @Bean
+    public PasswordEncoder pe() {
+        return new BCryptPasswordEncoder();
     }
 
 }

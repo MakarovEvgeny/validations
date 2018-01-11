@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +24,9 @@ public class UserDao implements UserDetailsService, UserValidatorDao {
 
     @Autowired
     private DataSource ds;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private NamedParameterJdbcTemplate jdbc;
 
@@ -46,7 +50,7 @@ public class UserDao implements UserDetailsService, UserValidatorDao {
     public void register(String username, String password) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("username", username);
-        params.addValue("password", password);
+        params.addValue("password", passwordEncoder.encode(password));
 
         jdbc.update(lookup("user/CreateUser"), params);
     }
