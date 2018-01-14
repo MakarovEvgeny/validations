@@ -9,9 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +28,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    public SecurityConfiguration() {
+        super(true);
+    }
 
     /**
      * Запросы которые не изменяют состояние ресурсов (в терминологии REST) должны выполняться минуя механизмы аутентификации и авторизации.
@@ -50,15 +54,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
-        http.httpBasic().disable();
-        http.anonymous().disable();
+        http.securityContext();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+        http.headers();
+        http.apply(new AdvancedDefaultLoginPageConfigurer<>());
 
-        DefaultLoginPageGeneratingFilter filter = new DefaultLoginPageGeneratingFilter();
-        http.setSharedObject(DefaultLoginPageGeneratingFilter.class, filter);
+        http.authorizeRequests().anyRequest().authenticated();
 
-        http.csrf().disable()
-            .formLogin()
+        http.formLogin()
                 .failureHandler((request, response, exception) -> {
 
                     Cookie cookie = new Cookie(LOGGED, null);
