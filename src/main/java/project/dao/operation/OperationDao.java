@@ -2,10 +2,11 @@ package project.dao.operation;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import project.dao.BaseVersionAwareModelDao;
+import project.dao.BaseVersionableModelDao;
 import project.dao.ConcurrentModificationException;
-import project.dao.SearchParamsProcessor;
 import project.dao.FindAbility;
+import project.dao.SearchParamsProcessor;
+import project.model.Change;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 
@@ -18,7 +19,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class OperationDao extends BaseVersionAwareModelDao<Operation> implements FindAbility<Operation>, OperationValidatorDao {
+public class OperationDao extends BaseVersionableModelDao<Operation> implements FindAbility<Operation>, OperationValidatorDao {
 
     private RowMapper<Operation> mapper = (rs, rowNum) -> new Operation(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 
@@ -89,6 +90,15 @@ public class OperationDao extends BaseVersionAwareModelDao<Operation> implements
     /** Проверка что на удаляемую запись ссылаются из других таблиц. */
     public boolean isUsed(String id) {
         return jdbc.queryForObject(lookup("operation/IsUsed"), singletonMap("id", id), Boolean.class);
+    }
+
+    public List<Change> getChanges(String id) {
+        return jdbc.query(lookup("operation/LoadChanges"), singletonMap("id", id), changeMapper);
+    }
+
+    @Override
+    public Operation loadVersion(int versionId) {
+        return jdbc.queryForObject(lookup("operation/LoadOperationVersion"), singletonMap("id", versionId), mapper);
     }
 
 }

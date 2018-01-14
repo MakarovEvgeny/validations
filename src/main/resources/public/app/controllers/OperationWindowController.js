@@ -9,6 +9,11 @@ Ext.define('app.controllers.OperationWindowController', {
     /** @override */
     createEmptyModel: function () {
         return Ext.create('app.models.Operation');
+    },
+
+    /** @override */
+    getChangesUrlPart: function () {
+        return 'operation';
     }
 
 });

@@ -5,10 +5,11 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import project.dao.BaseVersionAwareModelDao;
+import project.dao.BaseVersionableModelDao;
 import project.dao.ConcurrentModificationException;
 import project.dao.FindAbility;
 import project.dao.SearchParamsProcessor;
+import project.model.Change;
 import project.model.entity.Entity;
 import project.model.message.Message;
 import project.model.operation.Operation;
@@ -27,7 +28,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class ValidationDao extends BaseVersionAwareModelDao<Validation> implements FindAbility<ValidationDto>, ValidationValidatorDao {
+public class ValidationDao extends BaseVersionableModelDao<Validation> implements FindAbility<ValidationDto>, ValidationValidatorDao {
 
     private RowMapper<Validation> mapper = (rs, rowNum) -> {
         Message message = new Message(rs.getString("m_id"), rs.getString("m_text"), rs.getInt("m_version"), rs.getString("m_commentary"));
@@ -209,6 +210,28 @@ public class ValidationDao extends BaseVersionAwareModelDao<Validation> implemen
     @Override
     public boolean messageExists(String messageId) {
         return jdbc.queryForObject(lookup("validation/MessageExists"), singletonMap("id", messageId), Boolean.class);
+    }
+
+    public List<Change> getChanges(String id) {
+        return jdbc.query(lookup("validation/LoadChanges"), singletonMap("id", id), changeMapper);
+    }
+
+    @Override
+    public Validation loadVersion(int versionId) {
+        Validation validation = jdbc.queryForObject(lookup("validation/LoadValidationVersion"), singletonMap("id", versionId), mapper);
+        validation.setEntities(loadEntitiesVersions(versionId));
+        validation.setOperations(loadOperationsVersions(versionId));
+        return validation;
+    }
+
+    private Set<Entity> loadEntitiesVersions(int validationVersionId) {
+        List<Entity> data = jdbc.query(lookup("validation/LoadValidationEntitiesVersions"), singletonMap("id", validationVersionId), entityMapper);
+        return new HashSet<>(data);
+    }
+
+    private Set<Operation> loadOperationsVersions(int validationVersionId) {
+        List<Operation> data = jdbc.query(lookup("validation/LoadValidationOperationsVersions"), singletonMap("id", validationVersionId), operationMapper);
+        return new HashSet<>(data);
     }
 
 }

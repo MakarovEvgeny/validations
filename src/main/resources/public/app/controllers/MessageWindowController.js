@@ -9,6 +9,11 @@ Ext.define('app.controllers.MessageWindowController', {
     /** @override */
     createEmptyModel: function () {
         return Ext.create('app.models.Message');
+    },
+
+    /** @override */
+    getChangesUrlPart: function () {
+        return 'message';
     }
 
 });

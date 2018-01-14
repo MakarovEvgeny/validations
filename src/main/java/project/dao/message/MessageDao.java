@@ -2,10 +2,11 @@ package project.dao.message;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import project.dao.BaseVersionAwareModelDao;
+import project.dao.BaseVersionableModelDao;
 import project.dao.ConcurrentModificationException;
-import project.dao.SearchParamsProcessor;
 import project.dao.FindAbility;
+import project.dao.SearchParamsProcessor;
+import project.model.Change;
 import project.model.message.Message;
 import project.model.query.SearchParams;
 
@@ -18,7 +19,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class MessageDao extends BaseVersionAwareModelDao<Message> implements FindAbility<Message>, MessageValidatorDao {
+public class MessageDao extends BaseVersionableModelDao<Message> implements FindAbility<Message>, MessageValidatorDao {
 
     private RowMapper<Message> mapper = (rs, rowNum) -> new Message(rs.getString("id"), rs.getString("text"), rs.getInt("version"), rs.getString("commentary"));
 
@@ -91,6 +92,15 @@ public class MessageDao extends BaseVersionAwareModelDao<Message> implements Fin
     @Override
     public boolean isUsed(String id) {
         return jdbc.queryForObject(lookup("message/IsUsed"), singletonMap("id", id), Boolean.class);
+    }
+
+    public List<Change> getChanges(String id) {
+        return jdbc.query(lookup("message/LoadChanges"), singletonMap("id", id), changeMapper);
+    }
+
+    @Override
+    public Message loadVersion(int versionId) {
+        return jdbc.queryForObject(lookup("message/LoadMessageVersion"), singletonMap("id", versionId), mapper);
     }
 
 }

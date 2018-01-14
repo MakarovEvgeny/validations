@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import project.model.Change;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 import project.service.OperationService;
@@ -51,6 +52,16 @@ public class OperationController {
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void remove(@RequestBody @Valid Operation operation) {
         service.remove(operation);
+    }
+
+    @RequestMapping(value = "{id}/change", method = RequestMethod.GET)
+    public List<Change> getChanges(@PathVariable String id) {
+        return service.getChanges(id);
+    }
+
+    @RequestMapping(value = "{id}/change/{versionId}", method = RequestMethod.GET)
+    public Operation loadVersion(@PathVariable int versionId) {
+        return service.loadVersion(versionId);
     }
 
 }

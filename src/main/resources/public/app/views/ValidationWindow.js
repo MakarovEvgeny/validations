@@ -6,7 +6,7 @@ Ext.define('app.views.ValidationWindow', {
         'app.stores.SeverityStore'
     ],
 
-    width: 450,
+    height: '450',
 
     controller: 'validation-window-controller',
 
@@ -16,7 +16,8 @@ Ext.define('app.views.ValidationWindow', {
             {
                 xtype: 'textfield',
                 fieldLabel: 'Код',
-                name: 'id'
+                name: 'id',
+                margin: '15 10 5 10'
             },
 
             {

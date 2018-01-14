@@ -1,5 +1,5 @@
 Ext.define('app.models.Entity', {
-    extend: 'app.models.BaseVersionAwareModel',
+    extend: 'app.models.BaseVersionableModel',
 
     proxy: {
         type: 'rest',

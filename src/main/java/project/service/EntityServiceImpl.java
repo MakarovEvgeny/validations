@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dao.entity.EntityDao;
+import project.model.Change;
 import project.model.entity.Entity;
 import project.model.query.SearchParams;
 
@@ -39,6 +40,16 @@ public class EntityServiceImpl implements EntityService {
     @Override
     public List<Entity> find(SearchParams searchParams) {
         return dao.find(searchParams);
+    }
+
+    @Override
+    public List<Change> getChanges(String entityId) {
+        return dao.getChanges(entityId);
+    }
+
+    @Override
+    public Entity loadVersion(int versionId) {
+        return dao.loadVersion(versionId);
     }
 
 }

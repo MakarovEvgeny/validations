@@ -2,10 +2,11 @@ package project.dao.entity;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import project.dao.BaseVersionAwareModelDao;
+import project.dao.BaseVersionableModelDao;
 import project.dao.ConcurrentModificationException;
-import project.dao.SearchParamsProcessor.ProcessResult;
 import project.dao.FindAbility;
+import project.dao.SearchParamsProcessor.ProcessResult;
+import project.model.Change;
 import project.model.entity.Entity;
 import project.model.query.SearchParams;
 
@@ -18,7 +19,7 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class EntityDao extends BaseVersionAwareModelDao<Entity> implements FindAbility<Entity>, EntityValidatorDao {
+public class EntityDao extends BaseVersionableModelDao<Entity> implements FindAbility<Entity>, EntityValidatorDao {
 
     private RowMapper<Entity> mapper = (rs, rowNum) -> new Entity(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 
@@ -93,6 +94,15 @@ public class EntityDao extends BaseVersionAwareModelDao<Entity> implements FindA
     /** Проверка что на удаляемую запись ссылаются из других таблиц. */
     public boolean isUsed(String id) {
         return jdbc.queryForObject(lookup("entity/IsUsed"), singletonMap("id", id), Boolean.class);
+    }
+
+    public List<Change> getChanges(String id) {
+        return jdbc.query(lookup("entity/LoadChanges"), singletonMap("id", id), changeMapper);
+    }
+
+    @Override
+    public Entity loadVersion(int versionId) {
+        return jdbc.queryForObject(lookup("entity/LoadEntityVersion"), singletonMap("id", versionId), mapper);
     }
 
 }

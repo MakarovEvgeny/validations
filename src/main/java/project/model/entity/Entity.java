@@ -1,13 +1,13 @@
 package project.model.entity;
 
-import project.model.BaseVersionAwareModel;
+import project.model.BaseVersionableModel;
 
 import java.util.Objects;
 
 /**
  * Сущность системы.
  */
-public class Entity extends BaseVersionAwareModel {
+public class Entity extends BaseVersionableModel {
 
     /** Наименование, человекопонятное. */
     private String name;

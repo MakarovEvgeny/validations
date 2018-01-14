@@ -4,9 +4,9 @@ Ext.define('app.views.ModelWindow', {
         'app.controllers.EntityWindowController'
     ],
 
-    layout: 'fit',
-    width: 350,
-    height: 400,
+    layout: 'border',
+    width: 550,
+    height: 300,
 
     constructor: function () {
         this.callParent(arguments);
@@ -43,6 +43,7 @@ Ext.define('app.views.ModelWindow', {
 
         {
             xtype: 'form',
+            region: 'center',
             border: false,
             layout: {
                 type: 'vbox',
@@ -53,8 +54,58 @@ Ext.define('app.views.ModelWindow', {
                 margin: '5 10 5 10',
                 labelWidth: 150
             }
-        }
+        },
+        {
+            xtype: 'panel',
+            name: 'changesPanel',
+            region: 'east',
+            layout: 'fit',
+            width: '33%',
+            split: true,
+            collapsible: true,
+            collapsed: true,
 
+            autoScroll: true,
+
+            title: 'Изменения',
+            listeners: {
+                expand: 'onExpand'
+            },
+            items: [
+                {
+                    xtype: 'grid',
+                    name: 'changesGrid',
+
+                    listeners: {
+                        rowdblclick: 'onRowDoubleClick'
+                    },
+
+                    columns: {
+                        items: [
+                            {
+                                dataIndex: 'date',
+                                flex: 1,
+                                text: 'Дата',
+                                renderer: function (date) {
+                                    return Ext.Date.format(date, 'Y.m.d H:i:s');
+                                },
+                                dateFormat: 'yyyy'
+                            },
+                            {
+                                dataIndex: 'username',
+                                text: 'Пользователь',
+                                flex: 1
+                            },
+                            {
+                                dataIndex: 'commentary',
+                                text: 'Комментарий',
+                                flex: 3
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
     ],
 
     bbar: [
