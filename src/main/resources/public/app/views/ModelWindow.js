@@ -88,8 +88,7 @@ Ext.define('app.views.ModelWindow', {
                                 text: 'Дата',
                                 renderer: function (date) {
                                     return Ext.Date.format(date, 'Y.m.d H:i:s');
-                                },
-                                dateFormat: 'yyyy'
+                                }
                             },
                             {
                                 dataIndex: 'username',
