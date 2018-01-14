@@ -1,11 +1,12 @@
 package project.dao;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 /**
  * Класс для ленивой загрузки sql запросов с кэшированием.
@@ -28,9 +29,11 @@ public class RequestRegistry {
     private static String loadRequest(String requestId) {
         String fileName = "/queries/" + requestId + ".sql";
         try {
-            byte[] bytes = Files.readAllBytes(Paths.get(RequestRegistry.class.getResource(fileName).toURI()));
-            return new String(bytes);
-        } catch (IOException | URISyntaxException e) {
+            try (InputStream is = RequestRegistry.class.getResourceAsStream(fileName);
+                 BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+                return br.lines().collect(Collectors.joining("\n"));
+            }
+        } catch (IOException e) {
             throw new RuntimeException("Failed to load query from path: " + fileName);
         }
     }
