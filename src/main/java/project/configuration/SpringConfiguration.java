@@ -38,9 +38,12 @@ public class SpringConfiguration {
     @Value("${database}")
     private String database;
 
+    @Value("${schema}")
+    private String schema;
+
     @Bean
     public DataSource dataSource() {
-        return new DriverManagerDataSource(String.format("jdbc:postgresql://%s:%s/%s", host, port, database), login, password);
+        return new DriverManagerDataSource(String.format("jdbc:postgresql://%s:%s/%s?currentSchema=%s", host, port, database, schema), login, password);
     }
 
     @Bean

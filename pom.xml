@@ -68,6 +68,20 @@
             </dependencies>
 
             <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>false</filtering>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                        <includes>
+                            <include>database.properties</include>
+                        </includes>
+                    </resource>
+                </resources>
+
                 <plugins>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
