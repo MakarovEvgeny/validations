@@ -50,7 +50,7 @@ public class OperationDao extends BaseVersionableModelDao<Operation> implements 
         if (rowsAffected == 0) {
             throw new ConcurrentModificationException();
         }
-        jdbc.update(lookup("operation/CreateOperationHistory"), prepareHistoricalParamsForRemove(operation));
+        createHistory(operation);
     }
 
     public List<Operation> find(SearchParams searchParams) {
@@ -63,13 +63,6 @@ public class OperationDao extends BaseVersionableModelDao<Operation> implements 
         Map<String, Object> params = super.prepareParams(operation);
         params.put("name", operation.getName());
         params.put("description", operation.getDescription());
-        return params;
-    }
-
-    private Map<String, Object> prepareHistoricalParamsForRemove(Operation model) {
-        Map<String, Object> params = super.prepareHistoricalParams(model);
-        params.put("name", null);
-        params.put("description", null);
         return params;
     }
 

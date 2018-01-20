@@ -53,7 +53,7 @@ public class EntityDao extends BaseVersionableModelDao<Entity> implements FindAb
             throw new ConcurrentModificationException();
         }
 
-        jdbc.update(lookup("entity/CreateEntityHistory"), prepareHistoricalParamsForRemove(entity));
+        createHistory(entity);
     }
 
     public List<Entity> find(SearchParams searchParams) {
@@ -67,13 +67,6 @@ public class EntityDao extends BaseVersionableModelDao<Entity> implements FindAb
         Map<String, Object> params = super.prepareParams(entity);
         params.put("name", entity.getName());
         params.put("description", entity.getDescription());
-        return params;
-    }
-
-    private Map<String, Object> prepareHistoricalParamsForRemove(Entity model) {
-        Map<String, Object> params = prepareHistoricalParams(model);
-        params.put("name", null);
-        params.put("description", null);
         return params;
     }
 

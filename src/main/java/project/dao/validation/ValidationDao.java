@@ -72,7 +72,7 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
         createEntities(validation);
         createOperations(validation);
 
-        createHistory(validation, false);
+        createHistory(validation);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
             throw new ConcurrentModificationException();
         }
 
-        createHistory(validation, false);
+        createHistory(validation);
     }
 
     private void createOperations(Validation validation) {
@@ -120,9 +120,9 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
     }
 
 
-    private void createHistory(Validation validation, boolean isForDelete) {
+    private void createHistory(Validation validation) {
 
-        MapSqlParameterSource params = new MapSqlParameterSource(isForDelete ? prepareHistoricalParamsForDelete(validation) : prepareHistoricalParams(validation));
+        MapSqlParameterSource params = new MapSqlParameterSource(prepareHistoricalParams(validation));
 
         GeneratedKeyHolder idHolder = new GeneratedKeyHolder();
         jdbc.update(lookup("validation/CreateValidationHistory"), params, idHolder, new String[]{"validation_version_id"});
@@ -165,12 +165,6 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
         return params;
     }
 
-    private Map<String, Object> prepareHistoricalParamsForDelete(Validation validation) {
-        Map<String, Object> params = super.prepareHistoricalParams(validation);
-        params.put("messageId", null);
-        params.put("description", null);
-        return params;
-    }
 
 
     @Override
@@ -183,7 +177,7 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
             throw new ConcurrentModificationException();
         }
 
-        createHistory(validation, true);
+        createHistory(validation);
     }
 
     public List<ValidationDto> find(SearchParams searchParams) {

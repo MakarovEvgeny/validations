@@ -49,7 +49,7 @@ public class MessageDao extends BaseVersionableModelDao<Message> implements Find
         if (affectedRows == 0) {
             throw new ConcurrentModificationException();
         }
-        jdbc.update(lookup("message/CreateMessageHistory"), prepareHistoricalParamsForRemove(message));
+        createHistory(message);
     }
 
     @Override
@@ -66,12 +66,6 @@ public class MessageDao extends BaseVersionableModelDao<Message> implements Find
     protected Map<String, Object> prepareParams(Message message) {
         Map<String, Object> params = super.prepareParams(message);
         params.put("text", message.getText());
-        return params;
-    }
-
-    private Map<String, Object> prepareHistoricalParamsForRemove(Message model) {
-        Map<String, Object> params = super.prepareHistoricalParams(model);
-        params.put("text", null);
         return params;
     }
 
