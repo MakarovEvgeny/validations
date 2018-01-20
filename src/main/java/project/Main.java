@@ -6,7 +6,7 @@ import project.configuration.SpringConfiguration;
 public class Main {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringConfiguration.class);
+        SpringApplication.run(SpringConfiguration.class, args);
     }
 
 }
