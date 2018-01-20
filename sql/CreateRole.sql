@@ -1,0 +1,9 @@
+CREATE TABLE role
+(
+	name VARCHAR(50) NOT NULL,
+	role_id SMALLSERIAL NOT NULL
+		CONSTRAINT role_pkey
+			PRIMARY KEY
+);
+
+INSERT INTO role (name) VALUES ('USER');

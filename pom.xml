@@ -11,6 +11,13 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <host>localhost</host>
+        <port>5432</port>
+        <database>test</database>
+        <schema>public</schema>
+        <username>postgres</username>
+        <password>postgres</password>
     </properties>
 
     <parent>
@@ -19,50 +26,137 @@
         <version>1.5.7.RELEASE</version>
     </parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
+    <profiles>
+        <profile>
+            <id>app</id>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-jdbc</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </dependency>
 
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
+                <dependency>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                    <scope>test</scope>
+                </dependency>
 
-    </dependencies>
+                <dependency>
+                    <groupId>org.mockito</groupId>
+                    <artifactId>mockito-core</artifactId>
+                    <scope>test</scope>
+                </dependency>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>db</id>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sql-maven-plugin</artifactId>
+                        <version>1.5</version>
+
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.postgresql</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>${postgresql.version}</version>
+                            </dependency>
+                        </dependencies>
+
+                        <configuration>
+                            <driver>org.postgresql.Driver</driver>
+                            <url>jdbc:postgresql://${host}:${port}/${database}?currentSchema=${schema}</url>
+                            <username>${username}</username>
+                            <password>${password}</password>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>create-database-structure</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <srcFiles>
+                                        <srcFile>sql/DropUsers.sql</srcFile>
+                                        <srcFile>sql/DropRole.sql</srcFile>
+                                        <srcFile>sql/DropValidationEntity.sql</srcFile>
+                                        <srcFile>sql/DropValidationEntityH.sql</srcFile>
+                                        <srcFile>sql/DropValidationOperation.sql</srcFile>
+                                        <srcFile>sql/DropValidationOperationH.sql</srcFile>
+                                        <srcFile>sql/DropValidation.sql</srcFile>
+                                        <srcFile>sql/DropValidationH.sql</srcFile>
+                                        <srcFile>sql/DropSeverity.sql</srcFile>
+                                        <srcFile>sql/DropEntity.sql</srcFile>
+                                        <srcFile>sql/DropEntityH.sql</srcFile>
+                                        <srcFile>sql/DropOperation.sql</srcFile>
+                                        <srcFile>sql/DropOperationH.sql</srcFile>
+                                        <srcFile>sql/DropMessage.sql</srcFile>
+                                        <srcFile>sql/DropMessageH.sql</srcFile>
+
+                                        <srcFile>sql/CreateRole.sql</srcFile>
+                                        <srcFile>sql/CreateUsers.sql</srcFile>
+                                        <srcFile>sql/CreateSeverity.sql</srcFile>
+                                        <srcFile>sql/CreateEntity.sql</srcFile>
+                                        <srcFile>sql/CreateEntityH.sql</srcFile>
+                                        <srcFile>sql/CreateOperation.sql</srcFile>
+                                        <srcFile>sql/CreateOperationH.sql</srcFile>
+                                        <srcFile>sql/CreateMessage.sql</srcFile>
+                                        <srcFile>sql/CreateMessageH.sql</srcFile>
+                                        <srcFile>sql/CreateValidation.sql</srcFile>
+                                        <srcFile>sql/CreateValidationEntity.sql</srcFile>
+                                        <srcFile>sql/CreateValidationOperation.sql</srcFile>
+                                        <srcFile>sql/CreateValidationH.sql</srcFile>
+                                        <srcFile>sql/CreateValidationEntityH.sql</srcFile>
+                                        <srcFile>sql/CreateValidationOperationH.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

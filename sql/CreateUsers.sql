@@ -1,0 +1,10 @@
+CREATE TABLE users
+(
+	username VARCHAR(50) NOT NULL
+		CONSTRAINT user_pkey
+			PRIMARY KEY,
+	password VARCHAR(60) NOT NULL,
+	role_id SMALLINT NOT NULL
+		CONSTRAINT role_fk
+			REFERENCES role
+);
