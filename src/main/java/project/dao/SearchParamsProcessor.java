@@ -59,16 +59,7 @@ public class SearchParamsProcessor {
                     String paramName = filter.getProperty() + "_param_" + ++index;
                     params.put(paramName, filter.getValue());
 
-                    switch (filter.getOperator()) {
-                        case "=":
-                            builder.append(filter.getProperty()).append(" = :").append(paramName);
-                            break;
-                        case "like":
-                            builder.append(filter.getProperty()).append(" LIKE '%' || :").append(paramName).append(" || '%'");
-                            break;
-                        default:
-                            throw new IllegalStateException("Unsupported operator: " + filter.getOperator());
-                    }
+                    filter.getOperator().appendSql(builder, filter.getProperty(), paramName);
 
                     if (iterator.hasNext()) {
                         builder.append(" OR "); // Все фильтры для одинакового поля соединяем через ИЛИ (OR).

@@ -6,14 +6,14 @@ public class Property {
     /** Наименование */
     private String property;
     /** Оператор */
-    private String operator = "=";
+    private Operator operator = Operator.EQUALS;
     /** Значение. */
     private String value;
 
     public Property() {
     }
 
-    public Property(String property, String operator, String value) {
+    public Property(String property, Operator operator, String value) {
         this.property = property;
         this.operator = operator;
         this.value = value;
@@ -23,7 +23,7 @@ public class Property {
         return property;
     }
 
-    public String getOperator() {
+    public Operator getOperator() {
         return operator;
     }
 
