@@ -18,4 +18,5 @@ FROM validation v
   JOIN message m on v.message_id = m.message_id
   JOIN severity s on v.severity_id = s.severity_id
 GROUP BY v.validation_id, m.message_id, s.severity_id
+ORDER BY v.validation_id
 ) wrapper

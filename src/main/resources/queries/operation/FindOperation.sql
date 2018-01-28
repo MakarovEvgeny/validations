@@ -5,5 +5,5 @@ SELECT * FROM (
     description,
     version,
     commentary
-  FROM operation
+  FROM operation ORDER BY operation_id
 ) wrapper

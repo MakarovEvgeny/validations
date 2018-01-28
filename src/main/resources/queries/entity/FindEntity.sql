@@ -5,5 +5,5 @@ SELECT * FROM (
     description,
     version,
     commentary
-  FROM entity
+  FROM entity ORDER BY entity_id
 ) wrapper

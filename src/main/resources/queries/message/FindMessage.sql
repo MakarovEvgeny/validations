@@ -4,5 +4,5 @@ SELECT * FROM (
     text,
     version,
     commentary
-  FROM message
+  FROM message ORDER BY message_id
 ) wrapper
