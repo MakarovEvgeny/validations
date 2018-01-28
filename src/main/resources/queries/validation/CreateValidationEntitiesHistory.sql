@@ -1,1 +1,2 @@
-INSERT INTO validation_entity_h (validation_version_id, entity_id) VALUES (:validationVersionId, :entityId)
+INSERT INTO validation_entity_h (validation_version_id, entity_version_id)
+  VALUES (:validationVersionId, (SELECT entity_version_id FROM entity_h WHERE entity_id = :entityId ORDER BY DATE DESC LIMIT 1))

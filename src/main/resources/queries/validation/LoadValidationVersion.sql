@@ -12,5 +12,5 @@ SELECT
   m.commentary    AS m_commentary
 
 FROM validation_h v
-  JOIN message m ON v.message_id = m.message_id
+  JOIN message_h m ON v.message_version_id = m.message_version_id
 WHERE v.validation_version_id = :id

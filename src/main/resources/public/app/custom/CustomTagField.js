@@ -5,6 +5,8 @@ Ext.define('app.custom.CustomTagField', {
     filterProperty: 'id',
     filterOperator: 'like',
 
+    forceSelection: false,
+
     minChars: 1,
 
     /** @override */
