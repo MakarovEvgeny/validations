@@ -132,8 +132,6 @@
                                 </goals>
                                 <configuration>
                                     <srcFiles>
-                                        <srcFile>sql/DropUsers.sql</srcFile>
-                                        <srcFile>sql/DropRole.sql</srcFile>
                                         <srcFile>sql/DropValidationEntity.sql</srcFile>
                                         <srcFile>sql/DropValidationEntityH.sql</srcFile>
                                         <srcFile>sql/DropValidationOperation.sql</srcFile>
@@ -147,6 +145,8 @@
                                         <srcFile>sql/DropOperationH.sql</srcFile>
                                         <srcFile>sql/DropMessage.sql</srcFile>
                                         <srcFile>sql/DropMessageH.sql</srcFile>
+                                        <srcFile>sql/DropUsers.sql</srcFile>
+                                        <srcFile>sql/DropRole.sql</srcFile>
 
                                         <srcFile>sql/CreateRole.sql</srcFile>
                                         <srcFile>sql/CreateUsers.sql</srcFile>

@@ -8,6 +8,8 @@ CREATE TABLE message_h
 	version SMALLINT NOT NULL,
 	date TIMESTAMP WITH TIME ZONE NOT NULL,
 	commentary VARCHAR(500),
-	username VARCHAR(50) NOT NULL,
+	username VARCHAR(50) NOT NULL
+	  CONSTRAINT users_fk
+	    REFERENCES users,
 	ip CIDR
 );

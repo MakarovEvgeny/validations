@@ -14,6 +14,8 @@ CREATE TABLE validation_h
 	severity_id SMALLINT NOT NULL
 	  CONSTRAINT severity_fk
 	    REFERENCES severity,
-	username VARCHAR(50) NOT NULL,
+	username VARCHAR(50) NOT NULL
+	  CONSTRAINT users_fk
+	    REFERENCES users,
 	ip CIDR NOT NULL
 );
