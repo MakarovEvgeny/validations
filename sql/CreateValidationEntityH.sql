@@ -1,7 +1,7 @@
 CREATE TABLE validation_entity_h
 (
 	validation_version_id SMALLINT NOT NULL
-		CONSTRAINT validation_operation_h_fk
+		CONSTRAINT validation_h_fk
 			REFERENCES validation_h,
 	entity_version_id SMALLINT NOT NULL
 	  CONSTRAINT entity_h_fk

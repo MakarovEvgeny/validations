@@ -6,7 +6,7 @@ CREATE TABLE validation_h
 	validation_id VARCHAR(7) NOT NULL,
 	date TIMESTAMP WITH TIME ZONE NOT NULL,
 	message_version_id SMALLINT NOT NULL
-	  CONSTRAINT message_fk
+	  CONSTRAINT message_h_fk
 	    REFERENCES message_h,
 	description TEXT NOT NULL,
 	version SMALLINT NOT NULL,

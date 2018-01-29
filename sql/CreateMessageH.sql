@@ -11,5 +11,5 @@ CREATE TABLE message_h
 	username VARCHAR(50) NOT NULL
 	  CONSTRAINT users_fk
 	    REFERENCES users,
-	ip CIDR
+	ip CIDR NOT NULL
 );
