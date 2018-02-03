@@ -19,6 +19,14 @@ public enum Operator implements SqlAware {
         public void appendSql(StringBuilder builder, String property, String paramName) {
             builder.append(property).append(" LIKE '%' || :").append(paramName).append(" || '%'");
         }
+    },
+
+    @JsonProperty("likeIgnoreCase")
+    ILIKE {
+        @Override
+        public void appendSql(StringBuilder builder, String property, String paramName) {
+            builder.append("UPPER(").append(property).append(") LIKE '%' || UPPER(:").append(paramName).append(") || '%'");
+        }
     }
 
 }

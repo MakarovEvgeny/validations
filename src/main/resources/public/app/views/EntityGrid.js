@@ -21,7 +21,7 @@ Ext.define('app.views.EntityGrid', {
                 dataIndex: 'id',
                 filter: {
                     type: 'list',
-                    operator: '='
+                    operator: app.models.SearchOperator.EQUALS
                 },
                 flex: 1
             },
@@ -29,7 +29,8 @@ Ext.define('app.views.EntityGrid', {
                 text: 'Наименование',
                 dataIndex: 'name',
                 filter: {
-                    type: 'multi-string'
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
                 },
                 flex: 1
             },

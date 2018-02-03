@@ -1,6 +1,6 @@
 Ext.application({
     extend: 'Ext.app.Application',
-    requires: ['app.views.MainView', 'app.ServerResponseExceptionHandler'],
+    requires: ['app.models.SearchOperator', 'app.views.MainView', 'app.ServerResponseExceptionHandler'],
 
     name: 'app',
     paths: {

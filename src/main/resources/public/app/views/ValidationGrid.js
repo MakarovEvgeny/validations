@@ -21,7 +21,7 @@ Ext.define('app.views.ValidationGrid', {
                 dataIndex: 'id',
                 filter: {
                     type: 'list',
-                    operator: '='
+                    operator: app.models.SearchOperator.EQUALS
                 },
                 flex: 1
             },
@@ -29,7 +29,8 @@ Ext.define('app.views.ValidationGrid', {
                 text: 'Код сообщения об ошибке',
                 dataIndex: 'messageId',
                 filter: {
-                    type: 'multi-string'
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
                 },
                 flex: 1
             },
@@ -37,7 +38,8 @@ Ext.define('app.views.ValidationGrid', {
                 text: 'Сообщение об ошибке',
                 dataIndex: 'messageText',
                 filter: {
-                    type: 'multi-string'
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
                 },
                 flex: 1
             },
@@ -50,7 +52,8 @@ Ext.define('app.views.ValidationGrid', {
                 text: 'Сущности',
                 dataIndex: 'entityNames',
                 filter: {
-                    type: 'multi-string'
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
                 },
                 flex: 1
             },
@@ -58,7 +61,8 @@ Ext.define('app.views.ValidationGrid', {
                 text: 'Операции',
                 dataIndex: 'operationNames',
                 filter: {
-                    type: 'multi-string'
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
                 },
                 flex: 1
             },
