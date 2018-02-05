@@ -27,6 +27,14 @@ public enum Operator implements SqlAware {
         public void appendSql(StringBuilder builder, String property, String paramName) {
             builder.append("UPPER(").append(property).append(") LIKE '%' || UPPER(:").append(paramName).append(") || '%'");
         }
+    },
+
+    @JsonProperty("fts")
+    FTS {
+        @Override
+        public void appendSql(StringBuilder builder, String property, String paramName) {
+            builder.append("TO_TSVECTOR('russian', ").append(property).append(") @@ PLAINTO_TSQUERY('russian', :").append(paramName).append(')');
+        }
     }
 
 }

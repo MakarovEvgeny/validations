@@ -30,7 +30,7 @@ Ext.define('app.views.MessageGrid', {
                 dataIndex: 'text',
                 filter: {
                     type: 'multi-string',
-                    operator: app.models.SearchOperator.ILIKE
+                    operator: app.models.SearchOperator.FTS
                 },
                 flex: 1
             },

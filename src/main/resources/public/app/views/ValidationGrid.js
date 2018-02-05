@@ -69,6 +69,10 @@ Ext.define('app.views.ValidationGrid', {
             {
                 text: 'Описание',
                 dataIndex: 'description',
+                filter: {
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.FTS
+                },
                 flex: 1
             },
             {

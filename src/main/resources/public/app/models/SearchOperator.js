@@ -3,6 +3,8 @@ Ext.define('app.models.SearchOperator', {
     statics: {
         EQUALS: '=',
         LIKE: 'like',
-        ILIKE: 'likeIgnoreCase'
+        ILIKE: 'likeIgnoreCase',
+        /** Полнотекстовый поиск. */
+        FTS: 'fts'
     }
 });
