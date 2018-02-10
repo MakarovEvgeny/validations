@@ -1,11 +1,12 @@
-Ext.define('app.custom.CustomTagField', {
-    extend: 'Ext.form.field.Tag',
-    xtype: 'custom-tagfield',
+Ext.define('app.custom.CustomCombobox', {
+    extend: 'Ext.form.field.ComboBox',
+    xtype: 'custom-combo',
 
     filterProperty: 'id',
     filterOperator: app.models.SearchOperator.ILIKE,
 
-    forceSelection: false,
+    forceSelection: true, // Произвольный текст не должен оставаться в выпадающем списке в качестве выбранного значения.
+    triggerAction: 'query',
 
     minChars: 1,
 

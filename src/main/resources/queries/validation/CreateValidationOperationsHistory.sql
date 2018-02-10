@@ -1,2 +1,0 @@
-INSERT INTO validation_operation_h (validation_version_id, operation_version_id)
-  VALUES (:validationVersionId, (SELECT operation_version_id FROM operation_h WHERE operation_id = :operationId ORDER BY DATE DESC LIMIT 1))

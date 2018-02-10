@@ -5,6 +5,8 @@ Ext.define('app.stores.OperationStore', {
         'app.stores.AppRestProxy'
     ],
 
+    alias: 'store.operation-store',
+
     model: 'app.models.Operation',
 
     autoLoad: true,

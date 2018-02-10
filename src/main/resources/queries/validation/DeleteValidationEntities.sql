@@ -1,1 +1,0 @@
-DELETE FROM validation_entity WHERE validation_id = :id

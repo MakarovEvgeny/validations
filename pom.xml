@@ -132,10 +132,9 @@
                                 </goals>
                                 <configuration>
                                     <srcFiles>
-                                        <srcFile>sql/DropValidationEntity.sql</srcFile>
-                                        <srcFile>sql/DropValidationEntityH.sql</srcFile>
-                                        <srcFile>sql/DropValidationOperation.sql</srcFile>
-                                        <srcFile>sql/DropValidationOperationH.sql</srcFile>
+                                        <srcFile>sql/DropValidationEntityOperation.sql</srcFile>
+                                        <srcFile>sql/DropValidationEntityOperationH.sql</srcFile>
+
                                         <srcFile>sql/DropValidation.sql</srcFile>
                                         <srcFile>sql/DropValidationH.sql</srcFile>
                                         <srcFile>sql/DropSeverity.sql</srcFile>
@@ -158,11 +157,9 @@
                                         <srcFile>sql/CreateMessage.sql</srcFile>
                                         <srcFile>sql/CreateMessageH.sql</srcFile>
                                         <srcFile>sql/CreateValidation.sql</srcFile>
-                                        <srcFile>sql/CreateValidationEntity.sql</srcFile>
-                                        <srcFile>sql/CreateValidationOperation.sql</srcFile>
                                         <srcFile>sql/CreateValidationH.sql</srcFile>
-                                        <srcFile>sql/CreateValidationEntityH.sql</srcFile>
-                                        <srcFile>sql/CreateValidationOperationH.sql</srcFile>
+                                        <srcFile>sql/CreateValidationEntityOperation.sql</srcFile>
+                                        <srcFile>sql/CreateValidationEntityOperationH.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>

@@ -1,1 +1,0 @@
-DELETE FROM validation_operation WHERE validation_id = :id

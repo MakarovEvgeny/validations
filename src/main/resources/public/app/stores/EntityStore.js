@@ -5,6 +5,8 @@ Ext.define('app.stores.EntityStore', {
         'app.stores.AppRestProxy'
     ],
 
+    alias: 'store.entity-store',
+
     model: 'app.models.Entity',
 
     autoLoad: true,

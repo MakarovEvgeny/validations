@@ -1,5 +1,6 @@
 package project.dao.validation;
 
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -17,11 +18,10 @@ import project.model.query.SearchParams;
 import project.model.validation.Severity;
 import project.model.validation.Validation;
 import project.model.validation.ValidationDto;
+import project.model.validation.ValidationEntity;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonMap;
 import static project.dao.RequestRegistry.lookup;
@@ -52,16 +52,39 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
         return dto;
     };
 
-    private RowMapper<Entity> entityMapper = (rs, rowNum) -> new Entity(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
+    private RowMapper<Entity> entityMapper = (rs, rowNum) -> new Entity(rs.getString("e_id"), rs.getString("e_name"), rs.getString("e_description"), rs.getInt("e_version"), rs.getString("e_commentary"));
 
-    private RowMapper<Operation> operationMapper = (rs, rowNum) -> new Operation(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
+    private RowMapper<Operation> operationMapper = (rs, rowNum) -> new Operation(rs.getString("o_id"), rs.getString("o_name"), rs.getString("o_description"), rs.getInt("o_version"), rs.getString("o_commentary"));
 
+    private ResultSetExtractor<List<ValidationEntity>> rse = rs -> {
+        Map<Entity, Set<Operation>> map = new HashMap<>();
+
+        while (rs.next()) {
+            Entity entity = entityMapper.mapRow(rs, 0);
+            Operation operation = operationMapper.mapRow(rs, 0);
+
+            if (map.containsKey(entity)) {
+                map.get(entity).add(operation);
+            } else {
+                Set<Operation> operations = new HashSet<>();
+                operations.add(operation);
+                map.put(entity, operations);
+            }
+        }
+
+        List<ValidationEntity> result = new ArrayList<>();
+
+        for (Map.Entry<Entity, Set<Operation>> entry : map.entrySet()) {
+            result.add(new ValidationEntity(entry.getKey(), entry.getValue()));
+        }
+
+        return result;
+    };
 
     @Override
     public Validation load(String validationId) {
         Validation validation = jdbc.queryForObject(lookup("validation/LoadValidation"), singletonMap("id", validationId), mapper);
-        validation.setEntities(loadEntities(validationId));
-        validation.setOperations(loadOperations(validationId));
+        validation.setValidationEntities(loadValidationEntities(validationId));
         return validation;
     }
 
@@ -69,19 +92,16 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
     public void create(Validation validation) {
         jdbc.update(lookup("validation/CreateValidation"), prepareParams(validation));
 
-        createEntities(validation);
-        createOperations(validation);
+        createEntityOperations(validation);
 
         createHistory(validation);
     }
 
     @Override
     public void update(Validation validation) {
-        deleteEntities(validation);
-        deleteOperations(validation);
+        deleteEntityOperations(validation);
 
-        createEntities(validation);
-        createOperations(validation);
+        createEntityOperations(validation);
 
         int rowsAffected = jdbc.update(lookup("validation/UpdateValidation"), prepareParams(validation));
         if (rowsAffected == 0) {
@@ -91,32 +111,26 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
         createHistory(validation);
     }
 
-    private void createOperations(Validation validation) {
-        SqlParameterSource[] operationParams = validation.getOperations().stream().map(operation -> {
-            MapSqlParameterSource source = new MapSqlParameterSource();
-            source.addValue("id", validation.getId());
-            source.addValue("operationId", operation.getId());
-            return source;
-        }).toArray(SqlParameterSource[]::new);
-        jdbc.batchUpdate(lookup("validation/CreateValidationOperations"), operationParams);
+    private void createEntityOperations(Validation validation) {
+
+        List<SqlParameterSource> params = new ArrayList<>();
+
+        validation.getValidationEntities().forEach(validationEntity -> {
+            List<MapSqlParameterSource> validationEntityResult = validationEntity.getOperations().stream().map(operation -> {
+                MapSqlParameterSource source = new MapSqlParameterSource();
+                source.addValue("id", validation.getId());
+                source.addValue("entityId", validationEntity.getEntity().getId());
+                source.addValue("operationId", operation.getId());
+                return source;
+            }).collect(Collectors.toList());
+            params.addAll(validationEntityResult);
+        });
+
+        jdbc.batchUpdate(lookup("validation/CreateValidationEntityOperation"), params.toArray(new SqlParameterSource[]{}));
     }
 
-    private void createEntities(Validation validation) {
-        SqlParameterSource[] entityParams = validation.getEntities().stream().map(entity -> {
-            MapSqlParameterSource source = new MapSqlParameterSource();
-            source.addValue("id", validation.getId());
-            source.addValue("entityId", entity.getId());
-            return source;
-        }).toArray(SqlParameterSource[]::new);
-        jdbc.batchUpdate(lookup("validation/CreateValidationEntities"), entityParams);
-    }
-
-    private void deleteOperations(Validation validation) {
-        jdbc.update(lookup("validation/DeleteValidationOperations"), singletonMap("id", validation.getId()));
-    }
-
-    private void deleteEntities(Validation validation) {
-        jdbc.update(lookup("validation/DeleteValidationEntities"), singletonMap("id", validation.getId()));
+    private void deleteEntityOperations(Validation validation) {
+        jdbc.update(lookup("validation/DeleteValidationEntityOperations"), singletonMap("id", validation.getId()));
     }
 
 
@@ -129,30 +143,23 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
 
         int validationVersionId = idHolder.getKey().intValue();
 
-        createEntitiesHistory(validationVersionId, validation.getEntities());
-        createOperationsHistory(validationVersionId, validation.getOperations());
+        createEntityOperationsHistory(validationVersionId, validation.getValidationEntities());
     }
 
-    private void createEntitiesHistory(int validationVersionId, Set<Entity> entities) {
-        SqlParameterSource[] entityParams = entities.stream().map(entity -> {
-            MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("validationVersionId", validationVersionId);
-            params.addValue("entityId", entity.getId());
-            return params;
-        }).toArray(SqlParameterSource[]::new);
+    private void createEntityOperationsHistory(int validationVersionId, Set<ValidationEntity> entities) {
+        List<SqlParameterSource> params = new ArrayList<>();
 
-        jdbc.batchUpdate(lookup("validation/CreateValidationEntitiesHistory"), entityParams);
-    }
+        entities.forEach(validationEntity -> {
+            validationEntity.getOperations().forEach(operation -> {
+                MapSqlParameterSource source = new MapSqlParameterSource();
+                source.addValue("validationVersionId", validationVersionId);
+                source.addValue("entityId", validationEntity.getEntity().getId());
+                source.addValue("operationId", operation.getId());
+                params.add(source);
+            });
+        });
 
-    private void createOperationsHistory(int validationVersionId, Set<Operation> operations) {
-        SqlParameterSource[] entityParams = operations.stream().map(operation -> {
-            MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("validationVersionId", validationVersionId);
-            params.addValue("operationId", operation.getId());
-            return params;
-        }).toArray(SqlParameterSource[]::new);
-
-        jdbc.batchUpdate(lookup("validation/CreateValidationOperationsHistory"), entityParams);
+        jdbc.batchUpdate(lookup("validation/CreateValidationEntitiesHistory"), params.toArray(new SqlParameterSource[]{}));
     }
 
 
@@ -169,8 +176,7 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
 
     @Override
     public void remove(Validation validation) {
-        deleteEntities(validation);
-        deleteOperations(validation);
+        deleteEntityOperations(validation);
 
         int rowsAffected = jdbc.update(lookup("validation/DeleteValidation"), prepareParams(validation));
         if (rowsAffected == 0) {
@@ -186,13 +192,8 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
     }
 
 
-    private Set<Entity> loadEntities(String validationId) {
-        List<Entity> data = jdbc.query(lookup("validation/LoadValidationEntities"), singletonMap("id", validationId), entityMapper);
-        return new HashSet<>(data);
-    }
-
-    private Set<Operation> loadOperations(String validationId) {
-        List<Operation> data = jdbc.query(lookup("validation/LoadValidationOperations"), singletonMap("id", validationId), operationMapper);
+    private Set<ValidationEntity> loadValidationEntities(String validationId) {
+        List<ValidationEntity> data = jdbc.query(lookup("validation/LoadValidationEntities"), singletonMap("id", validationId), rse);
         return new HashSet<>(data);
     }
 
@@ -213,18 +214,12 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
     @Override
     public Validation loadVersion(int versionId) {
         Validation validation = jdbc.queryForObject(lookup("validation/LoadValidationVersion"), singletonMap("id", versionId), mapper);
-        validation.setEntities(loadEntitiesVersions(versionId));
-        validation.setOperations(loadOperationsVersions(versionId));
+        validation.setValidationEntities(loadEntitiesVersions(versionId));
         return validation;
     }
 
-    private Set<Entity> loadEntitiesVersions(int validationVersionId) {
-        List<Entity> data = jdbc.query(lookup("validation/LoadValidationEntitiesVersions"), singletonMap("id", validationVersionId), entityMapper);
-        return new HashSet<>(data);
-    }
-
-    private Set<Operation> loadOperationsVersions(int validationVersionId) {
-        List<Operation> data = jdbc.query(lookup("validation/LoadValidationOperationsVersions"), singletonMap("id", validationVersionId), operationMapper);
+    private Set<ValidationEntity> loadEntitiesVersions(int validationVersionId) {
+        List<ValidationEntity> data = jdbc.query(lookup("validation/LoadValidationEntitiesVersions"), singletonMap("id", validationVersionId), rse);
         return new HashSet<>(data);
     }
 

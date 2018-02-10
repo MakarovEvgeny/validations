@@ -1,9 +1,7 @@
 package project.model.validation;
 
 import project.model.BaseVersionableModel;
-import project.model.entity.Entity;
 import project.model.message.Message;
-import project.model.operation.Operation;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -24,10 +22,7 @@ public class Validation extends BaseVersionableModel {
     private String description;
 
     /** Коллекция уникальных {@link project.model.entity.Entity} */
-    private Set<Entity> entities = new HashSet<>();
-
-    /** Коллекция уникальных {@link project.model.operation.Operation} */
-    private Set<Operation> operations = new HashSet<>();
+    private Set<ValidationEntity> validationEntities = new HashSet<>();
 
     public Validation() {
         //for spring
@@ -52,20 +47,12 @@ public class Validation extends BaseVersionableModel {
         return description;
     }
 
-    public Set<Entity> getEntities() {
-        return entities;
+    public Set<ValidationEntity> getValidationEntities() {
+        return validationEntities;
     }
 
-    public Set<Operation> getOperations() {
-        return operations;
-    }
-
-    public void setEntities(Set<Entity> entities) {
-        this.entities = entities;
-    }
-
-    public void setOperations(Set<Operation> operations) {
-        this.operations = operations;
+    public void setValidationEntities(Set<ValidationEntity> validationEntities) {
+        this.validationEntities = validationEntities;
     }
 
     @Override
@@ -77,13 +64,12 @@ public class Validation extends BaseVersionableModel {
         return severity == that.severity &&
                 Objects.equals(message, that.message) &&
                 Objects.equals(description, that.description) &&
-                Objects.equals(entities, that.entities) &&
-                Objects.equals(operations, that.operations);
+                Objects.equals(validationEntities, that.validationEntities);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), severity, message, description, entities, operations);
+        return Objects.hash(super.hashCode(), severity, message, description, validationEntities);
     }
 
 }

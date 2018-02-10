@@ -9,19 +9,8 @@ Ext.define('app.controllers.ValidationWindowController', {
     /** @override */
     getModel: function () {
         var model = this.callParent();
-        var entitiesStore = model.entities();
-        var operationsStore = model.operations();
-
-        var entityIds = this.getView().down('custom-tagfield[name=entityIds]').value;
-        var operationIds = this.getView().down('custom-tagfield[name=operationIds]').value;
-
-        Ext.Array.each(entityIds, function (entityId) {
-                entitiesStore.add(Ext.create('app.models.Entity', {id: entityId}))
-        });
-        Ext.Array.each(operationIds, function (operationId) {
-                operationsStore.add(Ext.create('app.models.Operation', {id: operationId}))
-        });
-
+        var validationEntitiesStore = model.validationEntities();
+        validationEntitiesStore.add(this.getView().down('grid').getStore().getRange());
         Ext.apply(model.data, model.getAssociatedData());
 
         return model;
@@ -41,19 +30,82 @@ Ext.define('app.controllers.ValidationWindowController', {
     setModelToForm: function (form, model) {
         this.callParent(arguments);
 
-        var entities = form.down('custom-tagfield[name=entityIds]');
-        var entityIds = [];
-        Ext.Array.each(model.get('entities'), function (entity) {
-            entityIds.push(entity.id);
-        });
-        entities.setValue(entityIds);
+        var validationEntitiesStore = this.getView().down('grid').getStore();
+        validationEntitiesStore.removeAll();
 
-        var operations = form.down('custom-tagfield[name=operationIds]');
-        var operationIds = [];
-        Ext.Array.each(model.get('operations'), function (operation) {
-            operationIds.push(operation.id);
+        var ve = model.get('validationEntities');
+        Ext.Array.each(ve, function (item) {
+            var validationEntity = Ext.create('app.models.ValidationEntity');
+            validationEntity.setEntity(Ext.create('app.models.Entity', item.entity));
+            validationEntity.operations().add(item.operations);
+            validationEntitiesStore.add(validationEntity);
         });
-        operations.setValue(operationIds);
+    },
+
+    /** Удаление строки с сущностью и операциями по нажатию на кнопку. */
+    onDeleteGridRowAfterButtonClick: function () {
+        var grid = this.getView().down('grid');
+        var row = grid.getSelectionModel().getSelection()[0];
+        grid.getStore().remove(row);
+    },
+
+    /** Удаление строки с сущностью и операциями по нажатию на крестик той же строки. */
+    onDeleteGridRow: function (view, rowIndex) {
+        view.getStore().removeAt(rowIndex);
+    },
+
+    /** Добавим новую строку в таблицу сущность-операции, но только в том случае если в таблице отсутствуют незаполненные строки. */
+    onAddGridRow: function () {
+        var store = this.getView().down('grid').getStore();
+        var row = Ext.create('app.models.ValidationEntity');
+
+        if (!this.hasNotFilledRow(store)) {
+            store.add(row);
+        }
+
+    },
+
+    /** Есть ли незаполненная строка в гриде? */
+    hasNotFilledRow: function (store) {
+        var hasNotFilledRow = false;
+
+        store.each(function (each) {
+            if (Ext.isEmpty(each.getEntity()) || each.operations().count() === 0) {
+                hasNotFilledRow = true;
+                return false;
+            }
+        });
+
+        return hasNotFilledRow;
+    },
+
+    /** При выборе сущности установим значение в соответствующей записи ValidationEntityStore. */
+    onEntitySelect: function (combo, selectedRecord) {
+        combo.getWidgetRecord().setEntity(selectedRecord);
+    },
+
+    /** При выборе операций установим значения в соответствующей записи ValidationEntityStore. */
+    onOperationsChange: function (tag, newValue) {
+        var operations = tag.getWidgetRecord().operations();
+        operations.removeAll();
+        operations.add(newValue);
+    },
+
+    /** Обработчик создания выпадающего списка сущностей, заполнение начальными данными если они есть в ValidationEntityStore. */
+    onEntityWidgetAttach: function (column, combo, record) {
+        combo.suspendEvents(false);
+        combo.getStore().removeAll();
+        combo.getStore().add(record.getEntity()); // Чтобы не пропадали значения установленные программно, т.к. forceSelection = true.
+        combo.setValue(record.getEntity());
+        combo.resumeEvents();
+    },
+
+    /** Обработчик создания выпадающего списка операций с множественным выбором, заполнение начальными данными если они есть в ValidationEntityStore. */
+    onOperationsWidgetAttach: function (column, tag, record) {
+        tag.suspendEvents(false);
+        tag.getStore().add(record.operations().getRange()); // Чтобы не пропадали значения установленные программно, т.к. forceSelection = true.
+        tag.setValue(record.operations().getRange());
+        tag.resumeEvents();
     }
 
 });

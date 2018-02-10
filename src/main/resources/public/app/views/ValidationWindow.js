@@ -2,11 +2,14 @@ Ext.define('app.views.ValidationWindow', {
     extend: 'app.views.ModelWindow',
     requires: [
         'app.controllers.ValidationWindowController',
+        'app.custom.CustomCombobox',
         'app.custom.CustomTagField',
+        'app.stores.ValidationEntityStore',
         'app.stores.SeverityStore'
     ],
 
-    height: '450',
+    height: '550',
+    width: '650',
 
     controller: 'validation-window-controller',
 
@@ -31,27 +34,107 @@ Ext.define('app.views.ValidationWindow', {
             },
 
             {
-                xtype: 'custom-tagfield',
-                name: 'entityIds',
-                fieldLabel: 'Сущности',
-                displayField: 'id',
-                valueField: 'id',
-                maxWidth: 350,
-                width: 350,
-                grow: true,
-                store: Ext.create('app.stores.EntityStore')
-            },
+                xtype: 'grid',
+                name: 'entityOperationsGrid',
+                height: 200,
+                width: 550,
 
-            {
-                xtype: 'custom-tagfield',
-                name: 'operationIds',
-                fieldLabel: 'Операции',
-                displayField: 'id',
-                valueField: 'id',
-                maxWidth: 350,
-                width: 350,
-                grow: true,
-                store: Ext.create('app.stores.OperationStore')
+                sortableColumns: false,
+                menuDisabled: true,
+
+                store: Ext.create('app.stores.ValidationEntityStore'),
+
+                columns: {
+                    defaults: {
+                        menuDisabled: true
+                    },
+                    items: [
+                        {
+                            header: 'Сущность',
+                            dataIndex: 'entity',
+                            xtype: 'widgetcolumn',
+                            widget: {
+                                xtype: 'custom-combo',
+                                displayField: 'id',
+                                valueField: 'id',
+                                store: {
+                                    type: 'entity-store',
+                                    autoLoad: false
+                                },
+
+                                listeners: {
+                                    select: 'onEntitySelect'
+                                }
+                            },
+                            onWidgetAttach: 'onEntityWidgetAttach',
+                            flex: 1
+                        },
+
+
+                        {
+                            header: 'Операция',
+                            dataIndex: 'operations',
+                            // Чтобы записи добавлялись каждая в новой строчке.
+                            cellWrap: true,
+
+                            xtype: 'widgetcolumn',
+                            widget: {
+                                xtype: 'custom-tagfield',
+                                name: 'operationIds',
+                                displayField: 'id',
+                                valueField: 'id',
+                                grow: true,
+                                store: {
+                                    type: 'operation-store',
+                                    autoLoad: false
+                                },
+
+                                listeners: {
+                                    select: 'onOperationsChange'
+                                }
+
+                            },
+                            onWidgetAttach: 'onOperationsWidgetAttach',
+                            flex: 1
+                        },
+
+
+                        {
+                            xtype: 'actioncolumn',
+                            sortable: false,
+                            items: [{
+                                iconCls: 'x-message-box-error tiny',
+                                tooltip: 'Удалить сущность',
+                                cellFocusable: false,
+                                scope: this,
+                                //https://stackoverflow.com/questions/28066941/extjs-grid-handling-action-columns-click-event-in-the-controller
+                                handler: this.getController().onDeleteGridRow
+                            }],
+                            flex: 1
+                        }
+                    ]
+                },
+
+
+
+                bbar: [
+                    {
+                        xtype: 'button',
+                        name: 'add',
+                        text: 'Добавить',
+                        listeners: {
+                            click: 'onAddGridRow'
+                        }
+                    },
+                    {
+                        xtype: 'button',
+                        name: 'remove',
+                        text: 'Удалить',
+                        listeners: {
+                            click: 'onDeleteGridRowAfterButtonClick'
+                        }
+                    }
+                ]
             },
 
 

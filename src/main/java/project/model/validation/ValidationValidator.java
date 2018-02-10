@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -52,11 +53,17 @@ public class ValidationValidator implements Validator {
                 errors.rejectValue("severity", "011", new String[]{NAME}, null);
             }
 
-            if (validation.getEntities().isEmpty()) {
-                errors.rejectValue("entities", "009", new String[]{NAME}, null);
+            if (validation.getValidationEntities().isEmpty()) {
+                errors.rejectValue("validationEntities", "009", new String[]{NAME}, null);
             }
-            if (validation.getOperations().isEmpty()) {
-                errors.rejectValue("operations", "010", new String[]{NAME}, null);
+
+            ValidationEntityValidator vev = new ValidationEntityValidator();
+            for (ValidationEntity validationEntity : validation.getValidationEntities()) {
+                if (validationEntity.getOperations().isEmpty()) {
+                    BeanPropertyBindingResult veErrors = new BeanPropertyBindingResult(validationEntity, "validation");
+                    ValidationUtils.invokeValidator(vev, validationEntity, veErrors);
+                    errors.addAllErrors(veErrors);
+                }
             }
 
             Message message = validation.getMessage();
@@ -79,5 +86,19 @@ public class ValidationValidator implements Validator {
         if (op == ClientOperation.DELETE) {
             ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
         }
+    }
+
+    private class ValidationEntityValidator implements Validator {
+
+        @Override
+        public boolean supports(Class<?> clazz) {
+            return ValidationEntity.class == clazz;
+        }
+
+        @Override
+        public void validate(Object target, Errors errors) {
+            errors.rejectValue("operations", "010", new String[]{NAME}, null);
+        }
+
     }
 }
