@@ -16,12 +16,12 @@ Ext.define('app.views.MessageWindow', {
                 margin: '15 10 5 10'
             },
             {
-                xtype: 'textfield',
+                xtype: 'textareafield',
                 fieldLabel: 'Текст сообщения',
                 name: 'text'
             },
             {
-                xtype: 'textfield',
+                xtype: 'textareafield',
                 fieldLabel: 'Комментарий',
                 name: 'commentary'
             },

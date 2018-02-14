@@ -144,12 +144,12 @@ Ext.define('app.views.ValidationWindow', {
                 name: 'messageId'
             },
             {
-                xtype: 'textfield',
+                xtype: 'textareafield',
                 fieldLabel: 'Описание',
                 name: 'description'
             },
             {
-                xtype: 'textfield',
+                xtype: 'textareafield',
                 fieldLabel: 'Комментарий',
                 name: 'commentary'
             },
