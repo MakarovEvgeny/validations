@@ -21,12 +21,12 @@ Ext.define('app.views.OperationWindow', {
                 name: 'name'
             },
             {
-                xtype: 'textfield',
+                xtype: 'textareafield',
                 fieldLabel: 'Описание',
                 name: 'description'
             },
             {
-                xtype: 'textfield',
+                xtype: 'textareafield',
                 fieldLabel: 'Комментарий',
                 name: 'commentary'
             },

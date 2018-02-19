@@ -8,9 +8,7 @@ Ext.define('app.views.ValidationWindow', {
         'app.stores.SeverityStore'
     ],
 
-    height: '550',
-    width: '650',
-
+    height: 650,
     controller: 'validation-window-controller',
 
     /** @override */
@@ -37,7 +35,6 @@ Ext.define('app.views.ValidationWindow', {
                 xtype: 'grid',
                 name: 'entityOperationsGrid',
                 height: 200,
-                width: 550,
 
                 sortableColumns: false,
                 menuDisabled: true,
@@ -144,12 +141,12 @@ Ext.define('app.views.ValidationWindow', {
                 name: 'messageId'
             },
             {
-                xtype: 'textfield',
+                xtype: 'textareafield',
                 fieldLabel: 'Описание',
                 name: 'description'
             },
             {
-                xtype: 'textfield',
+                xtype: 'textareafield',
                 fieldLabel: 'Комментарий',
                 name: 'commentary'
             },

@@ -5,8 +5,8 @@ Ext.define('app.views.ModelWindow', {
     ],
 
     layout: 'border',
-    width: 550,
-    height: 300,
+    width: 850,
+    height: 350,
 
     constructor: function () {
         this.callParent(arguments);
@@ -52,7 +52,8 @@ Ext.define('app.views.ModelWindow', {
 
             defaults: {
                 margin: '5 10 5 10',
-                labelWidth: 150
+                labelWidth: 150,
+                width: 700
             }
         },
         {
@@ -60,7 +61,7 @@ Ext.define('app.views.ModelWindow', {
             name: 'changesPanel',
             region: 'east',
             layout: 'fit',
-            width: '33%',
+            width: '70%',
             split: true,
             collapsible: true,
             collapsed: true,
