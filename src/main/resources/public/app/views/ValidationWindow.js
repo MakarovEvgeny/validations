@@ -5,6 +5,7 @@ Ext.define('app.views.ValidationWindow', {
         'app.custom.CustomCombobox',
         'app.custom.CustomTagField',
         'app.stores.ValidationEntityStore',
+        'app.stores.MessageStore',
         'app.stores.SeverityStore'
     ],
 
@@ -137,7 +138,13 @@ Ext.define('app.views.ValidationWindow', {
 
 
             {
-                xtype: 'textfield',
+                xtype: 'custom-combo',
+                store: {
+                    type: 'message-store',
+                    autoLoad: false
+                },
+                valueField: 'id',
+                displayField: 'id',
                 fieldLabel: 'Код сообщения об ошибке',
                 name: 'messageId'
             },

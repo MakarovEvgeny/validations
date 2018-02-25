@@ -5,6 +5,8 @@ Ext.define('app.stores.MessageStore', {
         'app.stores.AppRestProxy'
     ],
 
+    alias: 'store.message-store',
+
     model: 'app.models.Message',
 
     autoLoad: true,
