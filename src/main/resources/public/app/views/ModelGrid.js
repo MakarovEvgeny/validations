@@ -27,7 +27,8 @@ Ext.define('app.views.ModelGrid', {
 
 
     listeners: {
-        selectionChange: 'onSelectionChange'
+        selectionChange: 'onSelectionChange',
+        itemdblclick: 'edit'
     },
 
     dockedItems: [{
