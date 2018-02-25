@@ -27,6 +27,7 @@ Ext.define('app.views.ValidationWindow', {
                 name: 'severity',
                 valueField: 'id',
                 displayField: 'name',
+                editable: false,
                 store: Ext.create(app.stores.SeverityStore),
                 local: true
             },
