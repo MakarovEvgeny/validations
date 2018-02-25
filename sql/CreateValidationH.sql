@@ -10,7 +10,7 @@ CREATE TABLE validation_h
 	    REFERENCES message_h,
 	description TEXT NOT NULL,
 	version SMALLINT NOT NULL,
-	commentary VARCHAR(500),
+	commentary TEXT,
 	severity_id SMALLINT NOT NULL
 	  CONSTRAINT severity_fk
 	    REFERENCES severity,
