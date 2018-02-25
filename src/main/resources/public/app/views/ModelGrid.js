@@ -14,7 +14,7 @@ Ext.define('app.views.ModelGrid', {
         this.callParent(arguments);
 
         var store = this.createStore({
-            pageSize: 50 //записей на одной странице.
+            pageSize: 200 //записей на одной странице.
         });
         this.reconfigure(store);
         this.down('custom-pagingtoolbar').bindStore(store);
