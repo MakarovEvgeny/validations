@@ -19,6 +19,7 @@ import project.model.validation.Severity;
 import project.model.validation.Validation;
 import project.model.validation.ValidationDto;
 import project.model.validation.ValidationEntity;
+import project.model.validation.ValidationExportRow;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,6 +36,9 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
         Severity severity = Severity.resolveById(rs.getInt("severityId"));
         return new Validation(rs.getString("id"), severity, message, rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
     };
+
+    private RowMapper<ValidationExportRow> exportMapper = (rs, rowNum) ->
+        new ValidationExportRow(rs.getString("code"), rs.getString("severity"), rs.getString("messageCode"), rs.getString("entities"), rs.getString("operations"), rs.getString("description"));
 
     private RowMapper<ValidationDto> dtoMapper = (rs, rowNum) -> {
         ValidationDto dto = new ValidationDto();
@@ -223,4 +227,7 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
         return new HashSet<>(data);
     }
 
+    public List<ValidationExportRow> exportValidations() {
+        return jdbc.query(lookup("validation/ExportValidations"), exportMapper);
+    }
 }
