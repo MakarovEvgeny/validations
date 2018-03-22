@@ -11,19 +11,23 @@ Ext.define('app.ServerResponseExceptionHandler', {
 
         Ext.Ajax.on('requestexception', function (conn, response, options) {
             // обработка http статусов...
-            switch (response.status) {
-                case 400: {
-                    Ext.create('app.views.ErrorWindow', {codesAndMessages: Ext.JSON.decode(response.responseText).data});
-                    break;
-                }
-                case 401: {
-                    app.views.LoginPanelConfigurer.configureButtons();
-                    if (Ext.ComponentQuery.query('login-window').length === 0) {
-                        Ext.create('app.views.LoginWindow');
-                    }
+            this.handleResponse(response);
+        });
+    },
+
+    handleResponse: function (response) {
+        switch (response.status) {
+            case 400: {
+                Ext.create('app.views.ErrorWindow', {codesAndMessages: Ext.JSON.decode(response.responseText).data});
+                break;
+            }
+            case 401: {
+                app.views.LoginPanelConfigurer.configureButtons();
+                if (Ext.ComponentQuery.query('login-window').length === 0) {
+                    Ext.create('app.views.LoginWindow');
                 }
             }
-        });
+        }
     }
 
 });

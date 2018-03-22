@@ -40,9 +40,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers(HttpMethod.GET, "/resources/**", "/login", "/")
-                .antMatchers(HttpMethod.GET, "/*/*") //Запросы данных по конкретной модели, например, entity/1.
+
+                //Запросы данных по конкретной модели, например, entity/1.
+                .antMatchers(HttpMethod.GET, "/entity/*")
+                .antMatchers(HttpMethod.GET, "/operation/*")
+                .antMatchers(HttpMethod.GET, "/message/*")
+                .antMatchers(HttpMethod.GET, "/validation/*")
+
                 .antMatchers(HttpMethod.GET, "/**/change/**") //Список изменений
-                .antMatchers(HttpMethod.GET, "/**/favicon.ico") //Список изменений
+                .antMatchers(HttpMethod.GET, "/**/favicon.ico")
                 .antMatchers(HttpMethod.POST, "/user/register")
                 .antMatchers(HttpMethod.POST, "/*/query"); // Поисковые запросы.
     }
@@ -57,6 +63,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.securityContext();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
         http.headers();
+
+        http.headers().frameOptions().sameOrigin();
+
         http.apply(new AdvancedDefaultLoginPageConfigurer<>());
 
         http.authorizeRequests().anyRequest().authenticated();
