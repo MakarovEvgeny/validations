@@ -8,6 +8,7 @@ import project.dao.FindAbility;
 import project.dao.SearchParamsProcessor;
 import project.model.Change;
 import project.model.message.Message;
+import project.model.message.MessageExportRow;
 import project.model.query.SearchParams;
 
 import java.util.HashMap;
@@ -19,9 +20,10 @@ import static project.dao.RequestRegistry.lookup;
 import static project.dao.SearchParamsProcessor.process;
 
 @Repository
-public class MessageDao extends BaseVersionableModelDao<Message> implements FindAbility<Message>, MessageValidatorDao {
+public class MessageDao extends BaseVersionableModelDao<Message> implements FindAbility<Message>, MessageValidatorDao, MessageExportDao {
 
     private RowMapper<Message> mapper = (rs, rowNum) -> new Message(rs.getString("id"), rs.getString("text"), rs.getInt("version"), rs.getString("commentary"));
+    private RowMapper<MessageExportRow> exportMapper = (rs, rowNum) -> new MessageExportRow(rs.getString("code"), rs.getString("text"));
 
     @Override
     public Message load(String messageId) {
@@ -97,4 +99,8 @@ public class MessageDao extends BaseVersionableModelDao<Message> implements Find
         return jdbc.queryForObject(lookup("message/LoadMessageVersion"), singletonMap("id", versionId), mapper);
     }
 
+    @Override
+    public List<MessageExportRow> exportMessages() {
+        return jdbc.query(lookup("message/ExportMessages"), exportMapper);
+    }
 }

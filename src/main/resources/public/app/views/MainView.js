@@ -2,6 +2,7 @@ Ext.define('app.views.MainView', {
     extend: 'Ext.panel.Panel',
 
     requires: [
+        'app.views.MainPageForm',
         'app.views.EntityGrid',
         'app.views.OperationGrid',
         'app.views.MessageGrid',
@@ -20,9 +21,13 @@ Ext.define('app.views.MainView', {
         {
             xtype: 'tabpanel',
             region: 'center',
-            activeTab: 3,
+            activeTab: 0,
 
             items: [
+                {
+                    title: 'Главная страница',
+                    xtype: 'main-page-form'
+                },
                 {
                     title: 'Сущности',
                     xtype: 'entity-grid'
