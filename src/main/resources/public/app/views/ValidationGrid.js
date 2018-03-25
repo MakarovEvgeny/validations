@@ -20,8 +20,8 @@ Ext.define('app.views.ValidationGrid', {
                 text: 'Код',
                 dataIndex: 'id',
                 filter: {
-                    type: 'list',
-                    operator: app.models.SearchOperator.EQUALS
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
                 },
                 flex: 1
             },
@@ -46,6 +46,10 @@ Ext.define('app.views.ValidationGrid', {
             {
                 text: 'Тип',
                 dataIndex: 'severityName',
+                filter: {
+                    type: 'list',
+                    operator: app.models.SearchOperator.EQUALS
+                },
                 flex: 1
             },
             {
@@ -78,6 +82,10 @@ Ext.define('app.views.ValidationGrid', {
             {
                 text: 'Комментарий',
                 dataIndex: 'commentary',
+                filter: {
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
+                },
                 flex: 1
             }
         ]

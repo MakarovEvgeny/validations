@@ -20,8 +20,8 @@ Ext.define('app.views.OperationGrid', {
                 text: 'Код',
                 dataIndex: 'id',
                 filter: {
-                    type: 'list',
-                    operator: app.models.SearchOperator.EQUALS
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
                 },
                 flex: 1
             },
@@ -37,11 +37,19 @@ Ext.define('app.views.OperationGrid', {
             {
                 text: 'Описание',
                 dataIndex: 'description',
+                filter: {
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
+                },
                 flex: 1
             },
             {
                 text: 'Комментарий',
                 dataIndex: 'commentary',
+                filter: {
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
+                },
                 flex: 1
             }
         ]

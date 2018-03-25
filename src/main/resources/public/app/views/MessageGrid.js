@@ -20,8 +20,8 @@ Ext.define('app.views.MessageGrid', {
                 text: 'Код',
                 dataIndex: 'id',
                 filter: {
-                    type: 'list',
-                    operator: app.models.SearchOperator.EQUALS
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
                 },
                 flex: 1
             },
@@ -37,6 +37,10 @@ Ext.define('app.views.MessageGrid', {
             {
                 text: 'Комментарий',
                 dataIndex: 'commentary',
+                filter: {
+                    type: 'multi-string',
+                    operator: app.models.SearchOperator.ILIKE
+                },
                 flex: 1
             }
         ]
