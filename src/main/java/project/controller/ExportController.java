@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import project.aspect.LoggingThat;
+import project.model.eventlog.EventLogType;
 import project.model.message.MessageExportRow;
 import project.model.validation.ValidationExportRow;
 import project.service.ExportService;
@@ -28,6 +30,7 @@ public class ExportController {
     private ValidationExportView exportExcelView;
 
     @RequestMapping(method = RequestMethod.GET, path = "excel")
+    @LoggingThat(type = EventLogType.EXPORT, operation = "Выгрузка данных проверок в EXCEL", logResult = false)
     public ModelAndView exportExcel() {
         List<MessageExportRow> messages = service.getMessages();
         List<ValidationExportRow> validations = service.getValidations();
