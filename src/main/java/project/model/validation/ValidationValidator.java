@@ -20,7 +20,7 @@ import static org.springframework.util.StringUtils.isEmpty;
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.INTERFACES)
 public class ValidationValidator implements Validator {
 
-    private static final String NAME = "Валидация";
+    private static final String NAME = "Проверка";
 
     @Autowired
     private ServletWebRequest request;

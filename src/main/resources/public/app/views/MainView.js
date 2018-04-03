@@ -41,7 +41,7 @@ Ext.define('app.views.MainView', {
                     xtype: 'message-grid'
                 },
                 {
-                    title: 'Валидации',
+                    title: 'Проверки',
                     xtype: 'validation-grid'
                 }
             ]
