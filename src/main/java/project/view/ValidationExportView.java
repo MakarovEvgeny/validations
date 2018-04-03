@@ -26,7 +26,7 @@ public class ValidationExportView extends AbstractXlsxStreamingView {
         @SuppressWarnings("unchecked") List<ValidationExportRow> validations = (List<ValidationExportRow>) map.get("validations");
         CreationHelper creationHelper = workbook.getCreationHelper();
 
-        Map<String, Hyperlink> linkByMessageCode = new HashMap<>();
+        Map<String, String> linkByMessageCode = new HashMap<>();
 
         WorkbookHelper workbookHelper = new WorkbookHelper(workbook);
         CellStyle headerStyle = workbookHelper.createHeaderStyle();
@@ -45,10 +45,7 @@ public class ValidationExportView extends AbstractXlsxStreamingView {
             sheetHelper.printRows(messages, (message, rowHelper) -> {
                 rowHelper
                         .createCell(rowStyle, message.getCode(), (cell) -> {
-                            // Создадим ссылку на сообщение.
-                            Hyperlink messageLink = creationHelper.createHyperlink(HyperlinkType.DOCUMENT);
-                            messageLink.setAddress("'Справочник сообщений об ошибке'!" + cell.getAddress().formatAsString());
-                            linkByMessageCode.put(message.getCode(), messageLink);
+                            linkByMessageCode.put(message.getCode(), "'Справочник сообщений об ошибке'!" +  cell.getAddress().formatAsString());
                         })
                         .createCell(rowTextStyle, message.getText())
                 ;
@@ -76,7 +73,13 @@ public class ValidationExportView extends AbstractXlsxStreamingView {
                     .createCell(
                             rowStyle,
                             validation.getMessageCode(),
-                            (cell) -> cell.setHyperlink(linkByMessageCode.get(validation.getMessageCode()))
+                            (cell) -> {
+                                // Создадим ссылку на сообщение.
+                                Hyperlink messageLink = creationHelper.createHyperlink(HyperlinkType.DOCUMENT);
+                                messageLink.setAddress(linkByMessageCode.get(validation.getMessageCode()));
+
+                                cell.setHyperlink(messageLink);
+                            }
                         )
                     .createCell(rowStyle, validation.getEntities())
                     .createCell(rowStyle, validation.getOperations())
