@@ -6,6 +6,7 @@ import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import project.model.user.RegisterUserDto;
+import project.model.user.UserCard;
 import project.service.UserService;
 
 import javax.validation.Valid;
@@ -30,5 +31,11 @@ public class UserController {
     public void register(@RequestBody @Valid RegisterUserDto dto) {
         service.register(dto.getUsername(), dto.getPassword());
     }
+
+    @RequestMapping("whoami")
+    public UserCard whoAmI() {
+        return service.whoAmI();
+    }
+
 
 }

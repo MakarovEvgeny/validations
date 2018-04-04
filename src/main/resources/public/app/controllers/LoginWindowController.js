@@ -18,6 +18,7 @@ Ext.define('app.controllers.LoginWindowController', {
             rawData: 'username=' + username + '&password=' + password,
             success: function() {
                 app.views.LoginPanelConfigurer.configureButtons();
+                app.views.LoginPanelConfigurer.loadUserCard();
                 window.close(); // Аутентификация прошла успешно.
             },
             failure: function () {
