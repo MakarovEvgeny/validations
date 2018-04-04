@@ -26,11 +26,10 @@ public class ValidationExportView extends AbstractXlsxStreamingView {
         @SuppressWarnings("unchecked") List<ValidationExportRow> validations = (List<ValidationExportRow>) map.get("validations");
         CreationHelper creationHelper = workbook.getCreationHelper();
 
-        Map<String, Hyperlink> linkByMessageCode = new HashMap<>();
+        Map<String, String> linkByMessageCode = new HashMap<>();
 
         WorkbookHelper workbookHelper = new WorkbookHelper(workbook);
         CellStyle headerStyle = workbookHelper.createHeaderStyle();
-        CellStyle rowStyle = workbookHelper.createRowStyle();
         CellStyle rowTextStyle = workbookHelper.createRowTextStyle();
 
         // Вкладка сообщений системы.
@@ -44,11 +43,8 @@ public class ValidationExportView extends AbstractXlsxStreamingView {
             ;
             sheetHelper.printRows(messages, (message, rowHelper) -> {
                 rowHelper
-                        .createCell(rowStyle, message.getCode(), (cell) -> {
-                            // Создадим ссылку на сообщение.
-                            Hyperlink messageLink = creationHelper.createHyperlink(HyperlinkType.DOCUMENT);
-                            messageLink.setAddress("'Справочник сообщений об ошибке'!" + cell.getAddress().formatAsString());
-                            linkByMessageCode.put(message.getCode(), messageLink);
+                        .createCell(rowTextStyle, message.getCode(), (cell) -> {
+                            linkByMessageCode.put(message.getCode(), "'Справочник сообщений об ошибке'!" +  cell.getAddress().formatAsString());
                         })
                         .createCell(rowTextStyle, message.getText())
                 ;
@@ -71,15 +67,21 @@ public class ValidationExportView extends AbstractXlsxStreamingView {
 
             sheetHelper.printRows(validations, (validation, rowHelper) ->
                 rowHelper
-                    .createCell(rowStyle, validation.getCode())
-                    .createCell(rowStyle, validation.getSeverity())
+                    .createCell(rowTextStyle, validation.getCode())
+                    .createCell(rowTextStyle, validation.getSeverity())
                     .createCell(
-                            rowStyle,
+                            rowTextStyle,
                             validation.getMessageCode(),
-                            (cell) -> cell.setHyperlink(linkByMessageCode.get(validation.getMessageCode()))
+                            (cell) -> {
+                                // Создадим ссылку на сообщение.
+                                Hyperlink messageLink = creationHelper.createHyperlink(HyperlinkType.DOCUMENT);
+                                messageLink.setAddress(linkByMessageCode.get(validation.getMessageCode()));
+
+                                cell.setHyperlink(messageLink);
+                            }
                         )
-                    .createCell(rowStyle, validation.getEntities())
-                    .createCell(rowStyle, validation.getOperations())
+                    .createCell(rowTextStyle, validation.getEntities())
+                    .createCell(rowTextStyle, validation.getOperations())
                     .createCell(rowTextStyle, validation.getDescription())
             );
         }
@@ -113,13 +115,6 @@ public class ValidationExportView extends AbstractXlsxStreamingView {
             return style;
         }
 
-        public CellStyle createRowStyle() {
-            CellStyle style = workbook.createCellStyle();
-            style.setAlignment(HorizontalAlignment.CENTER);
-            style.setVerticalAlignment(VerticalAlignment.JUSTIFY);
-            configureBorder(style);
-            return style;
-        }
 
         public CellStyle createRowTextStyle() {
             CellStyle style = workbook.createCellStyle();
@@ -212,6 +207,7 @@ public class ValidationExportView extends AbstractXlsxStreamingView {
             Cell cell = row.createCell(columnIndex);
             cell.setCellValue(data);
             cell.setCellStyle(style);
+            cell.setCellType(CellType.STRING);
             columnIndex++;
             lastCell = cell;
             return this;
