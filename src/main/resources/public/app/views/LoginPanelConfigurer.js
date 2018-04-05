@@ -40,7 +40,6 @@ Ext.define('app.views.LoginPanelConfigurer', {
                 scope: this,
                 success: function (record) {
                     userNameLabel.setHtml(record.get('username'));
-                    console.log('load username ' + record.get('username'));
                 }
 
             });
