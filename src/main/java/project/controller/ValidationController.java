@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+
+import project.aspect.LoggingThat;
 import project.model.Change;
+import project.model.eventlog.EventLogType;
 import project.model.query.SearchParams;
 import project.model.validation.Validation;
 import project.model.validation.ValidationDto;
@@ -31,6 +34,7 @@ public class ValidationController {
     }
 
     @RequestMapping(value = "query", method = RequestMethod.POST)
+    @LoggingThat(type = EventLogType.SEARCH, operation = "Поиск проверок")
     public List<ValidationDto> find(@RequestBody SearchParams searchParams) {
         return service.find(searchParams);
     }
@@ -42,16 +46,19 @@ public class ValidationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+    @LoggingThat(type = EventLogType.CREATE, operation = "Создание проверки")
     public void create(@RequestBody @Valid Validation operation) {
         service.create(operation);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    @LoggingThat(type = EventLogType.UPDATE, operation = "Обновление данных проверки")
     public void update(@RequestBody @Valid Validation operation) {
         service.update(operation);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @LoggingThat(type = EventLogType.DELETE, operation = "Удаление проверки")
     public void remove(@RequestBody @Valid Validation validation) {
         service.remove(validation);
     }

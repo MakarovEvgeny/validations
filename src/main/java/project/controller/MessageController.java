@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+
+import project.aspect.LoggingThat;
 import project.model.Change;
+import project.model.eventlog.EventLogType;
 import project.model.message.Message;
 import project.model.query.SearchParams;
 import project.service.MessageService;
@@ -30,6 +33,7 @@ public class MessageController {
     }
 
     @RequestMapping(value = "query", method = RequestMethod.POST)
+    @LoggingThat(type = EventLogType.SEARCH, operation = "Поиск сообщения")
     public List<Message> find(@RequestBody SearchParams searchParams) {
         return service.find(searchParams);
     }
@@ -40,16 +44,19 @@ public class MessageController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+    @LoggingThat(type = EventLogType.CREATE, operation = "Создание сообщения")
     public void create(@RequestBody @Valid Message message) {
         service.create(message);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    @LoggingThat(type = EventLogType.UPDATE, operation = "Обновление данных сообщения")
     public void update(@RequestBody @Valid Message message) {
         service.update(message);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @LoggingThat(type = EventLogType.DELETE, operation = "Удаление сообщения")
     public void remove(@RequestBody @Valid Message message) {
         service.remove(message);
     }

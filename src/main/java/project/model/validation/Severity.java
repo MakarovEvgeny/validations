@@ -14,11 +14,11 @@ public enum Severity {
 
     private String name;
 
-    static Map<Integer, Severity> map = new HashMap<>();
+    static Map<Integer, Severity> cacheById = new HashMap<>();
 
     static {
-        map.put(ERROR.getId(), ERROR);
-        map.put(WARNING.id, WARNING);
+        cacheById.put(ERROR.getId(), ERROR);
+        cacheById.put(WARNING.getId(), WARNING);
     }
 
     Severity() {
@@ -35,7 +35,7 @@ public enum Severity {
     }
 
     public static Severity resolveById(int id) {
-        Severity result = map.get(id);
+        Severity result = cacheById.get(id);
         if (result == null) {
             throw new IllegalArgumentException("Bad severity id");
         }

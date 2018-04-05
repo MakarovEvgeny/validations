@@ -37,6 +37,10 @@
                 </dependency>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-aop</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-security</artifactId>
                 </dependency>
                 <dependency>
@@ -138,6 +142,8 @@
                                 </goals>
                                 <configuration>
                                     <srcFiles>
+                                        <srcFile>sql/DropEventLog.sql</srcFile>
+                                        <srcFile>sql/DropEventLogType.sql</srcFile>
                                         <srcFile>sql/DropValidationEntityOperation.sql</srcFile>
                                         <srcFile>sql/DropValidationEntityOperationH.sql</srcFile>
 
@@ -166,6 +172,8 @@
                                         <srcFile>sql/CreateValidationH.sql</srcFile>
                                         <srcFile>sql/CreateValidationEntityOperation.sql</srcFile>
                                         <srcFile>sql/CreateValidationEntityOperationH.sql</srcFile>
+                                        <srcFile>sql/CreateEventLogType.sql</srcFile>
+                                        <srcFile>sql/CreateEventLog.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>
