@@ -3,8 +3,15 @@ Ext.define('app.controllers.MainPageController', {
     alias: 'controller.main-page-controller',
 
     requires: [
+        'app.views.LoginPanelConfigurer',
         'app.ServerResponseExceptionHandler'
     ],
+
+    init: function () {
+        if (app.views.LoginPanelConfigurer.isUserLoggedIn()) {
+            app.views.LoginPanelConfigurer.loadUserCard();
+        }
+    },
 
     onExportExcelClick: function () {
         var frame = Ext.create('Ext.Component', {

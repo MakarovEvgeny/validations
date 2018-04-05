@@ -20,6 +20,13 @@ Ext.define('app.views.LoginPanel', {
 
     items: [
         {
+            xtype: 'label',
+            name: 'userinfo',
+            style: 'padding-right: 20px; padding-top: 3px',
+            html: ''
+
+        },
+        {
             xtype: 'button',
             name: 'register',
             text: 'Зарегистрироваться',
