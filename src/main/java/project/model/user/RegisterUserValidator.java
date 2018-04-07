@@ -12,8 +12,12 @@ import java.util.Objects;
 @Component
 public class RegisterUserValidator implements Validator {
 
+    private final UserValidatorDao dao;
+
     @Autowired
-    private UserValidatorDao dao;
+    public RegisterUserValidator(UserValidatorDao dao) {
+        this.dao = dao;
+    }
 
     @Override
     public boolean supports(Class<?> clazz) {

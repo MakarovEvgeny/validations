@@ -14,11 +14,16 @@ import project.model.validation.ValidationExportRow;
 @Service
 @Transactional
 public class ExportServiceImpl implements ExportService {
-    @Autowired
-    private MessageDao messageDao;
+
+    private final MessageDao messageDao;
+
+    private final ValidationDao validationDao;
 
     @Autowired
-    private ValidationDao validationDao;
+    public ExportServiceImpl(MessageDao messageDao, ValidationDao validationDao) {
+        this.messageDao = messageDao;
+        this.validationDao = validationDao;
+    }
 
     @Override
     public List<MessageExportRow> getMessages() {

@@ -11,6 +11,7 @@ import project.model.message.Message;
 import project.model.message.MessageExportRow;
 import project.model.query.SearchParams;
 
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,10 @@ public class MessageDao extends BaseVersionableModelDao<Message> implements Find
 
     private RowMapper<Message> mapper = (rs, rowNum) -> new Message(rs.getString("id"), rs.getString("text"), rs.getInt("version"), rs.getString("commentary"));
     private RowMapper<MessageExportRow> exportMapper = (rs, rowNum) -> new MessageExportRow(rs.getString("code"), rs.getString("text"));
+
+    public MessageDao(DataSource ds) {
+        super(ds);
+    }
 
     @Override
     public Message load(String messageId) {

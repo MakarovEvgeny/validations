@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dao.operation.OperationDao;
 import project.model.Change;
-import project.model.entity.Entity;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 
@@ -15,8 +14,12 @@ import java.util.List;
 @Transactional
 public class OperationServiceImpl implements OperationService {
 
+    private final OperationDao dao;
+
     @Autowired
-    private OperationDao dao;
+    public OperationServiceImpl(OperationDao dao) {
+        this.dao = dao;
+    }
 
     @Override
     public Operation load(String operationId) {

@@ -18,12 +18,15 @@ import javax.validation.Valid;
 @RestController
 public class UserController {
 
-    @Autowired
-    private UserService service;
+    private final UserService service;
+
+    private final Validator v;
 
     @Autowired
-    @Qualifier("registerUserValidator")
-    private Validator v;
+    public UserController(UserService service, @Qualifier("registerUserValidator") Validator v) {
+        this.service = service;
+        this.v = v;
+    }
 
     @InitBinder("registerUserDto")
     public void initBinder(WebDataBinder binder) {

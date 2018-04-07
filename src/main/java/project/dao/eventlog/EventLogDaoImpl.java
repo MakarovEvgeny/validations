@@ -1,7 +1,6 @@
 package project.dao.eventlog;
 
 import java.sql.Timestamp;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,10 +30,14 @@ import static project.dao.RequestRegistry.lookup;
 public class EventLogDaoImpl implements EventLogDao {
     private final ObjectMapper objectMapper = new ObjectMapper();
     
-    @Autowired
-    protected DataSource ds;
+    private final DataSource ds;
 
     protected NamedParameterJdbcTemplate jdbc;
+
+    @Autowired
+    public EventLogDaoImpl(DataSource ds) {
+        this.ds = ds;
+    }
 
     @PostConstruct
     public void init() {
@@ -47,7 +50,7 @@ public class EventLogDaoImpl implements EventLogDao {
 
     }
 
-    protected Map<String, Object> prepareParams(EventLog model) {
+    private Map<String, Object> prepareParams(EventLog model) {
         Map<String, Object> params = new HashMap<>();
 
         params.put("eventlog_id", UUID.randomUUID().toString().substring(25));

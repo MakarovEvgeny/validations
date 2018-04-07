@@ -20,12 +20,15 @@ import java.util.List;
 @RestController
 public class MessageController {
 
-    @Autowired
-    private MessageService service;
+    private final MessageService service;
+
+    private final Validator validator;
 
     @Autowired
-    @Qualifier("messageValidator")
-    private Validator validator;
+    public MessageController(MessageService service, @Qualifier("messageValidator") Validator validator) {
+        this.service = service;
+        this.validator = validator;
+    }
 
     @InitBinder("message")
     public void initBinder(WebDataBinder binder) {

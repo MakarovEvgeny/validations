@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import project.aspect.LoggingThat;
@@ -23,11 +22,15 @@ import project.view.ValidationExportView;
 @Transactional
 public class ExportController {
 
-    @Autowired
-    private ExportService service;
+    private final ExportService service;
+
+    private final ValidationExportView exportExcelView;
 
     @Autowired
-    private ValidationExportView exportExcelView;
+    public ExportController(ExportService service, ValidationExportView exportExcelView) {
+        this.service = service;
+        this.exportExcelView = exportExcelView;
+    }
 
     @RequestMapping(method = RequestMethod.GET, path = "excel")
     @LoggingThat(type = EventLogType.EXPORT, operation = "Выгрузка данных проверок в EXCEL", logResult = false)

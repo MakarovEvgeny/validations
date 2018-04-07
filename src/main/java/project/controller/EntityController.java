@@ -22,12 +22,15 @@ import static project.model.ClientOperation.QUERY;
 @RestController
 public class EntityController {
 
-    @Autowired
-    private EntityService service;
+    private final EntityService service;
+
+    private final Validator v;
 
     @Autowired
-    @Qualifier("entityValidator")
-    private Validator v;
+    public EntityController(EntityService service, @Qualifier("entityValidator") Validator v) {
+        this.service = service;
+        this.v = v;
+    }
 
     @InitBinder("entity")
     public void initBinder(WebDataBinder binder) {

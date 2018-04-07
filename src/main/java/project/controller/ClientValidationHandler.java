@@ -19,10 +19,14 @@ import java.util.Locale;
 @ControllerAdvice
 public class ClientValidationHandler {
 
-    private static final Locale RU_LOCALE= new Locale("ru");
+    private static final Locale RU_LOCALE = new Locale("ru");
+
+    private final MessageSource messageSource;
 
     @Autowired
-    private MessageSource messageSource;
+    public ClientValidationHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ClientValidationFailureData> handleValidationFailure(MethodArgumentNotValidException ex) {

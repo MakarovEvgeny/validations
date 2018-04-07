@@ -11,8 +11,13 @@ import project.model.eventlog.EventLog;
 @Transactional
 @Service
 public class EventLogServiceImpl implements EventLogService {
+
+    private final EventLogDao eventLogDao;
+
     @Autowired
-    private EventLogDao eventLogDao;
+    public EventLogServiceImpl(EventLogDao eventLogDao) {
+        this.eventLogDao = eventLogDao;
+    }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override

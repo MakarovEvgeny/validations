@@ -10,6 +10,7 @@ import project.model.Change;
 import project.model.operation.Operation;
 import project.model.query.SearchParams;
 
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,10 @@ import static project.dao.SearchParamsProcessor.process;
 public class OperationDao extends BaseVersionableModelDao<Operation> implements FindAbility<Operation>, OperationValidatorDao {
 
     private RowMapper<Operation> mapper = (rs, rowNum) -> new Operation(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
+
+    public OperationDao(DataSource ds) {
+        super(ds);
+    }
 
     public Operation load(String operationId) {
         return jdbc.queryForObject(lookup("operation/LoadOperation"), singletonMap("id", operationId), mapper);

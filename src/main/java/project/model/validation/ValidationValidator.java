@@ -22,11 +22,15 @@ public class ValidationValidator implements Validator {
 
     private static final String NAME = "Проверка";
 
-    @Autowired
-    private ServletWebRequest request;
+    private final ServletWebRequest request;
+
+    private final ValidationValidatorDao dao;
 
     @Autowired
-    private ValidationValidatorDao dao;
+    public ValidationValidator(ServletWebRequest request, ValidationValidatorDao dao) {
+        this.request = request;
+        this.dao = dao;
+    }
 
     @Override
     public boolean supports(Class<?> clazz) {

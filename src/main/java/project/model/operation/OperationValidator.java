@@ -20,11 +20,15 @@ public class OperationValidator implements Validator {
 
     private static final String NAME = "Операция";
 
-    @Autowired
-    private ServletWebRequest request;
+    private final ServletWebRequest request;
+
+    private final OperationValidatorDao dao;
 
     @Autowired
-    private OperationValidatorDao dao;
+    public OperationValidator(ServletWebRequest request, OperationValidatorDao dao) {
+        this.request = request;
+        this.dao = dao;
+    }
 
     @Override
     public boolean supports(Class<?> clazz) {

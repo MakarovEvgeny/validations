@@ -24,15 +24,19 @@ import static project.dao.RequestRegistry.lookup;
 @Repository
 public class UserDao implements UserDetailsService, UserValidatorDao {
 
-    @Autowired
-    private DataSource ds;
+    private final DataSource ds;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     private NamedParameterJdbcTemplate jdbc;
 
     private RowMapper<UserDetails> mapper = (rs, rowNum) -> new User(rs.getString("username"), rs.getString("password"), singletonList(new SimpleGrantedAuthority(rs.getString("role"))));
+
+    @Autowired
+    public UserDao(DataSource ds, PasswordEncoder passwordEncoder) {
+        this.ds = ds;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostConstruct
     public void init() {

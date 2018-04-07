@@ -15,8 +15,12 @@ import java.util.List;
 @Transactional
 public class ValidationServiceImpl implements ValidationService {
 
+    private final ValidationDao dao;
+
     @Autowired
-    private ValidationDao dao;
+    public ValidationServiceImpl(ValidationDao dao) {
+        this.dao = dao;
+    }
 
     @Override
     public Validation load(String validationId) {

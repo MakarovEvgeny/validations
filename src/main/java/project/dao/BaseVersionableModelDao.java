@@ -21,12 +21,16 @@ import java.util.Map;
 /** Базовый класс DAO для моделей по которым ведется история. */
 public abstract class BaseVersionableModelDao<MODEL extends BaseVersionableModel> implements AbstractDao<MODEL> {
 
-    @Autowired
-    protected DataSource ds;
+    private final DataSource ds;
 
     protected NamedParameterJdbcTemplate jdbc;
 
     protected RowMapper<Change> changeMapper = (rs, rowNum) -> new Change(rs.getString("id"), ZonedDateTime.ofInstant(rs.getTimestamp("date").toInstant(), ZoneId.systemDefault()), rs.getString("username"), rs.getString("commentary"));
+
+    @Autowired
+    public BaseVersionableModelDao(DataSource ds) {
+        this.ds = ds;
+    }
 
     @PostConstruct
     public void init() {

@@ -21,12 +21,15 @@ import java.util.List;
 @RequestMapping("validation")
 public class ValidationController {
 
-    @Autowired
-    private ValidationService service;
+    private final ValidationService service;
+
+    private final Validator validator;
 
     @Autowired
-    @Qualifier("validationValidator")
-    private Validator validator;
+    public ValidationController(ValidationService service, @Qualifier("validationValidator") Validator validator) {
+        this.service = service;
+        this.validator = validator;
+    }
 
     @InitBinder("validation")
     public void initBinder(WebDataBinder binder) {

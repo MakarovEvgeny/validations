@@ -20,12 +20,15 @@ import java.util.List;
 @RequestMapping("operation")
 public class OperationController {
 
-    @Autowired
-    private OperationService service;
+    private final OperationService service;
+
+    private final Validator validator;
 
     @Autowired
-    @Qualifier("operationValidator")
-    private Validator validator;
+    public OperationController(OperationService service, @Qualifier("operationValidator") Validator validator) {
+        this.service = service;
+        this.validator = validator;
+    }
 
     @InitBinder("operation")
     public void initBinder(WebDataBinder binder) {

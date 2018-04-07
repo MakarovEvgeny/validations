@@ -15,8 +15,12 @@ import project.service.EventLogService;
 @Component
 public class EventLogAspect {
 
+    private final EventLogService logService;
+
     @Autowired
-    private EventLogService logService;
+    public EventLogAspect(EventLogService logService) {
+        this.logService = logService;
+    }
 
     @Pointcut(value="execution(public * project..*(..))")
     public void anyPublicMethod() {}

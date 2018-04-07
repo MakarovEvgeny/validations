@@ -14,8 +14,12 @@ import java.util.List;
 @Transactional
 public class EntityServiceImpl implements EntityService {
 
+    private final EntityDao dao;
+
     @Autowired
-    private EntityDao dao;
+    public EntityServiceImpl(EntityDao dao) {
+        this.dao = dao;
+    }
 
     @Override
     public Entity load(String entityId) {

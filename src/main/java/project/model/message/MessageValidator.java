@@ -20,11 +20,15 @@ public class MessageValidator implements Validator {
 
     private static final String NAME = "Сообщение";
 
-    @Autowired
-    private ServletWebRequest request;
+    private final ServletWebRequest request;
+
+    private final MessageValidatorDao dao;
 
     @Autowired
-    private MessageValidatorDao dao;
+    public MessageValidator(ServletWebRequest request, MessageValidatorDao dao) {
+        this.request = request;
+        this.dao = dao;
+    }
 
     @Override
     public boolean supports(Class<?> clazz) {

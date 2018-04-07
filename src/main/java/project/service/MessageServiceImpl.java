@@ -14,8 +14,12 @@ import java.util.List;
 @Transactional
 public class MessageServiceImpl implements MessageService {
 
+    private final MessageDao dao;
+
     @Autowired
-    private MessageDao dao;
+    public MessageServiceImpl(MessageDao dao) {
+        this.dao = dao;
+    }
 
     @Override
     public Message load(String messageId) {

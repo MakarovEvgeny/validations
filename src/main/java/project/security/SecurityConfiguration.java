@@ -23,14 +23,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     /** Cookie (не HttpOnly) служит для понимания (на стороне js) залогинился пользователь или нет. */
     private static final String LOGGED = "LOGGED";
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    public SecurityConfiguration() {
+    public SecurityConfiguration(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         super(true);
+        this.passwordEncoder = passwordEncoder;
+        this.userDetailsService = userDetailsService;
     }
 
     /**

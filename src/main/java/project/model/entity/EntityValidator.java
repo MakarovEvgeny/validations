@@ -20,11 +20,15 @@ public class EntityValidator implements Validator {
 
     private static final String NAME = "Сущность";
 
-    @Autowired
-    private ServletWebRequest request;
+    private final ServletWebRequest request;
+
+    private final EntityValidatorDao dao;
 
     @Autowired
-    private EntityValidatorDao dao;
+    public EntityValidator(ServletWebRequest request, EntityValidatorDao dao) {
+        this.request = request;
+        this.dao = dao;
+    }
 
     @Override
     public boolean supports(Class<?> clazz) {

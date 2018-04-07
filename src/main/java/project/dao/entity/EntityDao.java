@@ -10,6 +10,7 @@ import project.model.Change;
 import project.model.entity.Entity;
 import project.model.query.SearchParams;
 
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,10 @@ public class EntityDao extends BaseVersionableModelDao<Entity> implements FindAb
 
     private RowMapper<Entity> mapper = (rs, rowNum) -> new Entity(rs.getString("id"), rs.getString("name"), rs.getString("description"), rs.getInt("version"), rs.getString("commentary"));
 
+
+    public EntityDao(DataSource ds) {
+        super(ds);
+    }
 
     public Entity load(String entityId) {
         return jdbc.queryForObject(lookup("entity/LoadEntity"), singletonMap("id", entityId), mapper);

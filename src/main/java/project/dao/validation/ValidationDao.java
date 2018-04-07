@@ -21,6 +21,7 @@ import project.model.validation.ValidationDto;
 import project.model.validation.ValidationEntity;
 import project.model.validation.ValidationExportRow;
 
+import javax.sql.DataSource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -84,6 +85,10 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
 
         return result;
     };
+
+    public ValidationDao(DataSource ds) {
+        super(ds);
+    }
 
     @Override
     public Validation load(String validationId) {
