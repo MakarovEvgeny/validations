@@ -6,5 +6,6 @@ CREATE TABLE users
 	password VARCHAR(60) NOT NULL,
 	role_id SMALLINT NOT NULL
 		CONSTRAINT role_fk
-			REFERENCES role
+			REFERENCES role,
+  register_date TIMESTAMP WITH TIME ZONE NOT NULL
 );

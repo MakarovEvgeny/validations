@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
@@ -51,6 +53,7 @@ public class UserDao implements UserDetailsService, UserValidatorDao {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("username", username);
         params.addValue("password", passwordEncoder.encode(password));
+        params.addValue("date", Timestamp.from(ZonedDateTime.now().toInstant()));
 
         jdbc.update(lookup("user/CreateUser"), params);
     }
