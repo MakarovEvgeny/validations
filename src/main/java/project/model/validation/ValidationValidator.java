@@ -53,6 +53,13 @@ public class ValidationValidator implements Validator {
             }
         }
 
+        if (!isEmpty(id) && op == ClientOperation.UPDATE) {
+            String currentCommentary = dao.getCurrentCommentary(id);
+            if (currentCommentary.equals(validation.getCommentary())) {
+                errors.rejectValue("commentary", "015", new String[] {NAME}, null);
+            }
+        }
+
         if (op == ClientOperation.CREATE || op == ClientOperation.UPDATE) {
             if (validation.getSeverity() == null) {
                 errors.rejectValue("severity", "011", new String[]{NAME}, null);
@@ -81,11 +88,15 @@ public class ValidationValidator implements Validator {
             if (isEmpty(validation.getDescription())) {
                 errors.rejectValue("description", "014", new String[]{NAME}, null);
             }
+        }
 
-            if (isEmpty(validation.getCommentary())) {
-//                errors.rejectValue("commentary", "015", new String[]{NAME}, null);
+
+
+        if (!isEmpty(id) && op == ClientOperation.DELETE) {
+            String currentCommentary = dao.getCurrentCommentary(id);
+            if (currentCommentary.equals(validation.getCommentary())) {
+                errors.rejectValue("commentary", "019", new String[]{NAME}, null);
             }
-
         }
 
     }

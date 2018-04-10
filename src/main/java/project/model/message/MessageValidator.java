@@ -60,11 +60,23 @@ public class MessageValidator implements Validator {
             if (!isEmpty(id) && !isEmpty(text) && dao.sameTextAlreadyExists(id, text)) {
                 errors.rejectValue("id", "008", new String[]{NAME}, null);
             }
+            if (!isEmpty(id)) {
+                String currentCommentary = dao.getCurrentCommentary(id);
+                if (currentCommentary.equals(message.getCommentary())) {
+                    errors.rejectValue("commentary", "015", new String[] {NAME}, null);
+                }
+            }
         }
 
         if (operation == ClientOperation.DELETE) {
             if (!isEmpty(id) && dao.isUsed(id)) {
                 errors.rejectValue("id", "006", new String[]{NAME}, null);
+            }
+            if (!isEmpty(id)) {
+                String currentCommentary = dao.getCurrentCommentary(id);
+                if (currentCommentary.equals(message.getCommentary())) {
+                    errors.rejectValue("commentary", "019", new String[]{NAME}, null);
+                }
             }
         }
     }

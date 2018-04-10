@@ -1,0 +1,1 @@
+SELECT commentary FROM operation WHERE operation_id = :operationId

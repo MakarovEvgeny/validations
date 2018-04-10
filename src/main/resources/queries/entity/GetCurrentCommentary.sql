@@ -1,0 +1,1 @@
+SELECT commentary FROM entity WHERE entity_id = :entityId

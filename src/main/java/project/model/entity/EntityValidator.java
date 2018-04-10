@@ -60,11 +60,23 @@ public class EntityValidator implements Validator {
             if (!isEmpty(id) && !isEmpty(name) && dao.nameAlreadyExists(id, name)) {
                 errors.rejectValue("id", "004", new String[]{NAME}, null);
             }
+            if (!isEmpty(id)) {
+                String currentCommentary = dao.getCurrentCommentary(id);
+                if (currentCommentary.equals(entity.getCommentary())) {
+                    errors.rejectValue("commentary", "015", new String[] {NAME}, null);
+                }
+            }
         }
 
         if (operation == ClientOperation.DELETE) {
             if (!isEmpty(id) && dao.isUsed(id)) {
                 errors.rejectValue("id", "006", new String[]{NAME}, null);
+            }
+            if (!isEmpty(id)) {
+                String currentCommentary = dao.getCurrentCommentary(id);
+                if (currentCommentary.equals(entity.getCommentary())) {
+                    errors.rejectValue("commentary", "019", new String[]{NAME}, null);
+                }
             }
         }
     }
