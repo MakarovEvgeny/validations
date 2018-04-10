@@ -43,6 +43,7 @@ public class ValidationValidator implements Validator {
         ClientOperation op = ClientOperation.getClientOperation(request);
 
         ValidationUtils.rejectIfEmpty(errors, "id", "001", new String[]{NAME});
+        ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
 
         String id = validation.getId();
 
@@ -82,14 +83,11 @@ public class ValidationValidator implements Validator {
             }
 
             if (isEmpty(validation.getCommentary())) {
-                errors.rejectValue("commentary", "015", new String[]{NAME}, null);
+//                errors.rejectValue("commentary", "015", new String[]{NAME}, null);
             }
 
         }
 
-        if (op == ClientOperation.DELETE) {
-            ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
-        }
     }
 
     private class ValidationEntityValidator implements Validator {

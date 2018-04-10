@@ -42,6 +42,7 @@ public class EntityValidator implements Validator {
 
         ValidationUtils.rejectIfEmpty(errors, "id", "001", new String[]{NAME});
         ValidationUtils.rejectIfEmpty(errors, "name", "002", new String[]{NAME});
+        ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
 
         String id = entity.getId();
         String name = entity.getName();
@@ -62,8 +63,6 @@ public class EntityValidator implements Validator {
         }
 
         if (operation == ClientOperation.DELETE) {
-            ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
-
             if (!isEmpty(id) && dao.isUsed(id)) {
                 errors.rejectValue("id", "006", new String[]{NAME}, null);
             }

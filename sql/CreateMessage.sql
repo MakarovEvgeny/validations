@@ -5,5 +5,5 @@ CREATE TABLE message
 			PRIMARY KEY,
 	text TEXT NOT NULL,
 	version SMALLINT DEFAULT 1 NOT NULL,
-	commentary VARCHAR(500)
+	commentary VARCHAR(500) NOT NULL
 );

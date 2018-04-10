@@ -11,5 +11,5 @@ CREATE TABLE validation
 			REFERENCES severity,
 	description TEXT NOT NULL,
 	version SMALLINT DEFAULT 1 NOT NULL,
-	commentary TEXT
+	commentary TEXT NOT NULL
 );
