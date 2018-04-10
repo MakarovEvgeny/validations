@@ -43,12 +43,20 @@ public class ValidationValidator implements Validator {
         ClientOperation op = ClientOperation.getClientOperation(request);
 
         ValidationUtils.rejectIfEmpty(errors, "id", "001", new String[]{NAME});
+        ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
 
         String id = validation.getId();
 
         if (op == ClientOperation.CREATE) {
             if (!isEmpty(id) && dao.alreadyExists(id)) {
                 errors.rejectValue("id", "003", new String[]{NAME}, null);
+            }
+        }
+
+        if (!isEmpty(id) && op == ClientOperation.UPDATE) {
+            String currentCommentary = dao.getCurrentCommentary(id);
+            if (currentCommentary.equals(validation.getCommentary())) {
+                errors.rejectValue("commentary", "015", new String[] {NAME}, null);
             }
         }
 
@@ -80,16 +88,17 @@ public class ValidationValidator implements Validator {
             if (isEmpty(validation.getDescription())) {
                 errors.rejectValue("description", "014", new String[]{NAME}, null);
             }
+        }
 
-            if (isEmpty(validation.getCommentary())) {
-                errors.rejectValue("commentary", "015", new String[]{NAME}, null);
+
+
+        if (!isEmpty(id) && op == ClientOperation.DELETE) {
+            String currentCommentary = dao.getCurrentCommentary(id);
+            if (currentCommentary.equals(validation.getCommentary())) {
+                errors.rejectValue("commentary", "019", new String[]{NAME}, null);
             }
-
         }
 
-        if (op == ClientOperation.DELETE) {
-            ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
-        }
     }
 
     private class ValidationEntityValidator implements Validator {

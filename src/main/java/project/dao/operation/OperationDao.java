@@ -99,4 +99,9 @@ public class OperationDao extends BaseVersionableModelDao<Operation> implements 
         return jdbc.queryForObject(lookup("operation/LoadOperationVersion"), singletonMap("id", versionId), mapper);
     }
 
+    @Override
+    public String getCurrentCommentary(String operationId) {
+        return jdbc.queryForObject(lookup("operation/GetCurrentCommentary"), singletonMap("operationId", operationId), String.class);
+    }
+
 }

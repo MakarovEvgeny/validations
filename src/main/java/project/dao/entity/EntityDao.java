@@ -103,4 +103,9 @@ public class EntityDao extends BaseVersionableModelDao<Entity> implements FindAb
         return jdbc.queryForObject(lookup("entity/LoadEntityVersion"), singletonMap("id", versionId), mapper);
     }
 
+    @Override
+    public String getCurrentCommentary(String entityId) {
+        return jdbc.queryForObject(lookup("entity/GetCurrentCommentary"), singletonMap("entityId", entityId), String.class);
+    }
+
 }

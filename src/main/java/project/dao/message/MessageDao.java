@@ -108,4 +108,10 @@ public class MessageDao extends BaseVersionableModelDao<Message> implements Find
     public List<MessageExportRow> exportMessages() {
         return jdbc.query(lookup("message/ExportMessages"), exportMapper);
     }
+
+    @Override
+    public String getCurrentCommentary(String messageId) {
+        return jdbc.queryForObject(lookup("message/GetCurrentCommentary"), singletonMap("messageId", messageId), String.class);
+    }
+
 }

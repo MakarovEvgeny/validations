@@ -37,14 +37,15 @@ public class MessageValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        Message entity = (Message) target;
+        Message message = (Message) target;
         ClientOperation operation = ClientOperation.getClientOperation(request);
 
         ValidationUtils.rejectIfEmpty(errors, "id", "001", new String[]{NAME});
         ValidationUtils.rejectIfEmpty(errors, "text", "007", new String[]{NAME});
+        ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
 
-        String id = entity.getId();
-        String text = entity.getText();
+        String id = message.getId();
+        String text = message.getText();
 
         if (operation == ClientOperation.CREATE) {
             if (!isEmpty(id) && dao.alreadyExists(id)) {
@@ -59,13 +60,23 @@ public class MessageValidator implements Validator {
             if (!isEmpty(id) && !isEmpty(text) && dao.sameTextAlreadyExists(id, text)) {
                 errors.rejectValue("id", "008", new String[]{NAME}, null);
             }
+            if (!isEmpty(id)) {
+                String currentCommentary = dao.getCurrentCommentary(id);
+                if (currentCommentary.equals(message.getCommentary())) {
+                    errors.rejectValue("commentary", "015", new String[] {NAME}, null);
+                }
+            }
         }
 
         if (operation == ClientOperation.DELETE) {
-            ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
-
             if (!isEmpty(id) && dao.isUsed(id)) {
                 errors.rejectValue("id", "006", new String[]{NAME}, null);
+            }
+            if (!isEmpty(id)) {
+                String currentCommentary = dao.getCurrentCommentary(id);
+                if (currentCommentary.equals(message.getCommentary())) {
+                    errors.rejectValue("commentary", "019", new String[]{NAME}, null);
+                }
             }
         }
     }

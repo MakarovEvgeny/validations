@@ -42,6 +42,7 @@ public class OperationValidator implements Validator {
 
         ValidationUtils.rejectIfEmpty(errors, "id", "001", new String[]{NAME});
         ValidationUtils.rejectIfEmpty(errors, "name", "002", new String[]{NAME});
+        ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
 
         String id = operation.getId();
         String name = operation.getName();
@@ -59,13 +60,23 @@ public class OperationValidator implements Validator {
             if (!isEmpty(id) && !isEmpty(name) && dao.nameAlreadyExists(id, name)) {
                 errors.rejectValue("id", "004", new String[]{NAME}, null);
             }
+            if (!isEmpty(id)) {
+                String currentCommentary = dao.getCurrentCommentary(id);
+                if (currentCommentary.equals(operation.getCommentary())) {
+                    errors.rejectValue("commentary", "015", new String[] {NAME}, null);
+                }
+            }
         }
 
         if (op == ClientOperation.DELETE) {
-            ValidationUtils.rejectIfEmpty(errors, "commentary", "005", new String[]{NAME});
-
             if (!isEmpty(id) && dao.isUsed(id)) {
                 errors.rejectValue("id", "006", new String[]{NAME}, null);
+            }
+            if (!isEmpty(id)) {
+                String currentCommentary = dao.getCurrentCommentary(id);
+                if (currentCommentary.equals(operation.getCommentary())) {
+                    errors.rejectValue("commentary", "019", new String[]{NAME}, null);
+                }
             }
         }
     }

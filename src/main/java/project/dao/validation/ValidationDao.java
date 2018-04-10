@@ -235,4 +235,10 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
     public List<ValidationExportRow> exportValidations() {
         return jdbc.query(lookup("validation/ExportValidations"), exportMapper);
     }
+
+    @Override
+    public String getCurrentCommentary(String validationId) {
+        return jdbc.queryForObject(lookup("validation/GetCurrentCommentary"), singletonMap("validationId", validationId), String.class);
+    }
+
 }

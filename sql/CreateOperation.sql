@@ -6,5 +6,5 @@ CREATE TABLE operation
 	name VARCHAR(100) NOT NULL,
 	description VARCHAR(250),
 	version SMALLINT DEFAULT 1 NOT NULL,
-	commentary VARCHAR(500)
+	commentary VARCHAR(500) NOT NULL
 );

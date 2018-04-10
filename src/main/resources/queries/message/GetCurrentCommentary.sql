@@ -1,0 +1,1 @@
+SELECT commentary FROM message WHERE message_id = :messageId

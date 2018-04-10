@@ -1,6 +1,8 @@
 package project.dao.message;
 
-public interface MessageValidatorDao {
+import project.model.CurrentCommentaryAware;
+
+public interface MessageValidatorDao extends CurrentCommentaryAware {
 
     boolean alreadyExists(String id);
     boolean sameTextAlreadyExists(String id, String name);
