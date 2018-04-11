@@ -8,6 +8,15 @@ public class RegisterUserDto {
 
     private String password2;
 
+    public RegisterUserDto() {
+    }
+
+    public RegisterUserDto(String username, String password, String password2) {
+        this.username = username;
+        this.password = password;
+        this.password2 = password2;
+    }
+
     public String getUsername() {
         return username;
     }

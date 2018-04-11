@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import project.aspect.LoggingThat;
 import project.model.eventlog.EventLogType;
+import project.model.mapper.EmptyResponseMapper;
 import project.model.message.MessageExportRow;
 import project.model.validation.ValidationExportRow;
 import project.service.ExportService;
@@ -33,7 +34,7 @@ public class ExportController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "excel")
-    @LoggingThat(type = EventLogType.EXPORT, operation = "Выгрузка данных проверок в EXCEL", logResult = false)
+    @LoggingThat(type = EventLogType.EXPORT, operation = "Выгрузка данных проверок в EXCEL", mapper = EmptyResponseMapper.class)
     public ModelAndView exportExcel() {
         List<MessageExportRow> messages = service.getMessages();
         List<ValidationExportRow> validations = service.getValidations();

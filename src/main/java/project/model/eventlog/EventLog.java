@@ -5,8 +5,8 @@ package project.model.eventlog;
 public class EventLog {
     private EventLogType type;
     private String operation;
-    private Object request;
-    private Object response;
+    private String request;
+    private String response;
     private String commentary;
 
     public EventLogType getType() {
@@ -29,13 +29,13 @@ public class EventLog {
         return commentary;
     }
 
-    public EventLog request(Object request) {
-        this.request = request;
+    public EventLog request(String jsonRequest) {
+        this.request = jsonRequest;
         return this;
     }
 
-    public EventLog response(Object response) {
-        this.response = response;
+    public EventLog response(String jsonResponse) {
+        this.response = jsonResponse;
         return this;
     }
 

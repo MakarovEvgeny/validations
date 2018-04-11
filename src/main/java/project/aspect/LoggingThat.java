@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import project.model.eventlog.EventLogType;
+import project.model.mapper.DefaultMapper;
+import project.model.mapper.Mapper;
 
 /**
  * Аннотация для аспекта. Включает логирование вызова метода в БД.
@@ -19,6 +21,6 @@ public @interface LoggingThat {
     String operation();
     /** Уточняющий комментарий. */
     String commentary() default "";
-    /** Необходимость логировать результат. */
-    boolean logResult() default true;
+    /** Маппер данных для записи лога пользовательских операций. */
+    Class<? extends Mapper> mapper() default DefaultMapper.class;
 }

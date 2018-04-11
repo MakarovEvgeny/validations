@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import project.aspect.LoggingThat;
 import project.model.eventlog.EventLogType;
+import project.model.mapper.RegisterUserDtoMapper;
 import project.model.user.RegisterUserDto;
 import project.model.user.UserCard;
 import project.service.UserService;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("register")
-    @LoggingThat(type = EventLogType.CREATE, operation = "Создание пользователя")
+    @LoggingThat(type = EventLogType.CREATE, operation = "Создание пользователя", mapper = RegisterUserDtoMapper.class)
     public void register(@RequestBody @Valid RegisterUserDto dto) {
         service.register(dto.getUsername(), dto.getPassword());
     }
