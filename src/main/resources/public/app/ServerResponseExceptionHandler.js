@@ -27,6 +27,10 @@ Ext.define('app.ServerResponseExceptionHandler', {
                 if (Ext.ComponentQuery.query('login-window').length === 0) {
                     Ext.create('app.views.LoginWindow');
                 }
+                break;
+            }
+            case 409: {
+                Ext.create('app.views.ErrorWindow', {codesAndMessages: [{message: 'Конкурентное редактирование, требуется переоткрытие карточки'}]});
             }
         }
     }
