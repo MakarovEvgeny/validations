@@ -1,7 +1,8 @@
 Ext.define('app.views.ModelWindow', {
     extend: 'Ext.window.Window',
     requires: [
-        'app.controllers.EntityWindowController'
+        'app.controllers.EntityWindowController',
+        'app.custom.ResizableTextArea'
     ],
 
     layout: 'border',
@@ -45,6 +46,7 @@ Ext.define('app.views.ModelWindow', {
             xtype: 'form',
             region: 'center',
             border: false,
+            scrollable: true,
             layout: {
                 type: 'vbox',
                 align: 'left'
