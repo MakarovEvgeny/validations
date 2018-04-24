@@ -18,11 +18,13 @@ Ext.define('app.views.MessageWindow', {
             {
                 xtype: 'resizable-textarea',
                 fieldLabel: 'Текст сообщения',
+                flex: 1,
                 name: 'text'
             },
             {
                 xtype: 'resizable-textarea',
                 fieldLabel: 'Комментарий',
+                flex: 1,
                 name: 'commentary'
             },
             {
