@@ -157,6 +157,11 @@ Ext.define('app.custom.NoTotalPagesPagingToolbar', {
 
             afterText = Ext.String.format(me.afterPageText, isNaN(pageCount) ? 1 : pageCount);
         } else {
+            // если на новой странице нет данных и она не первая - грузим предыдущую
+            if (me.store.currentPage > 1) {
+                this.movePrevious();
+                return;
+            }
             currPage = me.store.currentPage;
             // currPage = 0;
             pageCount = me.store.currentPage;
