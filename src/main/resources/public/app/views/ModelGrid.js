@@ -28,7 +28,8 @@ Ext.define('app.views.ModelGrid', {
 
     listeners: {
         selectionChange: 'onSelectionChange',
-        itemdblclick: 'edit'
+        itemdblclick: 'edit',
+        show: 'onShow'
     },
 
     dockedItems: [{
@@ -64,6 +65,17 @@ Ext.define('app.views.ModelGrid', {
                         listeners: {
                             click: 'edit'
                         }
+                    },
+                    {
+                        xtype: 'button',
+                        name: 'merge',
+                        scale: 'large',
+                        text: 'Объединить теги',
+                        hidden: true,
+                        disabled: true,
+                        listeners: {
+                            click: 'merge'
+                        }
                     }
                 ]
             },
@@ -83,6 +95,10 @@ Ext.define('app.views.ModelGrid', {
 
     getEditButton: function () {
         return this.down('button[name=edit]');
+    },
+
+    getMergeButton: function () {
+        return this.down('button[name=merge]');
     }
 
 });

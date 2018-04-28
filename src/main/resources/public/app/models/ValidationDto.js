@@ -12,6 +12,7 @@ Ext.define('app.models.ValidationDto', {
         {name: 'severityName'},
         {name: 'entityNames'},
         {name: 'operationNames'},
+        {name: 'tagNames'},
         {name: 'severityId'}
     ]
 

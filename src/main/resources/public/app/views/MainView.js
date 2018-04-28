@@ -7,7 +7,8 @@ Ext.define('app.views.MainView', {
         'app.views.OperationGrid',
         'app.views.MessageGrid',
         'app.views.ValidationGrid',
-        'app.views.LoginPanel'
+        'app.views.LoginPanel',
+        'app.views.TagGrid'
     ],
 
     layout: 'border',
@@ -43,6 +44,10 @@ Ext.define('app.views.MainView', {
                 {
                     title: 'Проверки',
                     xtype: 'validation-grid'
+                },
+                {
+                    title: 'Теги',
+                    xtype: 'tag-grid'
                 }
             ]
         }

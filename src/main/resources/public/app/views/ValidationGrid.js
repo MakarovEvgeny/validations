@@ -87,6 +87,16 @@ Ext.define('app.views.ValidationGrid', {
                     operator: app.models.SearchOperator.ILIKE
                 },
                 flex: 1
+            },
+            {
+                text: 'Теги',
+                dataIndex: 'tagNames',
+                filter: {
+                    type: 'list',
+                    store: 'tag-store',
+                    operator: app.models.SearchOperator.ILIKE
+                },
+                flex: 1
             }
         ]
     }

@@ -47,6 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/operation/*")
                 .antMatchers(HttpMethod.GET, "/message/*")
                 .antMatchers(HttpMethod.GET, "/validation/*")
+                .antMatchers(HttpMethod.GET, "/tag/*")
 
                 .antMatchers(HttpMethod.GET, "/**/change/**") //Список изменений
                 .antMatchers(HttpMethod.GET, "/**/favicon.ico")

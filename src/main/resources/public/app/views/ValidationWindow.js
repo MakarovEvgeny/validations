@@ -32,7 +32,17 @@ Ext.define('app.views.ValidationWindow', {
                 store: Ext.create(app.stores.SeverityStore),
                 local: true
             },
-
+            {
+                xtype: 'custom-tagfield',
+                fieldLabel: 'Теги',
+                name: 'tags',
+                displayField: 'name',
+                valueField: 'id',
+                store: {
+                    type: 'tag-store',
+                    autoLoad: false
+                }
+            },
             {
                 xtype: 'grid',
                 name: 'entityOperationsGrid',

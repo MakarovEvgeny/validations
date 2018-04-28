@@ -9,6 +9,13 @@ Ext.define('app.controllers.ValidationWindowController', {
     /** @override */
     getModel: function () {
         var model = this.callParent();
+
+        var tagsView = this.getView().down('custom-tagfield[name=tags]');
+        var tags = Ext.Array.map(tagsView.getValueRecords(), function (tag) {
+            return tag.getData();
+        });
+        model.set('tags', tags);
+
         var validationEntitiesStore = model.validationEntities();
         validationEntitiesStore.add(this.getView().down('grid').getStore().getRange());
         Ext.apply(model.data, model.getAssociatedData());
@@ -77,6 +84,14 @@ Ext.define('app.controllers.ValidationWindowController', {
         });
 
         return hasNotFilledRow;
+    },
+
+    initTagView: function(record) {
+        var tagsField = this.getView().down('custom-tagfield[name=tags]');
+        tagsField.suspendEvents(false);
+        tagsField.getStore().add(record.tags().getRange()); // Чтобы не пропадали значения установленные программно, т.к. forceSelection = true.
+        tagsField.setValue(record.tags().getRange());
+        tagsField.resumeEvents();
     },
 
     /** При выборе сущности установим значение в соответствующей записи ValidationEntityStore. */

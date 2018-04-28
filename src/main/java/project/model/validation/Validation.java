@@ -2,8 +2,10 @@ package project.model.validation;
 
 import project.model.BaseVersionableModel;
 import project.model.message.Message;
+import project.model.tag.Tag;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,6 +25,9 @@ public class Validation extends BaseVersionableModel {
 
     /** Коллекция уникальных {@link project.model.entity.Entity} */
     private Set<ValidationEntity> validationEntities = new HashSet<>();
+
+    /** Коллекция уникальных {@link project.model.tag.Tag} */
+    private Set<Tag> tags = new HashSet<>();
 
     public Validation() {
         //for spring
@@ -55,6 +60,14 @@ public class Validation extends BaseVersionableModel {
         this.validationEntities = validationEntities;
     }
 
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,12 +77,18 @@ public class Validation extends BaseVersionableModel {
         return severity == that.severity &&
                 Objects.equals(message, that.message) &&
                 Objects.equals(description, that.description) &&
-                Objects.equals(validationEntities, that.validationEntities);
+                Objects.equals(validationEntities, that.validationEntities) &&
+                Objects.equals(tags, that.tags);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), severity, message, description, validationEntities);
+        return Objects.hash(super.hashCode(), severity, message, description, validationEntities, tags);
     }
 
+    public void mergeTags(Tag mainTag, List<Tag> mergeTags) {
+        if (tags.removeAll(mergeTags)) {
+            tags.add(mainTag);
+        }
+    }
 }
