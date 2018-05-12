@@ -23,11 +23,13 @@ Ext.define('app.views.EntityWindow', {
             {
                 xtype: 'resizable-textarea',
                 fieldLabel: 'Описание',
+                flex: 1,
                 name: 'description'
             },
             {
                 xtype: 'resizable-textarea',
                 fieldLabel: 'Комментарий',
+                flex: 1,
                 name: 'commentary'
             },
             {

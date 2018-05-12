@@ -151,11 +151,13 @@ Ext.define('app.views.ValidationWindow', {
             {
                 xtype: 'resizable-textarea',
                 fieldLabel: 'Описание',
+                flex: 1,
                 name: 'description'
             },
             {
                 xtype: 'resizable-textarea',
                 fieldLabel: 'Комментарий',
+                flex: 1,
                 name: 'commentary'
             },
             {
