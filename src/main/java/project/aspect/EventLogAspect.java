@@ -13,6 +13,10 @@ import project.model.eventlog.EventLog;
 import project.model.mapper.Mapper;
 import project.service.EventLogService;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Aspect
 @Component
 public class EventLogAspect {
@@ -58,7 +62,15 @@ public class EventLogAspect {
     }
 
     private Mapper lookupMapper(Class<? extends Mapper> clazz) {
-        return context.getBean(clazz);
+        Map<String, ? extends Mapper> beansOfType = context.getBeansOfType(clazz);
+        // Исключим подклассы указанного мапппера, т.к. нас интересует конкретно то, что указано.
+        List<? extends Mapper> result = beansOfType.values().stream().filter(bean -> bean.getClass() == clazz).collect(Collectors.toList());
+
+        if (result.isEmpty() || result.size() > 1) {
+            throw new RuntimeException("Cannot determine single mapper");
+        }
+
+        return result.get(0);
     }
 
 }
