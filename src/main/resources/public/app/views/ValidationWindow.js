@@ -54,8 +54,9 @@ Ext.define('app.views.ValidationWindow', {
                             xtype: 'widgetcolumn',
                             widget: {
                                 xtype: 'custom-combo',
-                                displayField: 'id',
+                                displayField: 'name',
                                 valueField: 'id',
+                                filterProperty: 'name',
                                 store: {
                                     type: 'entity-store',
                                     autoLoad: false
@@ -80,8 +81,9 @@ Ext.define('app.views.ValidationWindow', {
                             widget: {
                                 xtype: 'custom-tagfield',
                                 name: 'operationIds',
-                                displayField: 'id',
+                                displayField: 'name',
                                 valueField: 'id',
+                                filterProperty: 'name',
                                 grow: true,
                                 store: {
                                     type: 'operation-store',
