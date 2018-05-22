@@ -36,7 +36,7 @@ Ext.define('app.views.LoginPanelConfigurer', {
             userNameLabel.setHtml('');
 
             app.models.UserCard.load(null, {
-                url: '/user/whoami',
+                url: 'user/whoami',
                 scope: this,
                 success: function (record) {
                     userNameLabel.setHtml(record.get('username'));

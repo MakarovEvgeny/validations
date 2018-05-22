@@ -3,7 +3,7 @@ Ext.define('app.models.Message', {
 
     proxy: {
         type: 'rest',
-        url: '/message',
+        url: 'message',
         writer: {
             writeAllFields: true
         }

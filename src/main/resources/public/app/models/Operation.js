@@ -3,7 +3,7 @@ Ext.define('app.models.Operation', {
 
     proxy: {
         type: 'rest',
-        url: '/operation',
+        url: 'operation',
         writer: {
             writeAllFields: true
         }

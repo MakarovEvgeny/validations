@@ -7,7 +7,7 @@ Ext.define('app.models.Validation', {
 
     proxy: {
         type: 'rest',
-        url: '/validation',
+        url: 'validation',
         writer: {
             nameProperty: 'mapping',
             writeAllFields: true,
