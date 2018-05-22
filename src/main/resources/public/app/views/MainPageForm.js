@@ -134,7 +134,7 @@ Ext.define('app.views.MainPageForm', {
                         xtype: 'button',
                         name: 'export-excel',
                         scale: 'large',
-                        text: 'Экспортитовать в EXCEL',
+                        text: 'Экспортировать в EXCEL',
                         listeners: {
                             click: 'onExportExcelClick'
                         }
