@@ -15,7 +15,7 @@ Ext.define('app.stores.EntityStore', {
 
     proxy: {
         type: 'app-rest',
-        url: '/entity',
+        url: 'entity',
         api: {
             read: 'entity/query'
         }

@@ -15,7 +15,7 @@ Ext.define('app.stores.MessageStore', {
 
     proxy: {
         type: 'app-rest',
-        url: '/message',
+        url: 'message',
         api: {
             read: 'message/query'
         }

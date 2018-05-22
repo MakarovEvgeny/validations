@@ -15,7 +15,7 @@ Ext.define('app.stores.OperationStore', {
 
     proxy: {
         type: 'app-rest',
-        url: '/operation',
+        url: 'operation',
         api: {
             read: 'operation/query'
         }

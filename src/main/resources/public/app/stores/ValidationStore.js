@@ -13,7 +13,7 @@ Ext.define('app.stores.ValidationStore', {
 
     proxy: {
         type: 'app-rest',
-        url: '/validation',
+        url: 'validation',
         api: {
             read: 'validation/query'
         }
