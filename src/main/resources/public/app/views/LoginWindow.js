@@ -34,7 +34,7 @@ Ext.define('app.views.LoginWindow', {
         {
             xtype: 'button',
             listeners: {
-                click: 'onButtonClick'
+                click: 'onLoginButtonClick'
             },
             width: '100%',
             scale: 'large',

@@ -4,6 +4,7 @@ Ext.define('app.controllers.LoginWindowController', {
 
     requires: ['app.views.LoginPanelConfigurer'],
 
+    /** Обработка клавиш с целью обработать enter. */
     onSpecialKeyPress: function (field, e) {
         if (e.getKey() !== e.ENTER) {
             return;
@@ -12,11 +13,12 @@ Ext.define('app.controllers.LoginWindowController', {
         var username = window.down('textfield[name="username"]').getValue();
         var password = window.down('textfield[name="password"]').getValue();
         if (!Ext.isEmpty(username) && !Ext.isEmpty(password)) {
-            this.onButtonClick();
+            this.onLoginButtonClick();
         }
     },
 
-    onButtonClick: function () {
+    /** Обработка кнопки login. */
+    onLoginButtonClick: function () {
         var window = this.getView();
         var username = window.down('textfield[name="username"]').getValue();
         var password = window.down('textfield[name="password"]').getValue();
