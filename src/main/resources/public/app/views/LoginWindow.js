@@ -22,6 +22,9 @@ Ext.define('app.views.LoginWindow', {
         },
         {
             xtype: 'textfield',
+            listeners: {
+                specialkey: 'onSpecialKeyPress'
+            },
             width: '100%',
             emptyText: 'Пароль',
             height: '40',

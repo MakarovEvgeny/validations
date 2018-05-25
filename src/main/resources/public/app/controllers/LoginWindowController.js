@@ -4,6 +4,18 @@ Ext.define('app.controllers.LoginWindowController', {
 
     requires: ['app.views.LoginPanelConfigurer'],
 
+    onSpecialKeyPress: function (field, e) {
+        if (e.getKey() !== e.ENTER) {
+            return;
+        }
+        var window = this.getView();
+        var username = window.down('textfield[name="username"]').getValue();
+        var password = window.down('textfield[name="password"]').getValue();
+        if (!Ext.isEmpty(username) && !Ext.isEmpty(password)) {
+            this.onButtonClick();
+        }
+    },
+
     onButtonClick: function () {
         var window = this.getView();
         var username = window.down('textfield[name="username"]').getValue();
