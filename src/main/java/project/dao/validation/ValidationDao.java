@@ -78,7 +78,7 @@ public class ValidationDao extends BaseVersionableModelDao<Validation> implement
     };
 
     private RowMapper<ValidationExportRow> exportMapper = (rs, rowNum) ->
-        new ValidationExportRow(rs.getString("code"), rs.getString("severity"), rs.getString("messageCode"), rs.getString("entities"), rs.getString("operations"), rs.getString("description"));
+        new ValidationExportRow(rs.getString("code"), rs.getString("severity"), rs.getString("messageCode"), rs.getString("entities"), rs.getString("operations"), rs.getString("description"), rs.getString("tags"));
 
     private RowMapper<ValidationDto> dtoMapper = (rs, rowNum) -> {
         ValidationDto dto = new ValidationDto();

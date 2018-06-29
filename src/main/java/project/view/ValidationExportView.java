@@ -62,6 +62,7 @@ public class ValidationExportView extends AbstractXlsxStreamingView {
                 .createCell("Сущности", 150)
                 .createCell("Операции", 150)
                 .createCell("Описание", 500)
+                .createCell("Теги", 200)
                 .build()
             ;
 
@@ -83,6 +84,7 @@ public class ValidationExportView extends AbstractXlsxStreamingView {
                     .createCell(rowTextStyle, validation.getEntities())
                     .createCell(rowTextStyle, validation.getOperations())
                     .createCell(rowTextStyle, validation.getDescription())
+                    .createCell(rowTextStyle, validation.getTags())
             );
         }
         workbook.setActiveSheet(/* Номер вкладки с проверками. */1);

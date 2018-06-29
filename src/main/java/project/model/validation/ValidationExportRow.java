@@ -10,15 +10,17 @@ public class ValidationExportRow {
     private String entities ;
     private String operations;
     private String description;
+    private String tags;
 
     public ValidationExportRow(String code, String severity, String messageCode, String entities, String operations,
-            String description) {
+            String description, String tags) {
         this.code = code;
         this.severity = severity;
         this.messageCode = messageCode;
         this.entities = entities;
         this.operations = operations;
         this.description = description;
+        this.tags = tags;
     }
 
     public String getCode() {
@@ -43,5 +45,9 @@ public class ValidationExportRow {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getTags() {
+        return tags;
     }
 }
