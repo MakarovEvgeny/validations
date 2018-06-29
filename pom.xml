@@ -142,10 +142,13 @@
                                 </goals>
                                 <configuration>
                                     <srcFiles>
+                                        <srcFile>sql/LoadExtension.sql</srcFile>
                                         <srcFile>sql/DropEventLog.sql</srcFile>
                                         <srcFile>sql/DropEventLogType.sql</srcFile>
                                         <srcFile>sql/DropValidationEntityOperation.sql</srcFile>
                                         <srcFile>sql/DropValidationEntityOperationH.sql</srcFile>
+                                        <srcFile>sql/DropValidationTag.sql</srcFile>
+                                        <srcFile>sql/DropValidationTagH.sql</srcFile>
 
                                         <srcFile>sql/DropValidation.sql</srcFile>
                                         <srcFile>sql/DropValidationH.sql</srcFile>
@@ -156,6 +159,9 @@
                                         <srcFile>sql/DropOperationH.sql</srcFile>
                                         <srcFile>sql/DropMessage.sql</srcFile>
                                         <srcFile>sql/DropMessageH.sql</srcFile>
+                                        <srcFile>sql/DropTag.sql</srcFile>
+                                        <srcFile>sql/DropTagH.sql</srcFile>
+
                                         <srcFile>sql/DropUsers.sql</srcFile>
                                         <srcFile>sql/DropRole.sql</srcFile>
 
@@ -172,6 +178,10 @@
                                         <srcFile>sql/CreateValidationH.sql</srcFile>
                                         <srcFile>sql/CreateValidationEntityOperation.sql</srcFile>
                                         <srcFile>sql/CreateValidationEntityOperationH.sql</srcFile>
+                                        <srcFile>sql/CreateTag.sql</srcFile>
+                                        <srcFile>sql/CreateTagH.sql</srcFile>
+                                        <srcFile>sql/CreateValidationTag.sql</srcFile>
+                                        <srcFile>sql/CreateValidationTagH.sql</srcFile>
                                         <srcFile>sql/CreateEventLogType.sql</srcFile>
                                         <srcFile>sql/CreateEventLog.sql</srcFile>
                                     </srcFiles>

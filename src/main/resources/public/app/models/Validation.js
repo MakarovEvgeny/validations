@@ -2,7 +2,8 @@ Ext.define('app.models.Validation', {
     extend: 'app.models.BaseVersionableModel',
 
     requires: [
-        'app.models.ValidationEntity'
+        'app.models.ValidationEntity',
+        'app.models.Tag'
     ],
 
     proxy: {
@@ -19,6 +20,7 @@ Ext.define('app.models.Validation', {
         {name: 'messageId', mapping: 'message.id'},
         {name: 'description'},
         {name: 'validationEntities'},
+        {name: 'tags'},
         {name: 'severity'}
     ],
 
@@ -27,6 +29,11 @@ Ext.define('app.models.Validation', {
             type: 'hasMany',
             associatedName: 'validationEntities',
             model: 'app.models.ValidationEntity'
+        },
+        {
+            type: 'hasMany',
+            associatedName: 'tags',
+            model: 'app.models.Tag'
         }
     ]
 

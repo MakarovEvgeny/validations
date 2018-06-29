@@ -15,6 +15,7 @@ Ext.define('app.controllers.ValidationGridController', {
     loadModel: function (id, requestConfig, window) {
         requestConfig.success = function (record) {
             window.down('form').loadRecord(record);
+            window.getController().initTagView(record);
             var validationEntitiesStore = window.down('grid').getStore();
             validationEntitiesStore.add(record.validationEntities().getRange());
         };

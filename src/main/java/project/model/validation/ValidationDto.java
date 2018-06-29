@@ -12,5 +12,5 @@ public class ValidationDto {
     public String severityName;
     public String operationNames;
     public String entityNames;
-
+    public String tagNames;
 }

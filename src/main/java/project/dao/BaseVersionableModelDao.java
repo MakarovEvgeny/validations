@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+
+import project.model.AbstractModel;
 import project.model.BaseVersionableModel;
 import project.model.Change;
 
@@ -17,6 +19,8 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /** Базовый класс DAO для моделей по которым ведется история. */
 public abstract class BaseVersionableModelDao<MODEL extends BaseVersionableModel> implements AbstractDao<MODEL> {
@@ -57,6 +61,17 @@ public abstract class BaseVersionableModelDao<MODEL extends BaseVersionableModel
         params.put("ip", details.getRemoteAddress());
 
         return params;
+    }
+
+    protected List<String> ids(List<? extends BaseVersionableModel> models) {
+        return models.stream()
+                .filter(Objects::nonNull)
+                .map(AbstractModel::getId)
+                .collect(Collectors.toList());
+    }
+
+    protected String id(BaseVersionableModel model) {
+        return model == null ? null : model.getId();
     }
 
     /** Получаем список изменений по конкретной модели данных. */

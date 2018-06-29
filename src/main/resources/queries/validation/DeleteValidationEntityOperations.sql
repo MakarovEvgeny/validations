@@ -1,1 +1,1 @@
-DELETE FROM validation_entity_operation WHERE validation_id = :id
+DELETE FROM validation_entity_operation WHERE validation_id IN (:ids)

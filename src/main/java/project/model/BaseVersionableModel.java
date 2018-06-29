@@ -32,6 +32,10 @@ public class BaseVersionableModel extends AbstractModel implements Versionable, 
         return commentary;
     }
 
+    public void setCommentary(String commentary) {
+        this.commentary = commentary;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

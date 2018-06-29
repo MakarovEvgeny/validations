@@ -13,4 +13,4 @@ SELECT
 
 FROM validation v
   JOIN message m ON v.message_id = m.message_id
-WHERE v.validation_id = :id
+WHERE v.validation_id in (:ids)

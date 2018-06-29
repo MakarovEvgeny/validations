@@ -45,6 +45,10 @@ Ext.define('app.controllers.ModelGridController', {
 
     loadModel: function (id, requestConfig) {
         throw 'should be overridden';
+    },
+
+    onShow: function() {
+        this.getView().getMergeButton().setHidden(true);
     }
 
 });
